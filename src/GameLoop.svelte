@@ -1,37 +1,37 @@
 <script lang="ts">
-    import { resources } from "./store/resources.js";
-    import { resourceTypes } from './constants/resourceTypes.js';
+    import { resources } from "./store/resources";
+    import { workers } from "./store/workers";
+    import { act, scene } from "./store/gameState";
+    import { resourceTypes, generatableResources } from './constants/resourceTypes';
+    import { calculateGenerationRate } from './utils/helpers';
 
     let previousTime = new Date();
-    let toggledFarm = false, toggledWood = false;
-
+    
     const gameLoop = () => {
         const currentTime = new Date();
         const secondsElapsed = Math.round(
             (currentTime.getTime() - previousTime.getTime()) / 1000
         );
+        processResources(secondsElapsed);
         processEvents(secondsElapsed);
         previousTime = currentTime;
     };
 
-    const processEvents = (secondsElapsed: number) => {
-        processResources(secondsElapsed);
-        
-    };
-
     const processResources = (secondsElapsed: number) => {
-        const newFoodValue = $resources.food.value + $resources.farms.value * secondsElapsed;
-        resources.updateResourceValue(resourceTypes.FOOD, newFoodValue);
-        if (!toggledWood && newFoodValue > 10) {
-            resources.toggleDisplay(resourceTypes.WOOD);
-            toggledWood = true;
-            resources.toggleDisplay(resourceTypes.STORAGE);
-        }
-        if (!toggledFarm && $resources.wood.value > 5) {
-            resources.toggleDisplay(resourceTypes.FARMS);
-            toggledFarm = true;
+        for (let resource of generatableResources) {
+            handleResourceGeneration(secondsElapsed, resource)
         }
     }
+
+    const handleResourceGeneration = (secondsElapsed: number, type: string) => {
+        const generationRate = parseInt(calculateGenerationRate(type, $resources, $workers));
+        const newValue = $resources[type].value + (generationRate * secondsElapsed);
+        resources.updateResourceValue(type, newValue);
+    }
+
+    const processEvents = (secondsElapsed: number) => {
+        
+    };
 
     setInterval(gameLoop, 1000);
 	// document.addEventListener("DOMContentLoaded", function (event) {

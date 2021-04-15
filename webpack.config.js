@@ -11,9 +11,10 @@ module.exports = {
 	},
 	resolve: {
 		alias: {
-			svelte: path.dirname(require.resolve('svelte/package.json'))
+			svelte: path.dirname(require.resolve('svelte/package.json')),
+			'~': path.resolve(__dirname, 'src')
 		},
-		extensions: ['.mjs', '.js', '.svelte'],
+		extensions: ['.mjs', '.ts', '.tsx', '.js', '.svelte'],
 		mainFields: ['svelte', 'browser', 'module', 'main']
 	},
 	output: {
@@ -34,18 +35,23 @@ module.exports = {
 						emitCss: prod,
 						hotReload: !prod,
 						preprocess: sveltePreprocess({
-                            // https://github.com/kaisermann/svelte-preprocess/#user-content-options
-                            sourceMap: !prod,
-                            postcss: {
-                                plugins: [
-                                    require("tailwindcss"), 
-                                    // require("autoprefixer"),
-                                    require("postcss-nesting"),
-                                ],
-                            },
-                        }),
+							// https://github.com/kaisermann/svelte-preprocess/#user-content-options
+							sourceMap: !prod,
+							postcss: {
+								plugins: [
+									require("tailwindcss"),
+									// require("autoprefixer"),
+									require("postcss-nesting"),
+								],
+							},
+						}),
 					}
 				}
+			},
+			{
+				test: /\.tsx?$/,
+				use: 'ts-loader',
+				exclude: /node_modules/,
 			},
 			{
 				test: /\.css$/,

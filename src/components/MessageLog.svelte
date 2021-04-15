@@ -1,15 +1,15 @@
 <script lang="ts">
-// retrieve message array from store and for each it
-    const messageLog = ['YOU ARE A PEASANT', 'YOU FARM WHEAT', 'THIS IS SOME REALLY loNG TEXT']
-    messageLog.push(...messageLog);messageLog.push(messageLog.toString());messageLog.push(...messageLog);
+    // import { messageLog } from '../store/gameState';
+    let messageLog: any = []
     $: totalMessages = messageLog.length;
 </script>
 
-<div class="w-3/12 -mt-10 -ml-10 overflow-y-auto w-min-273px h-2/4 rpgui-container framed bg-none">
+<div class="fixed bottom-0 w-3/12 overflow-y-auto border-white w-min-350px h-2/4">
+    <hr/>
     <ul>
-    {#each messageLog as msg, i}
+    {#each $messageLog as msg, i}
         <li
-            class="my-2 text-red"
+            class="my-2 text-red text-10px"
             class:opacity-70={totalMessages > 5 && i === totalMessages - 3}
             class:opacity-50={totalMessages > 5 && i === totalMessages - 2}
             class:opacity-25={totalMessages > 5 && i === totalMessages - 1}
@@ -21,7 +21,11 @@
 </div>
 
 <style>
-    .w-min-273px {
-        min-width: 273px;
+    .w-min-350px {
+        min-width: 350px;
+    }
+
+    .text-10px {
+        font-size: 10px;
     }
 </style>

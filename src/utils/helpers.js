@@ -2,27 +2,69 @@
 // displays k if over a thousand
 // parses numbers to two decimal places
 import { resourceGeneratorMap } from '../constants/resourceTypes';
+import { workerGeneratorMap } from '../constants/workerTypes';
+import { scienceButtonPrereqs } from '~/constants/buttons/scienceButtons';
+import { empireButtonPrereqs, empireButtonTypes } from '~/constants/buttons/empireButtons';
+import { get } from 'svelte/store';
+import {
+    researchedSciences as researchedSciencesFromStore,
+    obtainedResources as obtainedResourcesFromStore
+} from '~/store/gameState';
+import { buttonCategories } from '~/constants/buttons/buttons';
 
 export const resourceParser = (input) => {
-    const value = Math.round(input * 100) / 100;
     const million = 1000000;
     const thousand = 1000;
+    let value = parseInt(input);
     let parsedValue = '';
     if (value >= million) {
-        parsedValue += value % million;
+        parsedValue = parseDecimals(value / million).toString();
         parsedValue += 'm';
     } else if (value >= thousand) {
-        parsedValue += value % thousand;
+        parsedValue = parseDecimals(value / thousand).toString();
         parsedValue += 'k';
     } else {
-        return value;
+        parsedValue = parseDecimals(value).toString();
     }
     return parsedValue;
 }
 
-export const calculateGenerationRate = (type, resources) => {
-    if (!resources) return 0;
+const parseDecimals = (input) => {
+    return Math.round(input * 100) / 100;
+}
+
+export const calculateGenerationRate = (type, resources, workers) => {
     const generator = resourceGeneratorMap[type];
-    const resourcesGenerated = resources[generator]?.generationValue ?? 0;
+    if (!resources || !generator) return '0';
+    let resourcesGenerated = resources[generator].value * resources[generator].generationValue;
+    const workerType = workerGeneratorMap[type];
+    if (!workers || !workerType) return resourceParser(resourcesGenerated);
+    resourcesGenerated += workers[workerType].value * workers[workerType].generationValue;
     return resourceParser(resourcesGenerated);
+}
+
+export const buttonPrereqsMet = (type, buttonCategory) => {
+    let prereqList = {};
+    switch(buttonCategory) {
+        case buttonCategories.EMPIRE:
+            prereqList = empireButtonPrereqs;
+            break;
+        case buttonCategories.SCIENCE:
+            prereqList = scienceButtonPrereqs;
+            break;
+        default:
+            return;
+    }
+    if (!prereqList[type]) return false;
+    const { sciencePrereqs } = prereqList[type]
+    const { resourcePrereqs } = prereqList[type]
+    const researchedSciences = get(researchedSciencesFromStore);
+    const obtainedResources = get(obtainedResourcesFromStore)
+    for (let science of sciencePrereqs) {
+        if (!researchedSciences.has(science)) return false;
+    }
+    for (let resource of resourcePrereqs) {
+        if (!obtainedResources.has(resource)) return false;
+    }
+    return true;
 }

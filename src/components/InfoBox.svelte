@@ -2,23 +2,36 @@
     import {
         displayInfoBox,
         buttonType,
+        buttonCategory,
         buttonPositionX,
         buttonPositionY,
     } from "../store/infoBox.js";
-    import { resources, resourceCosts } from "../store/resources";
+    import { resources } from "../store/resources";
     import { infoBoxes } from "../constants/infoBoxes";
-    import { buttonTypeToResourceType } from "../constants/buttons";
-    import { resourceParser } from '../utils/helpers'
+    import { resourceParser } from "../utils/helpers";
+    import { empireButtonCosts } from "~/store/buttonCosts";
+    import type { IButtonCost } from "~/interfaces/buttons";
+    import { buttonCategories } from "~/constants/buttons/buttons";
 
-    let infoBox: any;
-    console.log($resourceCosts);
+    let infoBox: any,
+        costs: IButtonCost[] = [];
+
     $: infoBoxBounds = infoBox?.getBoundingClientRect();
     $: y = $buttonPositionY - infoBoxBounds?.height / 2;
     $: x = $buttonPositionX - infoBoxBounds?.width - 10;
-    $: resourceType = buttonTypeToResourceType[$buttonType];
-    $: costs = $resourceCosts[resourceType] ?? [];
+    $: {
+        switch ($buttonCategory) {
+            case buttonCategories.EMPIRE:
+                costs = $empireButtonCosts[$buttonType];
+                break;
+            default:
+                costs = [];
+                break;
+        }
+        if (!costs) costs = [];
+    }
 
-    function hasEnoughResources(resourceType, cost) {
+    function hasEnoughResources(resourceType: string, cost: number) {
         const curResourceAmount = $resources[resourceType].value;
         return curResourceAmount >= cost;
     }
@@ -35,7 +48,7 @@
             <hr class="-mx-2" />
             <p>{(infoBoxes[$buttonType] ?? {}).text}</p>
             {#if costs.length > 0}
-                <p class="my-3"><u> Cost </u></p>
+                <p class="my-3 underline">Cost</p>
             {/if}
             {#key $resources}
                 {#each costs as obj}

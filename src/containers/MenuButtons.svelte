@@ -1,16 +1,46 @@
 <script>
+    import { tabs } from "../constants/buttons/buttons";
+    import { createEventDispatcher } from "svelte";
+    //fix flex problem
+
+    const dispatch = createEventDispatcher();
+
+    const toggleTab = (tab) => {
+        dispatch("toggleTab", tab);
+    }
+    
 </script>
 
-<div class="mt-5 -mb-3">
-    <button class="mr-3 rpgui-button" type="button">
-        <p> Farm </p>
+<div class="w-full mt-5 -mb-3">
+    <button
+        class="rpgui-button"
+        type="button"
+        on:click={() => { toggleTab(tabs.MAIN_2) }}
+    >
+        <p>Base</p>
     </button>
 
-    <button class="mx-3 rpgui-button" type="button">
-        <p> 2 </p>
+    <button
+        class="rpgui-button"
+        type="button"
+        on:click={() => { toggleTab(tabs.WORKERS) }}
+    >
+        <p>Workers</p>
     </button>
 
-    <button class="mx-3 rpgui-button" type="button">
-        <p> 3 </p>
+    <button
+        class="rpgui-button"
+        type="button"
+        on:click={() => { toggleTab(tabs.SCIENCE) }}
+    >
+        <p>Science</p>
+    </button>
+
+    <button
+        class="rpgui-button"
+        type="button"
+        on:click={() => { toggleTab(tabs.MILITARY) }}
+    >
+        <p>Military</p>
     </button>
 </div>
