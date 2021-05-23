@@ -151,7 +151,7 @@ const dialogues: IDialogueList = {
     'A2S7': {
         characterImage: '',
         characterName: '',
-        mainText: `Immense knowledge flows into your mind. You feel as if you can build an entire kingdom from scratch now. A familiar voice also appears in your mind: <span class="text-white"> *Ah, I assume you're aware of the situation now. I know what you're about to say, but I never explicitly said *when* you'd become a lord right? And isn't it more fun to earn it through your own hard work? Hahaha! </span>`,
+        mainText: `You pull out the dusty book that seems so old that it'll disintegrate if a mosquito sneezes on it. Immense knowledge flows into your mind. You feel as if you can build an entire kingdom from scratch now. A familiar voice also appears in your mind: <span class="text-white"> *Ah, I assume you're aware of the situation now. I know what you're about to say, but I never explicitly said *when* you'd become a lord right? And isn't it more fun to earn it through your own hard work? Hahaha! </span>`,
         yesText: 'Continue',
         noText: '',
         yesHandler: () => {

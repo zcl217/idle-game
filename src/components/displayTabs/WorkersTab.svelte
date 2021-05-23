@@ -25,7 +25,7 @@
     };
 </script>
 
-<div class="w-3/5 w-min-670px rpgui-container framed-golden">
+<div class="w-3/5 w-min-670px rpgui-container">
     <div>
         <h1 class="text-xl">
             Available Workers: {availableWorkers} / {maxWorkers}

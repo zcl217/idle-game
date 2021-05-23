@@ -6,7 +6,8 @@ export const buttonWidth = 211;
 export const buttonCategories = {
     OTHER: 'other',
     EMPIRE: 'empire',
-    SCIENCE: 'science'
+    SCIENCE: 'science',
+    MILITARY: 'military',
 }
 
 export const otherButtonTypes = {
@@ -36,5 +37,6 @@ export const tabs = {
     CHARACTER_CHOICE: 'charChoice',
     WORKERS: 'workers',
     SCIENCE: 'science',
-    MILITARY: 'military',
+    BARRACKS: 'barracks',
+    EXPEDITION: 'expedition',
 }

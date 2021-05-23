@@ -53,8 +53,8 @@
 {/if}
 
 <style>
-    .text-shadow {
+    /* .text-shadow {
         color: #fff;
         text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000;
-    }
+    } */
 </style>

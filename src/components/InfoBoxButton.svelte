@@ -9,13 +9,15 @@
     import {
         buttonCategories,
         otherButtonTexts,
+        buttonWidth
     } from "~/constants/buttons/buttons";
     import { empireButtonTexts } from "~/constants/buttons/empireButtons";
     import { scienceButtonTexts } from "~/constants/buttons/scienceButtons";
+    import { militaryButtonTexts } from "~/constants/buttons/militaryButtons";
     import { onDestroy } from "svelte";
     export let handler: any,
         curButtonType: string,
-        width: number,
+        width: number = buttonWidth,
         curButtonCategory: string;
 
     let button: Element;
@@ -51,5 +53,7 @@
         <p>{empireButtonTexts[curButtonType]}</p>
     {:else if curButtonCategory === buttonCategories.SCIENCE}
         <p>{scienceButtonTexts[curButtonType]}</p>
+    {:else if curButtonCategory === buttonCategories.MILITARY}
+        <p>{militaryButtonTexts[curButtonType]}</p>
     {/if}
 </button>

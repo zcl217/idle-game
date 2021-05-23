@@ -1,17 +1,19 @@
 <script>
-    import MenuButtons from "./MenuButtons.svelte";
+    import MenuTabs from "./MenuTabs.svelte";
     import Resources from "../components/Resources.svelte";
     import MainDisplay from "../components/displayTabs/MainDisplay.svelte";
     import MainDisplayAct2 from "../components/displayTabs/MainDisplayAct2.svelte";
     import WorkersTab from "../components/displayTabs/WorkersTab.svelte";
     import ScienceTab from "../components/displayTabs/ScienceTab.svelte";
-    import MilitaryTab from "../components/displayTabs/MilitaryTab.svelte";
+    import BarracksTab from "../components/displayTabs/BarracksTab.svelte";
+    import ExpeditionTab from "~/components/displayTabs/ExpeditionTab.svelte";
     import MessageLog from "../components/MessageLog.svelte";
     import DialogueBox from "../components/DialogueBox.svelte";
     import InfoBox from "../components/InfoBox.svelte";
     import { tabs } from "../constants/buttons/buttons";
     import CharacterChoice from "~/components/displayTabs/CharacterChoice.svelte";
-    import { scene, act } from "~/store/gameState.js";
+    import { scene, act, inExpedition } from "~/store/gameState.js";
+import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
     let darkBackground = true,
         displayMenuTabs = true,
         currentTab = tabs.MAIN_1;
@@ -19,10 +21,10 @@
         currentTab = payload.detail;
     };
     $: {
-        if ($act === '1' && $scene === '5') {
-            currentTab = tabs.CHARACTER_CHOICE
+        if ($act === "1" && $scene === "5") {
+            currentTab = tabs.CHARACTER_CHOICE;
         }
-        if ($act === '2' && $scene === '1') {
+        if ($act === "2" && $scene === "1") {
             currentTab = tabs.MAIN_2;
             displayMenuTabs = true;
         }
@@ -43,16 +45,20 @@
     </div>
     <div class="flex">
         <div class="w-3/12 h-full m-5 mr-0">
-            <Resources />
+            {#if $inExpedition}
+                <UnitDeploymentTab />
+            {:else}
+                <Resources />
+            {/if}
         </div>
         <div class="ml-5">
             {#if displayMenuTabs}
-                <MenuButtons on:toggleTab={toggleTab} />
+                <MenuTabs on:toggleTab={toggleTab} />
             {:else}
                 <div class="mt-68px" />
             {/if}
             <div
-                class="w-8/12 w-min-730px h-5/6 rpgui-container framed-golden-2"
+                class="w-8/12 w-min-730px h-min-550px h-5/6 rpgui-container framed-golden-2"
             >
                 {#if currentTab === tabs.MAIN_2}
                     <MainDisplayAct2 />
@@ -60,8 +66,10 @@
                     <WorkersTab />
                 {:else if currentTab === tabs.SCIENCE}
                     <ScienceTab />
-                {:else if currentTab === tabs.MILITARY}
-                    <MilitaryTab />
+                {:else if currentTab === tabs.BARRACKS}
+                    <BarracksTab />
+                {:else if currentTab === tabs.EXPEDITION}
+                    <ExpeditionTab />
                 {:else if currentTab === tabs.MAIN_1}
                     <MainDisplay />
                 {:else if currentTab === tabs.CHARACTER_CHOICE}
@@ -81,6 +89,10 @@
 
     .w-min-730px {
         min-width: 730px;
+    }
+
+    .h-min-550px {
+        min-height: 550px;
     }
 
     .mt-68px {

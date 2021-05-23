@@ -9,7 +9,8 @@ export const playerName = writable('Peasant');
 export const getCurActScene = () => {
     return `A${get(act)}S${get(scene)}`;
 }
-
+export const currentExpeditionLevel = writable(1);
+export const inExpedition = writable(true);
 export const researchedSciences = writable(new Set());
 
 const initialResourceSet = new Set(resourceTypes.FOOD, resourceTypes.WOOD, resourceTypes.FARMS)

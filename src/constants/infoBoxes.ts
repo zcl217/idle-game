@@ -1,8 +1,9 @@
 import { otherButtonTypes } from './buttons/buttons';
 import { empireButtonTypes } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
+import { militaryButtonTypes } from './buttons/militaryButtons';
 
-export const infoBoxes: IInfoBoxList = {
+export const empireInfoBoxes: IInfoBoxList = {
     [empireButtonTypes.GATHER_FOOD]: {
         title: 'Gather Food',
         text: 'Collect 1 food'
@@ -31,6 +32,24 @@ export const infoBoxes: IInfoBoxList = {
         title: 'Build House',
         text: 'Build a house. Increases max workers by 1'
     },
+}
+
+export const scienceInfoBoxes: IInfoBoxList = {
+
+}
+
+export const militaryInfoBoxes: IInfoBoxList = {
+    [militaryButtonTypes.TRAIN_HEAVY_INFANTRY]: {
+        title: 'Train Heavy Infantry',
+        text: 'Increases heavy infantry count by one'
+    },
+    [militaryButtonTypes.UPGRADE_HEAVY_INFANTRY]: {
+        title: 'Upgrade Heavy Infantry',
+        text: 'Upgrades all heavy infantries'
+    }
+}
+
+export const otherInfoBoxes: IInfoBoxList = {
     [otherButtonTypes.LORD_1]: {
         title: 'The Final Bastion of Humanity',
         text: 'Become the lord of hope. You will lead humanity to heights never seen before, your name remembered for centuries to come. Your subjects will be filled with the wisest of scholars and the most legendary of knights.'

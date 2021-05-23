@@ -9,5 +9,5 @@ export interface IDialogue {
 }
 
 export interface IDialogueList {
-    [key: string]: IDialogue
+    [key: string]: IDialogue;
 }

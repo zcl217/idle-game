@@ -8,6 +8,17 @@ module.exports = {
     'p-0': ['important'],
     'border-4': ['important'],
   },
+  theme: {
+    extend: {
+      backgroundImage: theme => ({
+        'base': "url('/icons/base.png')",
+        'worker': "url('/icons/worker.png')",
+        'science': "url('/icons/science.png')",
+        'barracks': "url('/icons/barracks.png')",
+        'expedition': "url('/icons/expedition.png')"
+      })
+    }
+  },
   plugins: [
     plugin(function({ addVariant }) {
       addVariant('important', ({ container }) => {

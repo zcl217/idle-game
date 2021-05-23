@@ -11,6 +11,8 @@ import {
     obtainedResources as obtainedResourcesFromStore
 } from '~/store/gameState';
 import { buttonCategories } from '~/constants/buttons/buttons';
+import * as humanUnits from '~/constants/military/units/humans'
+import { unitType } from '~/constants/military/units/unitTypes'
 
 export const resourceParser = (input) => {
     const million = 1000000;
@@ -68,3 +70,16 @@ export const buttonPrereqsMet = (type, buttonCategory) => {
     }
     return true;
 }
+
+export const getSprite = (input) => {
+    switch (input) {
+        case unitType.HEAVY_INFANTRY:
+            return humanUnits.heavyInfantry;
+        default:
+            return {};
+    }
+}
+
+export const getBackgroundPosition = (sprite) => {
+    return `${sprite.position.spriteSheetPositionX}px ${sprite.position.spriteSheetPositionY}px`;
+};
