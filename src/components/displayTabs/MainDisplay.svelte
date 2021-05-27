@@ -2,7 +2,7 @@
     import InfoBoxButton from "../InfoBoxButton.svelte";
     import CharacterFrame from "../CharacterFrame.svelte";
     import { resourceTypes } from "~/constants/resourceTypes";
-    import { buttonWidth, buttonCategories } from "~/constants/buttons/buttons";
+    import { BUTTON_WIDTH, BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
     import dialogues from "~/constants/dialogueTextAndHandlers";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
     import { resources } from "~/store/resources.js";
@@ -146,11 +146,11 @@
 <div class="flex flex-wrap">
     {#key $obtainedResources}
         {#each Object.entries(empireButtonTypes) as [key, id]}
-            {#if buttonPrereqsMet(id, buttonCategories.EMPIRE)}
+            {#if buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)}
                 <InfoBoxButton
-                    width={buttonWidth}
+                    width={BUTTON_WIDTH}
                     curButtonType={id}
-                    curButtonCategory={buttonCategories.EMPIRE}
+                    curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
                     handler={() => {
                         handleResource(id);
                     }}

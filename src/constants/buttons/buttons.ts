@@ -1,23 +1,23 @@
 import { resourceTypes } from '../resourceTypes';
 import { uniqueId } from 'lodash'
 
-export const buttonWidth = 211;
+export const BUTTON_WIDTH = 211;
 
-export const buttonCategories = {
+export const BUTTON_CATEGORIES: Record<string, string> = {
     OTHER: 'other',
     EMPIRE: 'empire',
     SCIENCE: 'science',
     MILITARY: 'military',
 }
 
-export const otherButtonTypes = {
+export const OTHER_BUTTON_TYPES = {
     LORD_1: uniqueId(),
     LORD_2: uniqueId(),
 }
 
-export const otherButtonTexts = {
-    [otherButtonTypes.LORD_1]: 'Lord of Hope',
-    [otherButtonTypes.LORD_2]: 'Lord of Destruction',
+export const OTHER_BUTTON_TEXTS = {
+    [OTHER_BUTTON_TYPES.LORD_1]: 'Lord of Hope',
+    [OTHER_BUTTON_TYPES.LORD_2]: 'Lord of Destruction',
 }
 
 
@@ -31,7 +31,7 @@ export const otherButtonTexts = {
 //     [empireButtonTypes.BUILD_HOUSE]: resourceTypes.HOMES,
 // }
 
-export const tabs = {
+export const TABS = {
     MAIN_1: 'main1',
     MAIN_2: 'main2',
     CHARACTER_CHOICE: 'charChoice',

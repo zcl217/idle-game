@@ -1,4 +1,4 @@
-import { otherButtonTypes } from './buttons/buttons';
+import { OTHER_BUTTON_TYPES } from './buttons/buttons';
 import { empireButtonTypes } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
 import { militaryButtonTypes } from './buttons/militaryButtons';
@@ -50,11 +50,11 @@ export const militaryInfoBoxes: IInfoBoxList = {
 }
 
 export const otherInfoBoxes: IInfoBoxList = {
-    [otherButtonTypes.LORD_1]: {
+    [OTHER_BUTTON_TYPES.LORD_1]: {
         title: 'The Final Bastion of Humanity',
         text: 'Become the lord of hope. You will lead humanity to heights never seen before, your name remembered for centuries to come. Your subjects will be filled with the wisest of scholars and the most legendary of knights.'
     },
-    [otherButtonTypes.LORD_2]: {
+    [OTHER_BUTTON_TYPES.LORD_2]: {
         title: 'Destroyer of All',
         text: `Don't worry, you're not actually going to destroy everything. However, your power will become so great that one could mistake you as a bringer of apocalypse. Be warned, however, as humans aren't capable of such power, nor will humans want to follow you...`
     },

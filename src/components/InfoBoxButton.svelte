@@ -7,9 +7,9 @@
         buttonPositionY,
     } from "../store/infoBox.js";
     import {
-        buttonCategories,
-        otherButtonTexts,
-        buttonWidth
+        BUTTON_CATEGORIES,
+        OTHER_BUTTON_TEXTS,
+        BUTTON_WIDTH
     } from "~/constants/buttons/buttons";
     import { empireButtonTexts } from "~/constants/buttons/empireButtons";
     import { scienceButtonTexts } from "~/constants/buttons/scienceButtons";
@@ -17,7 +17,7 @@
     import { onDestroy } from "svelte";
     export let handler: any,
         curButtonType: string,
-        width: number = buttonWidth,
+        width: number = BUTTON_WIDTH,
         curButtonCategory: string;
 
     let button: Element;
@@ -47,13 +47,13 @@
     on:mouseenter={showInfoBox}
     on:mouseleave={hideInfoBox}
 >
-    {#if curButtonCategory === buttonCategories.OTHER}
-        <p>{otherButtonTexts[curButtonType]}</p>
-    {:else if curButtonCategory === buttonCategories.EMPIRE}
+    {#if curButtonCategory === BUTTON_CATEGORIES.OTHER}
+        <p>{OTHER_BUTTON_TEXTS[curButtonType]}</p>
+    {:else if curButtonCategory === BUTTON_CATEGORIES.EMPIRE}
         <p>{empireButtonTexts[curButtonType]}</p>
-    {:else if curButtonCategory === buttonCategories.SCIENCE}
+    {:else if curButtonCategory === BUTTON_CATEGORIES.SCIENCE}
         <p>{scienceButtonTexts[curButtonType]}</p>
-    {:else if curButtonCategory === buttonCategories.MILITARY}
+    {:else if curButtonCategory === BUTTON_CATEGORIES.MILITARY}
         <p>{militaryButtonTexts[curButtonType]}</p>
     {/if}
 </button>

@@ -12,41 +12,48 @@
     import {
         highlightMeleeCells,
         highlightRangedCells,
+        lifeCount,
         unitToDeploy,
     } from "~/store/military";
-    import { onDestroy, onMount } from "svelte";
+    import { createEventDispatcher, onDestroy, onMount } from "svelte";
     import type { IMap } from "~/interfaces/military/map";
     import type { IExpeditionCell } from "~/interfaces/military/expeditionGrid";
     import ExpeditionCell from "../military/ExpeditionCell.svelte";
-    import { getBackgroundPosition } from "~/utils/helpers";
+    import { getExpeditionBackgroundPosition } from "~/utils/helpers";
     import {
-        getLifeCount,
+        setLifeCount,
         handleDamageCalculations,
         handleEnemyMovements,
-        handleProjectileAnimations,
+        handleProjectiles,
         handleUnitAnimations,
         initializeEnemies,
         initializeGrid,
         initializeUnitPosition,
+        processDamageCalculation,
         setGridPath,
     } from "~/utils/expeditionMode";
     import type { ICoordinates } from "~/interfaces/common";
     import { spriteSheetMap } from "~/constants/military/spriteSheetMap";
     import { cloneDeep, uniqueId } from "lodash";
+    import type { IProjectile } from "~/interfaces/military/projectile";
+    import Projectile from "../military/Projectile.svelte";
 
     export let mapType: number = 1,
         level = 1;
 
+    const dispatch = createEventDispatcher();
+
     let grid: IExpeditionCell[][] = [];
     let enemyUnits: ISprite[] = [];
     let playerUnits: ISprite[] = [];
-    let lifeCount: number = 0;
+    let projectiles: IProjectile[] = [];
+    let enemiesRemaining: number = 0;
     let interval = 0;
 
     onMount(() => {
         grid = initializeGrid(mapType);
         setGridPath(grid, mapType);
-        lifeCount = getLifeCount(level);
+        setLifeCount(level, lifeCount);
         setTimeout(() => {
             startExpeditionLevel();
         }, 0);
@@ -63,26 +70,35 @@
             for the difference between game loop and their own movement delay).
             how would we fix this?
         */
-        let delay = 500;
+
+        // IMPORTANT: there's a bug where the deployable (half opacity) image remains
+        // on the field if you hover over an area and then an enemy walks into that area
+        let delay = 200;
         let frame = 0;
         interval = setInterval(() => {
             frame++;
-            handleDamageCalculations(grid, playerUnits, enemyUnits);
+            handleDamageCalculations(
+                grid,
+                playerUnits,
+                enemyUnits,
+                projectiles
+            );
+            handleProjectiles(projectiles);
             /*
              if we want to implement faster/slower movements,
              we need the setinterval to be at the lowest tick (the fastest moving unit
              speed's interval) and then just ignore the mobs that are still moving 
              (which can be done by checking their state)
             */
-            handleEnemyMovements(enemyUnits, grid);
+            handleEnemyMovements(enemyUnits, grid, lifeCount);
             handleUnitAnimations(playerUnits, enemyUnits, frame);
-            handleProjectileAnimations();
             // when all enemies are dead, emit event to parent that stage is over
             // OR if you run out of lives,
             if (frame > 60) frame = 0;
             enemyUnits = enemyUnits;
             playerUnits = playerUnits;
             grid = grid;
+            projectiles = projectiles;
         }, delay);
         setTimeout(() => {
             initializeEnemies(level, enemyUnits, grid);
@@ -92,6 +108,14 @@
     onDestroy(() => {
         clearInterval(interval);
     });
+
+    $: {
+        if ($lifeCount === 0) {
+            clearInterval(interval);
+            //emit to emit defeat to parent
+            dispatch("DEFEAT");
+        }
+    }
 
     // const sprite1: ISprite = Object.assign({}, heavyInfantry);
     // sprite1.unitPath = UNIT_PATHS.MAP_1.PATH_1;
@@ -116,26 +140,32 @@
     ];
 
     $: {
-       // console.log("hightlight melee cells");
+        // console.log("hightlight melee cells");
         if ($highlightMeleeCells) {
             for (let row of grid) {
                 for (let cell of row) {
-                    if (
-                        cell.isPath &&
-                        !cell.playerUnit &&
-                        !cell.startOfPath &&
-                        !cell.endOfPath &&
-                        !cell.enemyUnitArriving &&
-                        cell.enemyUnitList.length === 0
-                    ) {
+                    if (meleeCellIsDeployable(cell)) {
                         cell.isDeployable = true;
                     } else {
                         cell.isDeployable = false;
                     }
                 }
             }
+        } else if (!$highlightRangedCells && !$highlightMeleeCells) {
+            turnOffCellHighlighting();
         }
         grid = grid;
+    }
+
+    function meleeCellIsDeployable(cell: IExpeditionCell) {
+        return (
+            cell.isPath &&
+            !cell.playerUnit &&
+            !cell.startOfPath &&
+            !cell.endOfPath &&
+            !cell.enemyUnitArriving &&
+            cell.enemyUnitList.length === 0
+        );
     }
 
     $: {
@@ -146,6 +176,8 @@
                         cell.isDeployable = true;
                 }
             }
+        } else if (!$highlightRangedCells && !$highlightMeleeCells) {
+            turnOffCellHighlighting();
         }
         grid = grid;
     }
@@ -158,7 +190,6 @@
             turnOffCellHighlighting();
             let newPlayerUnit: ISprite = cloneDeep($unitToDeploy);
             cell.playerUnit = newPlayerUnit;
-            console.log(newPlayerUnit);
             newPlayerUnit.spriteInfo.unitId = uniqueId();
             initializeUnitPosition(
                 newPlayerUnit,
@@ -166,7 +197,7 @@
                 cell.coordinates.col
             );
             playerUnits.push(newPlayerUnit);
-            console.log(cell);
+            unitToDeploy.set({});
         }
     };
 
@@ -180,92 +211,30 @@
         highlightRangedCells.set(false);
     };
 
-    let test = 0;
-    setInterval(() => {
-        return;
-        if (test < 5)
-            for (let sprite of sprites)
-                sprite.state.currentState = unitStates.ATTACK;
-
-        if (unitStates.IDLE === sprites[0].state.currentState) {
-            if (test % 7 === 0) {
-                for (let sprite of sprites) {
-                    sprite.state.currentState = unitStates.ATTACK;
-                    handleSpriteAnimations(sprite);
-                }
-            }
-        } else {
-            for (let sprite of sprites) {
-                handleSpriteAnimations(sprite);
+    const handleHomingProjectileCollision = (projectile: IProjectile) => {
+        processDamageCalculation(
+            projectile.damage,
+            projectile.target,
+            grid,
+            playerUnits,
+            enemyUnits
+        );
+        for (let a = 0; a < projectiles.length; a++) {
+            if (projectiles[a].projectileId === projectile.projectileId) {
+                projectiles.splice(a, 1);
+                break;
             }
         }
-
-        // test 2
-        // if (test < 5)  sprites[0]state.currentState = unitStates.ATTACK;
-
-        // if (unitStates.IDLE === sprites[0]state.currentState) {
-        //     if (test % 7 === 0) {
-        //         sprites[0]state.currentState = unitStates.ATTACK;
-        //         handleSprite(sprites[0]);
-        //     }
-        // } else {
-
-        // handleSprite(sprites[0])
-        // }
-
-        // test 1
-        //  handleSprite(sprites[0]);
-        test++;
-        // svelte only reacts to assignments so we need this to trigger reactivity
-        sprites = sprites;
-    }, 100);
-
-    const handleSpriteAnimations = (sprite: any) => {
-        let frameList = [];
-        switch (sprite.state.currentState) {
-            case unitStates.IDLE:
-                frameList = sprite.idleFrames;
-                break;
-            case unitStates.ATTACK:
-                frameList = sprite.attackFrames;
-                break;
-            case unitStates.MOVE:
-                frameList = sprite.moveFrames;
-                break;
-            default:
-                break;
-        }
-        if (sprite.state.currentFrame >= frameList.length) {
-            sprite.state.currentState = unitStates.IDLE;
-            sprite.state.currentFrame = 0;
-            frameList = sprite.idleFrames;
-        }
-        const spriteSheetPosition = frameList[sprite.state.currentFrame];
-        // console.log(spriteSheetPosition)
-        sprite.spriteSheetPositionX =
-            spriteSheetPosition.col * -sprite.spriteInfo.spriteSize.x;
-        sprite.spriteSheetPositionY =
-            spriteSheetPosition.row * -sprite.spriteInfo.spriteSize.y;
-        /// console.log(sprite.spriteSheetPositionX + " " + sprite.spriteSheetPositionY);
-        sprite.state.currentFrame++;
-        // console.log("frame: " + sprite.state.currentFrame + " state: " + sprite.state.currentState)
+        projectiles = projectiles;
     };
-
-    /*
-    const getSpriteStyles = (sprite: any) => {
-        const style = `
-            background-image: url('${sprite.spriteSheet}');
-            left: ${$tweenTest}px;
-            top: ${sprite.positionY}px;
-            width: ${sprite.spriteInfo.spriteSize.x}px;
-            height: ${sprite.spriteInfo.spriteSize.y}px;
-            background-position: ${getBackgroundPosition(sprite)}
-        `;
-        return style;
-    };
-    */
 </script>
 
+<div class="text-center" />
+<div class="flex justify-between px-10 my-3">
+    <p>Stage 1-1</p>
+    <p>Lives: {$lifeCount}</p>
+    <!-- <p> Enemies Remaining: {enemiesRemaining} </p> -->
+</div>
 <div class="mx-auto border-2 border-black w-648px h-504px">
     <div class="relative flex flex-row flex-wrap w-648px h-504px">
         <!--    {#key $highlightMeleeCells} -->
@@ -292,6 +261,14 @@
         {/each}
         {#each enemyUnits as sprite}
             <Sprite {sprite} />
+        {/each}
+        {#each projectiles as projectile}
+            <Projectile
+                handleHomingProjectileCollision={() => {
+                    handleHomingProjectileCollision(projectile);
+                }}
+                {projectile}
+            />
         {/each}
         <!-- {/key} -->
     </div>

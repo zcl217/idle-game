@@ -2,7 +2,7 @@
     import InfoBoxButton from "../InfoBoxButton.svelte";
     import CharacterFrame from "../CharacterFrame.svelte";
     import { resourceTypes } from "~/constants/resourceTypes";
-    import { buttonCategories, buttonWidth } from "~/constants/buttons/buttons";
+    import { BUTTON_CATEGORIES, BUTTON_WIDTH } from "~/constants/buttons/buttons";
     import dialogues from "~/constants/dialogueTextAndHandlers";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
     import { resources } from "~/store/resources.js";
@@ -116,11 +116,11 @@ import { buttonPrereqsMet } from "~/utils/helpers";
 <div class="flex flex-wrap">
     {#key $obtainedResources}
         {#each Object.entries(empireButtonTypes) as [key, id]}
-            {#if buttonPrereqsMet(id, buttonCategories.EMPIRE)}
+            {#if buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)}
                 <InfoBoxButton
-                    width={buttonWidth}
+                    width={BUTTON_WIDTH}
                     curButtonType={id}
-                    curButtonCategory={buttonCategories.EMPIRE}
+                    curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
                     handler={() => {
                         handleResource(id);
                     }}
@@ -129,35 +129,35 @@ import { buttonPrereqsMet } from "~/utils/helpers";
         {/each}
     {/key}
     <InfoBoxButton
-        width={buttonWidth}
-        curButtonCategory={buttonCategories.EMPIRE}
+        width={BUTTON_WIDTH}
+        curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
         curButtonType={empireButtonTypes.BUILD_HOUSE}
         handler={buildHouseHandler}
     />
     {#if $resources[resourceTypes.WOOD].display}
         <InfoBoxButton
-            width={buttonWidth}
+            width={BUTTON_WIDTH}
             curButtonType={empireButtonTypes.GATHER_WOOD}
             handler={{}}
         />
     {/if}
     {#if $resources[resourceTypes.FARMS].display}
         <InfoBoxButton
-            width={buttonWidth}
+            width={BUTTON_WIDTH}
             curButtonType={empireButtonTypes.CREATE_FARM}
             handler={{}}
         />
     {/if}
     {#if $resources[resourceTypes.FARMS].value > 1}
         <InfoBoxButton
-            width={buttonWidth}
+            width={BUTTON_WIDTH}
             curButtonType={empireButtonTypes.CREATE_TREE_FARM}
             handler={createTreeFarmHandler}
         />
     {/if}
     {#if $resources[resourceTypes.FARMS].value > 2}
         <InfoBoxButton
-            width={buttonWidth}
+            width={BUTTON_WIDTH}
             curButtonType={empireButtonTypes.BUILD_STORAGE}
             handler={buildStorageHandler}
         />

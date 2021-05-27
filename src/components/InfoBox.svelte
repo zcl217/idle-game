@@ -16,7 +16,7 @@
     import { resourceParser } from "../utils/helpers";
     import { empireButtonCosts } from "~/store/buttonCosts";
     import type { IButtonCost } from "~/interfaces/buttons";
-    import { buttonCategories } from "~/constants/buttons/buttons";
+    import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
 
     let infoBox: any,
         costs: IButtonCost[] = [],
@@ -28,20 +28,20 @@
     $: x = $buttonPositionX - infoBoxBounds?.width - 10;
     $: {
         switch ($buttonCategory) {
-            case buttonCategories.EMPIRE:
+            case BUTTON_CATEGORIES.EMPIRE:
                 costs = $empireButtonCosts[$buttonType];
                 title = empireInfoBoxes[$buttonType].title;
                 text = empireInfoBoxes[$buttonType].text;
                 break;
-            case buttonCategories.SCIENCE:
+            case BUTTON_CATEGORIES.SCIENCE:
                 title = scienceInfoBoxes[$buttonType].title;
                 text = scienceInfoBoxes[$buttonType].text;
                 break;
-            case buttonCategories.MILITARY:
+            case BUTTON_CATEGORIES.MILITARY:
                 title = militaryInfoBoxes[$buttonType].title;
                 text = militaryInfoBoxes[$buttonType].text;
                 break;
-            case buttonCategories.OTHER:
+            case BUTTON_CATEGORIES.OTHER:
                 title = otherInfoBoxes[$buttonType].title;
                 text = otherInfoBoxes[$buttonType].text;
                 break;

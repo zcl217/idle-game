@@ -10,22 +10,22 @@
     import MessageLog from "../components/MessageLog.svelte";
     import DialogueBox from "../components/DialogueBox.svelte";
     import InfoBox from "../components/InfoBox.svelte";
-    import { tabs } from "../constants/buttons/buttons";
+    import { TABS } from "../constants/buttons/buttons";
     import CharacterChoice from "~/components/displayTabs/CharacterChoice.svelte";
     import { scene, act, inExpedition } from "~/store/gameState.js";
 import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
     let darkBackground = true,
         displayMenuTabs = true,
-        currentTab = tabs.MAIN_1;
+        currentTab = TABS.MAIN_1;
     const toggleTab = (payload) => {
         currentTab = payload.detail;
     };
     $: {
         if ($act === "1" && $scene === "5") {
-            currentTab = tabs.CHARACTER_CHOICE;
+            currentTab = TABS.CHARACTER_CHOICE;
         }
         if ($act === "2" && $scene === "1") {
-            currentTab = tabs.MAIN_2;
+            currentTab = TABS.MAIN_2;
             displayMenuTabs = true;
         }
     }
@@ -52,7 +52,7 @@ import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
             {/if}
         </div>
         <div class="ml-5">
-            {#if displayMenuTabs}
+            {#if displayMenuTabs && !$inExpedition}
                 <MenuTabs on:toggleTab={toggleTab} />
             {:else}
                 <div class="mt-68px" />
@@ -60,19 +60,19 @@ import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
             <div
                 class="w-8/12 w-min-730px h-min-550px h-5/6 rpgui-container framed-golden-2"
             >
-                {#if currentTab === tabs.MAIN_2}
+                {#if currentTab === TABS.MAIN_2}
                     <MainDisplayAct2 />
-                {:else if currentTab === tabs.WORKERS}
+                {:else if currentTab === TABS.WORKERS}
                     <WorkersTab />
-                {:else if currentTab === tabs.SCIENCE}
+                {:else if currentTab === TABS.SCIENCE}
                     <ScienceTab />
-                {:else if currentTab === tabs.BARRACKS}
+                {:else if currentTab === TABS.BARRACKS}
                     <BarracksTab />
-                {:else if currentTab === tabs.EXPEDITION}
+                {:else if currentTab === TABS.EXPEDITION}
                     <ExpeditionTab />
-                {:else if currentTab === tabs.MAIN_1}
+                {:else if currentTab === TABS.MAIN_1}
                     <MainDisplay />
-                {:else if currentTab === tabs.CHARACTER_CHOICE}
+                {:else if currentTab === TABS.CHARACTER_CHOICE}
                     <CharacterChoice />
                 {/if}
             </div>
