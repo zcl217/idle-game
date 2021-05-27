@@ -9,9 +9,10 @@ export interface ISprite {
     spriteInfo: ISpriteInfo;
     position: IPosition;
     state: IState;
-    // in case a sprite is a different size than usual, we'll need an offset to make sure
+    // in case a sprite is a different size than usual, we'll need an offsetX to make sure
     // it's in the correct position
-    offset: number;
+    offsetX: number;
+    offsetY?: number;
 }
 
 // The info interface manages any properties that describe the sprite's stats
@@ -29,7 +30,9 @@ interface ISpriteInfo {
     spriteSize: ISpriteSize;
     spriteType: string;
     animationSpeed: number;
-    movementDelay?: number;
+    // more specific animation speeds in case the all purpose animationSpeed isn't enough
+    movementAnimationSpeed?: number;
+    attackAnimationSpeed?: number;
     hpBarOffsetX: number;
     hpBarOffsetY?: number;
 }
@@ -39,9 +42,11 @@ interface IPosition {
     coordinates: ICoordinates;
     spriteSheetPositionX: number;
     spriteSheetPositionY: number;
+    spriteSheetOffsetX?: number;
     facingRight: boolean;
     positionXTweened?: any;
     positionYTweened?: any;
+    tweenedDelay?: number;
 }
 
 // The state interface manages the attributes of a sprite that change throughout the game

@@ -10,14 +10,17 @@ import {
     researchedSciences as researchedSciencesFromStore,
     obtainedResources as obtainedResourcesFromStore
 } from '~/store/gameState';
-import { buttonCategories } from '~/constants/buttons/buttons';
+import { BUTTON_CATEGORIES } from '~/constants/buttons/buttons';
 import * as humanUnits from '~/constants/military/units/humans'
 import { unitType } from '~/constants/military/units/unitTypes'
+import { spriteSheetMap } from '~/constants/military/spriteSheetMap';
+import type { ICoordinates, IPrereqsList } from '~/interfaces/common';
+import type { ISprite } from '~/interfaces/military/sprite';
+import { spriteSizes } from '~/constants/military/sprites';
 
-export const resourceParser = (input) => {
+export const resourceParser = (value: number): string => {
     const million = 1000000;
     const thousand = 1000;
-    let value = parseInt(input);
     let parsedValue = '';
     if (value >= million) {
         parsedValue = parseDecimals(value / million).toString();
@@ -31,11 +34,11 @@ export const resourceParser = (input) => {
     return parsedValue;
 }
 
-const parseDecimals = (input) => {
+const parseDecimals = (input: number) => {
     return Math.round(input * 100) / 100;
 }
 
-export const calculateGenerationRate = (type, resources, workers) => {
+export const calculateGenerationRate = (type: string, resources: any, workers: any) => {
     const generator = resourceGeneratorMap[type];
     if (!resources || !generator) return '0';
     let resourcesGenerated = resources[generator].value * resources[generator].generationValue;
@@ -45,13 +48,13 @@ export const calculateGenerationRate = (type, resources, workers) => {
     return resourceParser(resourcesGenerated);
 }
 
-export const buttonPrereqsMet = (type, buttonCategory) => {
-    let prereqList = {};
-    switch(buttonCategory) {
-        case buttonCategories.EMPIRE:
+export const buttonPrereqsMet = (type: string, buttonCategory: string) => {
+    let prereqList = {} as IPrereqsList;
+    switch (buttonCategory) {
+        case BUTTON_CATEGORIES.EMPIRE:
             prereqList = empireButtonPrereqs;
             break;
-        case buttonCategories.SCIENCE:
+        case BUTTON_CATEGORIES.SCIENCE:
             prereqList = scienceButtonPrereqs;
             break;
         default:
@@ -71,7 +74,7 @@ export const buttonPrereqsMet = (type, buttonCategory) => {
     return true;
 }
 
-export const getSprite = (input) => {
+export const getSprite = (input: string) => {
     switch (input) {
         case unitType.HEAVY_INFANTRY:
             return humanUnits.heavyInfantry;
@@ -80,6 +83,16 @@ export const getSprite = (input) => {
     }
 }
 
-export const getBackgroundPosition = (sprite) => {
+export const getExpeditionBackgroundPosition = (sprite: ISprite) => {
     return `${sprite.position.spriteSheetPositionX}px ${sprite.position.spriteSheetPositionY}px`;
 };
+
+export const getMenuBackgroundPosition = (sprite: ISprite, idleFrames: ICoordinates[], currentFrame: number) => {
+    const spriteSheetPosition = idleFrames[currentFrame];
+    let spriteSheetPositionX =
+        spriteSheetPosition.col * -sprite.spriteInfo.spriteSize.x +
+        (sprite.position.spriteSheetOffsetX || 0) / 1.5;
+    let spriteSheetPositionY =
+        spriteSheetPosition.row * -sprite.spriteInfo.spriteSize.y;
+    return `${spriteSheetPositionX}px ${spriteSheetPositionY}px`;
+}

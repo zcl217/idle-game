@@ -1,13 +1,17 @@
 import { cloneDeep, uniqueId } from "lodash";
-import { MAP_1, UNIT_PATHS } from "~/constants/military/maps";
+import { cellHeight, cellWidth, MAP_1, UNIT_PATHS } from "~/constants/military/maps";
 import { unitStates, spriteType } from "~/constants/military/sprites";
-import { wolf1 } from "~/constants/military/units/monsters";
+import { wolf1, wolf3 } from "~/constants/military/units/monsters";
 import type { ICoordinates } from "~/interfaces/common";
 import type { IExpeditionCell } from "~/interfaces/military/expeditionGrid";
 import type { IMap } from "~/interfaces/military/map";
 import type { ISprite } from "~/interfaces/military/sprite";
-import { tweened } from "svelte/motion";
+import { tweened, spring } from "svelte/motion";
+import { get } from 'svelte/store';
 import { spriteSheetMap } from "~/constants/military/spriteSheetMap";
+import type { IProjectile } from "~/interfaces/military/projectile";
+import { unitProjectiles } from "~/constants/military/projectiles";
+import { createEventDispatcher } from "svelte";
 
 export const initializeGrid = (mapType: number) => {
     let grid: IExpeditionCell[][] = [];
@@ -90,15 +94,16 @@ export const initializeEnemies = (level: number, enemyUnits: ISprite[], grid: IE
         case 1: {
             // we need a settimeout to add enemyUnits into the array
             // so they don't spawn right away.
-            let enemy = cloneDeep(wolf1);
-            enemy.spriteInfo.unitId = uniqueId();
+            let enemy = cloneDeep(wolf3);
             enemy.state.unitPath = UNIT_PATHS.MAP_1.PATH_1;
-            initializeUnitPosition(enemy, enemy.state.unitPath[0].row, enemy.state.unitPath[0].col);
             let { row, col } = enemy.state.unitPath[0];
             let startingCell = grid[row][col];
-            createMultipleEnemies(enemy, enemyUnits, startingCell, 1000, 1);
+            const delay = 1000;
+            const remainingEnemies = 5;
+            createMultipleEnemies(enemy, enemyUnits, startingCell, delay, remainingEnemies);
             break;
         }
+        
     }
 }
 
@@ -106,6 +111,8 @@ function createMultipleEnemies(
     enemy: ISprite, enemyUnits: ISprite[], startingCell: IExpeditionCell, delay: number, remainingEnemies: number) {
     if (remainingEnemies === 0) return;
     let newEnemy = cloneDeep(enemy);
+    initializeUnitPosition(newEnemy, newEnemy.state.unitPath[0].row, newEnemy.state.unitPath[0].col);
+    newEnemy.spriteInfo.unitId = uniqueId();
     enemyUnits.push(newEnemy);
     startingCell.enemyUnitList.push(newEnemy);
     setTimeout(() => {
@@ -114,65 +121,157 @@ function createMultipleEnemies(
 }
 
 export function initializeUnitPosition(unit: ISprite, row: number, col: number) {
-    let startingPositionX = col * 72 + unit.offset;
-    let startingPositionY = row * 72;
+    let startingPositionX = col * cellWidth;
+    let startingPositionY = row * cellHeight;
     unit.position.positionXTweened = tweened(startingPositionX, {
-        duration: unit.spriteInfo.movementDelay || 1000
+        duration: unit.position.tweenedDelay || 1000
     });
     unit.position.positionYTweened = tweened(startingPositionY, {
-        duration: unit.spriteInfo.movementDelay || 1000
+        duration: unit.position.tweenedDelay || 1000
     })
     unit.position.coordinates = { row, col };
 }
 
-export const getLifeCount = (level: number) => {
-    return 0;
+export const setLifeCount = (level: number, lifeCount: any) => {
+    lifeCount.set(30);
 }
 
 export const handleDamageCalculations = (
     grid: IExpeditionCell[][],
     playerUnits: ISprite[],
-    enemyUnits: ISprite[]
+    enemyUnits: ISprite[],
+    projectiles: IProjectile[]
 ) => {
-    for (let unit of playerUnits) processAttack(unit, grid, playerUnits, enemyUnits);
-    for (let unit of enemyUnits) processAttack(unit, grid, playerUnits, enemyUnits);
+    for (let unit of playerUnits) processAttack(unit, grid, playerUnits, enemyUnits, projectiles);
+    for (let unit of enemyUnits) processAttack(unit, grid, playerUnits, enemyUnits, projectiles);
 };
 
 function processAttack(
     unit: ISprite,
     grid: IExpeditionCell[][],
     playerUnits: ISprite[],
-    enemyUnits: ISprite[]
+    enemyUnits: ISprite[],
+    projectiles: IProjectile[]
 ) {
-    console.log(unit.state.currentState);
-    // enemies can't attack while moving, but player units can't move so
-    // we don't have to check for that
+    // console.log(unit.state.currentState);
+    // enemies can't attack while moving
     if (unit.spriteInfo.spriteType === spriteType.ENEMY &&
         unit.state.currentState !== unitStates.ATTACK) return;
+    let target = getAttackTarget(unit, grid);
+    //  console.log(target);
+    if (!target) {
+        changeUnitState(unit, unitStates.IDLE);
+        return;
+    };
     changeUnitState(unit, unitStates.ATTACK);
-    console.log(unit.state.currentFrame);
+
     // if unit is already attacking then skip
     // (we check currentFrame against 1 and not 0 because handleUnitAnimations is run
     // after damage calculations and unit movements, which means that anything that changes
     // the unit state will animate the attack by one frame before we end up calculating
     // the actual damage)
     if (unit.state.currentFrame !== 1) return;
-    let target = getAttackTarget(unit, grid);
-    console.log('target: ' + target);
-    if (!target) {
-        changeUnitState(unit, unitStates.IDLE);
-        return;
-    };
     if (unit.spriteInfo.melee) {
-        target.state.currentHp -= unit.spriteInfo.damage;
+        processDamageCalculation(unit.spriteInfo.damage, target, grid, playerUnits, enemyUnits);
+    } else {
+        // fire a projectile. when the projectile hits the enemy, that's when we calculate dmg
+        fireHomingProjectile(unit, target, grid, playerUnits, enemyUnits, projectiles);
+        //  fireProjectile(unit, target, grid, playerUnits, enemyUnits, projectiles);
+    }
+}
+
+export const processDamageCalculation = (
+    damage: number,
+    target: ISprite,
+    grid: IExpeditionCell[][],
+    playerUnits: ISprite[],
+    enemyUnits: ISprite[]
+) => {
+    target.state.currentHp -= damage;
+    // remove sprite from cell and master list
+    if (target.state.currentHp <= 0) {
         const targetCoordinates = target.position.coordinates;
         let targetCell: IExpeditionCell =
             grid[targetCoordinates.row][targetCoordinates.col];
-        // remove sprite from cell and master list
-        if (target.state.currentHp <= 0) processUnitDeath(target, targetCell, playerUnits, enemyUnits);
-    } else {
-        // fire a projectile. when the projectile hits the enemy, that's when we calculate dmg
+        processUnitDeath(target, targetCell, playerUnits, enemyUnits);
     }
+}
+
+function fireProjectile(
+    unit: ISprite,
+    target: ISprite,
+    grid: IExpeditionCell[][],
+    playerUnits: ISprite[],
+    enemyUnits: ISprite[],
+    projectiles: IProjectile[]
+) {
+    let newProjectile = cloneDeep(unitProjectiles[unit.spriteInfo.unitType]);
+    newProjectile.projectileId = uniqueId();
+    let startingPositionX = unit.position.coordinates.col * cellWidth;
+    let startingPositionY = unit.position.coordinates.row * cellHeight;
+    newProjectile.target = target;
+    newProjectile.damage = unit.spriteInfo.damage;
+    const projectileSpeed = calculateProjectileSpeed(
+        newProjectile.speed,
+        unit.position.coordinates,
+        target.position.coordinates
+    );
+    newProjectile.positionXTweened = tweened(startingPositionX, {
+        duration: projectileSpeed
+    });
+    newProjectile.positionYTweened = tweened(startingPositionY, {
+        duration: projectileSpeed
+    });
+    let targetPositionX = target.position.coordinates.col * cellWidth;
+    let targetPositionY = target.position.coordinates.row * cellHeight;
+    newProjectile.positionXTweened.set(targetPositionX);
+    // TODO: use handleProjectiles instead so we can add more logic
+    // FIX THIS PART SINCE WE'RE USING TWO DIFFERENT PROJECTILE SYSTEMS NOW
+    // (the non homing version is more flexible in controlling the exact speed of it)
+    newProjectile.positionYTweened.set(targetPositionY).then(() => {
+        processDamageCalculation(newProjectile.damage, target, grid, playerUnits, enemyUnits);
+        for (let a = 0; a < projectiles.length; a++) {
+            if (projectiles[a].projectileId === newProjectile.projectileId) {
+                projectiles.splice(a, 1);
+                return;
+            }
+        }
+    });
+    projectiles.push(newProjectile);
+}
+
+function fireHomingProjectile(
+    unit: ISprite,
+    target: ISprite,
+    grid: IExpeditionCell[][],
+    playerUnits: ISprite[],
+    enemyUnits: ISprite[],
+    projectiles: IProjectile[]
+) {
+    let newProjectile = cloneDeep(unitProjectiles[unit.spriteInfo.unitType]);
+    newProjectile.projectileId = uniqueId();
+    newProjectile.homing = true;
+    // newProjectile.damage = unit.spriteInfo.damage;
+    newProjectile.damage = 1;
+    let startingPositionX = unit.position.coordinates.col * cellWidth;
+    let startingPositionY = unit.position.coordinates.row * cellHeight;
+    newProjectile.target = target;
+    newProjectile.positionSpring = spring({ x: startingPositionX, y: startingPositionY }, {
+        stiffness: 0.05,
+        damping: 0.5
+    });
+    projectiles.push(newProjectile);
+}
+
+function calculateProjectileSpeed(
+    speed: number,
+    currentCoordinates: ICoordinates,
+    targetCoordinates: ICoordinates
+) {
+    const a = Math.pow(Math.abs(currentCoordinates.row - targetCoordinates.row), 2);
+    const b = Math.pow(Math.abs(currentCoordinates.col - targetCoordinates.col), 2);
+    const c = Math.floor(Math.sqrt(a + b)) || 0;
+    return speed * c;
 }
 
 function processUnitDeath(
@@ -211,7 +310,6 @@ const getAttackTarget = (curUnit: ISprite, grid: IExpeditionCell[][]): ISprite |
             grid
         );
     }
-    console.log(coordinatesInRange);
     if (curUnit.spriteInfo.spriteType === spriteType.PLAYER) {
         // return the first enemy unit found in the coordinates within attack range
         for (let coordinate of coordinatesInRange) {
@@ -273,11 +371,11 @@ const getCoordinateRange = (
 ): ICoordinates[] => {
     const coordinateList: ICoordinates[] = [];
     const { row, col } = coordinates;
-    for (let range = 1; range <= radius; range++) {
-        for (let direction of directions) {
+    for (let rangeX = (radius * -1); rangeX <= radius; rangeX++) {
+        for (let rangeY = (radius * -1); rangeY <= radius; rangeY++) {
             coordinateList.push({
-                row: row + direction[0] * range,
-                col: col + direction[1] * range,
+                row: row + rangeY,
+                col: col + rangeX,
             });
         }
     }
@@ -303,12 +401,7 @@ function pruneCoordinateList(
     return prunedList;
 }
 
-// this path index variable... how is it managed?
-// we only have two choices:
-// 1: map it as a property to object (don't want to do this)
-// 2: make another data structure where we map each sprite to it's unitPath index
-// so we know how far it travelled
-export const handleEnemyMovements = (enemyUnits: ISprite[], grid: IExpeditionCell[][]) => {
+export const handleEnemyMovements = (enemyUnits: ISprite[], grid: IExpeditionCell[][], lifeCount: any) => {
     for (let unit of enemyUnits) {
         const unitPath: ICoordinates[] = unit.state.unitPath;
         if (
@@ -316,6 +409,7 @@ export const handleEnemyMovements = (enemyUnits: ISprite[], grid: IExpeditionCel
             unit.state.currentPathIndex >= unitPath.length - 1 ||
             unit.state.currentState !== unitStates.IDLE
         ) continue;
+
         changeUnitState(unit, unitStates.MOVE);
         const previousCol = unitPath[unit.state.currentPathIndex].col;
         const { row, col } = unitPath[unit.state.currentPathIndex + 1];
@@ -324,10 +418,11 @@ export const handleEnemyMovements = (enemyUnits: ISprite[], grid: IExpeditionCel
         if (grid[row][col].playerUnit) {
             changeUnitState(unit, unitStates.ATTACK);
         } else {
+
             grid[row][col].enemyUnitArriving = true;
-            unit.position.positionXTweened.set(col * 72 + unit.offset);
-            unit.position.positionYTweened.set(row * 72).then(() => {
-                handleCompletedMovement(unit, grid);
+            unit.position.positionXTweened.set(col * cellWidth);
+            unit.position.positionYTweened.set(row * cellHeight).then(() => {
+                handleCompletedMovement(unit, grid, enemyUnits, lifeCount);
                 grid[row][col].enemyUnitArriving = false;
                 unit.position.coordinates = { row, col };
             });
@@ -336,7 +431,12 @@ export const handleEnemyMovements = (enemyUnits: ISprite[], grid: IExpeditionCel
     }
 };
 
-function handleCompletedMovement(unit: ISprite, grid: IExpeditionCell[][]) {
+function handleCompletedMovement(
+    unit: ISprite,
+    grid: IExpeditionCell[][],
+    enemyUnits: ISprite[],
+    lifeCount: any
+) {
     // transfer the unit from the previous cell (where it came from) to the current cell
     const previousCellCoordinates = unit.state.unitPath[unit.state.currentPathIndex - 1];
     const previousCell = grid[previousCellCoordinates.row][previousCellCoordinates.col];
@@ -344,8 +444,12 @@ function handleCompletedMovement(unit: ISprite, grid: IExpeditionCell[][]) {
     if (!unitExistsInList(unit, previousCell.enemyUnitList)) return;
     removeFromUnitList(unit, previousCell.enemyUnitList);
 
+    //console.log(unit.state.currentPathIndex + " " + unit.state.unitPath.length);
     // TODO: if unit reaches end we need to decrease life count
-    if (unit.state.currentPathIndex >= unit.state.unitPath.length) return;
+    if (unit.state.currentPathIndex >= unit.state.unitPath.length - 1) {
+        lifeCount.update((n: number) => n > 0 ? n - 1 : n);
+        removeFromUnitList(unit, enemyUnits);
+    };
     const currentCellCoordinates = unit.state.unitPath[unit.state.currentPathIndex];
     const currentCell = grid[currentCellCoordinates.row][currentCellCoordinates.col];
     currentCell.enemyUnitList.push(unit);
@@ -369,39 +473,23 @@ const animateUnit = (unit: ISprite, frame: number) => {
     // (if the animation speed is too slow then they won't end up animating, so
     // make sure the delays are properly set)
 
-    
-       /*
-            might have to implement a separate animation timer for attack...
-            (heavy infantry attack has too many frames)
-            to do this, we first have to get the type of unit state they're in,
-            and then use the appropriate animationspeed thing
-            (use optional property to skip unnecessary processing. maybe at most half
-            of the units will have a separate animation timer)
-       */
-    if (frame % unit.spriteInfo.animationSpeed !== 0) return;
+
+    /*
+         might have to implement a separate animation timer for attack...
+         (heavy infantry attack has too many frames)
+         to do this, we first have to get the type of unit state they're in,
+         and then use the appropriate animationspeed thing
+         (use optional property to skip unnecessary processing. maybe at most half
+         of the units will have a separate animation timer)
+    */
+    let animationSpeed = 1;
+    animationSpeed = getAnimationSpeed(unit);
+    if (frame % animationSpeed !== 0) return;
     let frameList: ICoordinates[] = [];
     if (unit.state.currentFrame === 0 ||
         unit.state.currentFrame >= unit.state.currentFrameList.length
     ) {
-        switch (unit.state.currentState) {
-            case unitStates.IDLE:
-                unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].idleFrames;
-                break;
-            case unitStates.MOVE:
-                unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].moveFrames;
-                break;
-            case unitStates.ATTACK:
-                if (unit.state.currentFrame === 0) {
-                    unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].attackFrames;
-                } else {
-                    // on attack completion, we don't loop it but instead go back to the idle state
-                    // (the attack is complete after one animation)                  
-                    changeUnitState(unit, unitStates.IDLE);
-                }
-                break;
-            default:
-                break;
-        }
+        setFrameList(unit);
         unit.state.currentFrame = 0;
     }
     frameList = unit.state.currentFrameList;
@@ -415,7 +503,50 @@ const animateUnit = (unit: ISprite, frame: number) => {
     unit.state.currentFrame++;
 };
 
-export const handleProjectileAnimations = () => { };
+function getAnimationSpeed(unit: ISprite): number {
+    let stateSpecificAnimationSpeed;
+    switch (unit.state.currentState) {
+        case unitStates.MOVE:
+            stateSpecificAnimationSpeed = unit.spriteInfo.movementAnimationSpeed;
+            break;
+        case unitStates.ATTACK:
+            stateSpecificAnimationSpeed = unit.spriteInfo.attackAnimationSpeed;
+            break;
+        default:
+            break;
+    }
+    return stateSpecificAnimationSpeed || unit.spriteInfo.animationSpeed;
+}
+
+function setFrameList(unit: ISprite) {
+    switch (unit.state.currentState) {
+        case unitStates.IDLE:
+            unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].idleFrames;
+            break;
+        case unitStates.MOVE:
+            unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].moveFrames;
+            break;
+        case unitStates.ATTACK:
+            if (unit.state.currentFrame === 0) {
+                unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].attackFrames;
+            } else {
+                // on attack completion, we don't loop it but instead go back to the idle state
+                // (the attack is complete after one animation)                
+                changeUnitState(unit, unitStates.IDLE);
+                unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].idleFrames;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+export const handleProjectiles = (projectiles: IProjectile[]) => {
+    // if projectile reach target, remove from array and deal damage and handle death
+    for (let projectile of projectiles) {
+        if (projectile.positionXTweened) continue;
+    }
+};
 
 function changeUnitState(unit: ISprite, newState: string) {
     if (unit.state.currentState === newState) return;

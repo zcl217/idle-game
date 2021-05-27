@@ -1,9 +1,10 @@
 import type { ICoordinates } from "~/interfaces/common"
+import { cellHeight, cellWidth } from "./maps"
 
 export const spriteSizes = {
     "TYPE_1": {
-        x: 72,
-        y: 72
+        x: cellWidth,
+        y: cellHeight
     },
     "TYPE_2": {
         x: 168,

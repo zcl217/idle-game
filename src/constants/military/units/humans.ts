@@ -17,9 +17,10 @@ export const heavyInfantry: ISprite = {
         unitType: unitType.HEAVY_INFANTRY,
         spriteSize: spriteSizes.TYPE_2,
         spriteType: spriteType.PLAYER,
-        animationSpeed: 1,
-        hpBarOffsetX: 60,
-        hpBarOffsetY: -30
+        animationSpeed: 3,
+        attackAnimationSpeed: 1,
+        hpBarOffsetX: 10,
+        hpBarOffsetY: -40
     },
     position: {
         coordinates: {
@@ -28,6 +29,7 @@ export const heavyInfantry: ISprite = {
         },
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
+        spriteSheetOffsetX: -55,
         facingRight: true,
     },
     state: {
@@ -36,14 +38,15 @@ export const heavyInfantry: ISprite = {
         currentHp: 50,
         currentFrameList: []
     },
-    // this sprite happens to be wider than the others so it needs an offset
-    offset: -55
+    // this sprite happens to be wider than the others so it needs an offsetX
+    offsetX: -50,
+    offsetY: -20
 }
 
 export const mage: ISprite = {
     spriteInfo: {
-        damage: 10,
-        attackRange: 3,
+        damage: 5,
+        attackRange: 2,
         melee: false,
         maxHp: 50,
         name: "Mage",
@@ -56,7 +59,8 @@ export const mage: ISprite = {
         spriteSize: spriteSizes.TYPE_1,
         spriteType: spriteType.PLAYER,
         animationSpeed: 1,
-        hpBarOffsetX: 0,
+        hpBarOffsetX: 9,
+        hpBarOffsetY: -15
     },
     position: {
         coordinates: {
@@ -73,5 +77,5 @@ export const mage: ISprite = {
         currentHp: 50,
         currentFrameList: [],
     },
-    offset: 0
+    offsetX: 0,
 }

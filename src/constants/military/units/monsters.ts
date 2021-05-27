@@ -11,8 +11,8 @@ export const wolf1: ISprite = {
         unitType: unitType.WOLF1,
         spriteSize: spriteSizes.TYPE_1,
         spriteType: spriteType.ENEMY,
-        movementDelay: 950,
         animationSpeed: 1,
+        movementAnimationSpeed: 1,
         hpBarOffsetX: 11,
         hpBarOffsetY: -10
     },
@@ -23,7 +23,8 @@ export const wolf1: ISprite = {
         },
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
-        facingRight: true
+        facingRight: true,
+        tweenedDelay: 980,
     },
     state: {
         currentState: unitStates.IDLE,
@@ -32,7 +33,7 @@ export const wolf1: ISprite = {
         currentPathIndex: 0,
         currentFrameList: [],
     },
-    offset: 0
+    offsetX: 0
 }
 
 export const wolf2: ISprite = {
@@ -44,8 +45,8 @@ export const wolf2: ISprite = {
         unitType: unitType.WOLF2,
         spriteSize: spriteSizes.TYPE_1,
         spriteType: spriteType.ENEMY,
-        movementDelay: 1000,
         animationSpeed: 1,
+        movementAnimationSpeed: 4,
         hpBarOffsetX: 0,
     },
     position: {
@@ -55,7 +56,8 @@ export const wolf2: ISprite = {
         },
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
-        facingRight: true
+        facingRight: true,
+        tweenedDelay: 950,
     },
     state: {
         currentState: unitStates.IDLE,
@@ -64,7 +66,7 @@ export const wolf2: ISprite = {
         currentPathIndex: 0,
         currentFrameList: [],
     },
-    offset: 0
+    offsetX: 0
 }
 
 export const wolf3: ISprite = {
@@ -95,5 +97,5 @@ export const wolf3: ISprite = {
         currentPathIndex: 0,
         currentFrameList: [],
     },
-    offset: 0
+    offsetX: 0
 }

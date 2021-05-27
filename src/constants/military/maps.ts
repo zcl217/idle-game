@@ -1,6 +1,9 @@
 import type { ICoordinates } from "~/interfaces/common"
 import type { IMap } from "~/interfaces/military/map"
 
+export const cellWidth = 72;
+export const cellHeight = 72;
+
 /*
     These constants hold the tile layout and paths of each playable map.
 */

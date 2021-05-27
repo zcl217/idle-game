@@ -1,10 +1,16 @@
 import { writable } from 'svelte/store';
+import { STAGE_LIST } from '~/constants/military/stageList';
 import { unitType } from '~/constants/military/units/unitTypes'
 
-export const currentStage = new writable(0);
 export const unitToDeploy = new writable({});
+export const lifeCount = new writable(0);
 export const highlightMeleeCells = new writable(false);
 export const highlightRangedCells = new writable(false);
+
+let clearedStagesList = {};
+for (let stage in STAGE_LIST) clearedStagesList[stage] = false;
+
+export const clearedStages = new writable(clearedStagesList);
 
 const initialMilitaryUnitList = [
     {

@@ -2,7 +2,7 @@
     import { tweened } from "svelte/motion";
     import { spriteSheetMap } from "~/constants/military/spriteSheetMap";
     import type { ISprite } from "~/interfaces/military/sprite";
-    import { getBackgroundPosition } from "~/utils/helpers";
+    import { getExpeditionBackgroundPosition } from "~/utils/helpers";
 
     export let sprite: ISprite;
 
@@ -20,7 +20,9 @@
         currentHp: number = 0,
         maxHp: number = 0,
         hpBarOffsetX: number = 0,
-        hpBarOffsetY: number = 0;
+        hpBarOffsetY: number = 0,
+        offsetX: number = 0,
+        offsetY: number = 0;
 
     $: {
         spriteSheet = spriteSheetMap[sprite.spriteInfo.unitType].spriteSheet;
@@ -28,21 +30,24 @@
         height = sprite.spriteInfo.spriteSize.y;
         positionXTweened = sprite.position.positionXTweened;
         positionYTweened = sprite.position.positionYTweened;
-        backgroundPosition = getBackgroundPosition(sprite);
+        backgroundPosition = getExpeditionBackgroundPosition(sprite);
         facingRight = sprite.position.facingRight;
         currentHp = sprite.state.currentHp;
         maxHp = sprite.spriteInfo.maxHp;
         hpBarOffsetX = sprite.spriteInfo.hpBarOffsetX;
-        hpBarOffsetY = sprite.spriteInfo.hpBarOffsetY || 0;
+        hpBarOffsetY = sprite.spriteInfo.hpBarOffsetY || 0,
+        offsetX = sprite.offsetX;
+        offsetY = sprite.offsetY || 0;
     }
 </script>
 
-<div class="pointer-events-none">
+<!-- <div class="pointer-events-none"> -->
+<div>
     <div
         style="
         background-image: url('${spriteSheet}'); 
-        left: {$positionXTweened}px; 
-        top: {$positionYTweened}px;
+        left: {$positionXTweened + offsetX}px; 
+        top: {$positionYTweened + offsetY}px;
         width: {width}px;
         height: {height}px;
         background-position: {backgroundPosition};

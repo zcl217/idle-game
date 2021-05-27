@@ -3,8 +3,9 @@
     import type { ISprite } from "~/interfaces/military/sprite";
     import { unitToDeploy } from "~/store/military";
     import Sprite from "./Sprite.svelte";
-    import { getBackgroundPosition } from "~/utils/helpers";
+    import { getExpeditionBackgroundPosition } from "~/utils/helpers";
     import { spriteSheetMap } from "~/constants/military/spriteSheetMap";
+    import { cellHeight, cellWidth } from "~/constants/military/maps";
 
     export let handleCellClick: any,
         cell: IExpeditionCell,
@@ -24,6 +25,12 @@
         }
     };
 
+    $: {
+        if (!cell.isDeployable) {
+            displayDeployableSprite = false;
+        }
+    }
+
     const handleCellLeave = () => {
         // check the property of cell
         if (cell.isDeployable) {
@@ -40,8 +47,12 @@
 </script>
 
 <div
-    class="bg-cover cell"
-    style="background-image: {cell.backgroundImage}"
+    class="bg-cover"
+    style="
+        background-image: {cell.backgroundImage};
+        width: {cellWidth}px;
+        height: {cellHeight}px;
+    "
     on:mouseenter={handleCellEnter}
     on:mouseleave={handleCellLeave}
     on:click={emitCellClick}
@@ -67,7 +78,7 @@
     {#if displayDeployableSprite}
         <div
             class="absolute opacity-50"
-            style="top: {row * 72}px; left: {col * 72 + sprite.offset}px"
+            style="top: {row * cellHeight}px; left: {col * cellWidth}px"
         >
             <Sprite {sprite} />
         </div>
@@ -80,9 +91,5 @@
         height: 90%;
         border-radius: 50px;
         margin: 0 auto;
-    }
-    .cell {
-        height: 72px;
-        width: 72px;
     }
 </style>
