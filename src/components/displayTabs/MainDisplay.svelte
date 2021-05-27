@@ -1,19 +1,21 @@
 <script lang="ts">
     import InfoBoxButton from "../InfoBoxButton.svelte";
     import CharacterFrame from "../CharacterFrame.svelte";
-    import { RESOURCE_TYPES } from "~/constants/resourceTypes";
-    import { BUTTON_WIDTH, BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
-    import DIALOGUES from "~/constants/dialogueTextAndHandlers";
+    import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
+    import {
+        BUTTON_WIDTH,
+        BUTTON_CATEGORIES,
+    } from "~/constants/buttons/buttons";
+    import { DIALOGUES, STORY_PROGRESS_LIST } from "~/constants/story";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
     import { resources } from "~/store/resources.js";
     import { empireButtonCosts } from "~/store/buttonCosts";
     import {
         playerImage,
         playerName,
-        scene,
-        getCurActScene,
         researchedSciences,
         obtainedResources,
+        curStoryProgress,
     } from "~/store/gameState.js";
     import { buttonPrereqsMet } from "~/utils/helpers";
     import {
@@ -47,6 +49,10 @@
         }
     };
     const gatherFoodHandler = () => {
+        curStoryProgress.set(STORY_PROGRESS_LIST['A2S1']);
+        updateDialogue(DIALOGUES[$curStoryProgress]);
+        displayDialogueBox.set(true);
+
         const food = RESOURCE_TYPES.FOOD;
         resources.updateResourceValue(food, $resources[food].value + 10);
         obtainedResources.add(RESOURCE_TYPES.FOOD);
@@ -99,25 +105,23 @@
     };
 
     const buildAttractiveHouseHandler = (buttonType: string) => {
-        const house = RESOURCE_TYPES.ATTRACTIVE_HOUSE;
+        const attractiveHouse = RESOURCE_TYPES.ATTRACTIVE_HOUSE;
         if (!hasEnoughResources(buttonType)) return;
         spendResources(buttonType);
-        resources.updateResourceValue(house, $resources[house].value + 1);
+        resources.updateResourceValue(attractiveHouse, $resources[attractiveHouse].value + 1);
         empireButtonCosts.updateButtonCosts(
             buttonType,
             EMPIRE_COST_MULTIPLIERS[buttonType]
         );
         setTimeout(() => {
-            //trigger dailogue
+            //trigger dialogue
             // bug right now:
             /* 1. loop running several times if we spam click buttons
             not sure how we fixed this last time
             */
-            if ($scene === "0") {
-                scene.set("1");
-                const curScene = getCurActScene();
-                updateDialogue(DIALOGUES[curScene]);
-            }
+            const nextScene = STORY_PROGRESS_LIST['A1S1'];
+            curStoryProgress.set(nextScene);
+            updateDialogue(DIALOGUES[nextScene]);
             displayDialogueBox.set(true);
         }, 3);
         obtainedResources.add(RESOURCE_TYPES.ATTRACTIVE_HOUSE);
@@ -142,7 +146,7 @@
     };
 </script>
 
-<CharacterFrame characterImage={$playerImage} characterName={$playerName} />
+<!-- <CharacterFrame characterImage={$playerImage} characterName={$playerName} /> -->
 <div class="flex flex-wrap">
     {#key $obtainedResources}
         {#each Object.entries(EMPIRE_BUTTON_TYPES) as [key, id]}

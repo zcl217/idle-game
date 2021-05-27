@@ -8,12 +8,15 @@
     } from "../store/infoBox.js";
     import {
         BUTTON_CATEGORIES,
-        OTHER_BUTTON_TEXTS,
-        BUTTON_WIDTH
+        BUTTON_WIDTH,
     } from "~/constants/buttons/buttons";
     import { EMPIRE_BUTTON_TEXTS } from "~/constants/buttons/empireButtons";
     import { SCIENCE_BUTTON_TEXTS } from "~/constants/buttons/scienceButtons";
     import { MILITARY_BUTTON_TEXTS } from "~/constants/buttons/militaryButtons";
+    import {
+        OTHER_BUTTON_TEXTS,
+        OTHER_BUTTON_TYPES,
+    } from "~/constants/buttons/otherButtons";
     import { onDestroy } from "svelte";
     export let handler: any,
         curButtonType: string,
@@ -21,6 +24,10 @@
         curButtonCategory: string;
 
     let button: Element;
+    let disabled = false;
+
+    if (curButtonType === OTHER_BUTTON_TYPES.LORD_2) disabled = true;
+
     const showInfoBox = () => {
         displayInfoBox.set(true);
         buttonType.set(curButtonType);
@@ -42,6 +49,7 @@
     style="width: {width}px"
     class="m-3 mx-2 rpgui-button"
     type="button"
+    {disabled}
     bind:this={button}
     on:click={handler}
     on:mouseenter={showInfoBox}

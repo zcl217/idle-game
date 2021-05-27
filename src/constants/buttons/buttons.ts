@@ -1,4 +1,4 @@
-import { RESOURCE_TYPES } from '../resourceTypes';
+import { RESOURCE_TYPES } from '../resources/resourceTypes';
 import { uniqueId } from 'lodash'
 
 export const BUTTON_WIDTH = 211;
@@ -9,17 +9,6 @@ export const BUTTON_CATEGORIES: Record<string, string> = {
     SCIENCE: 'science',
     MILITARY: 'military',
 }
-
-export const OTHER_BUTTON_TYPES = {
-    LORD_1: uniqueId(),
-    LORD_2: uniqueId(),
-}
-
-export const OTHER_BUTTON_TEXTS = {
-    [OTHER_BUTTON_TYPES.LORD_1]: 'Lord of Hope',
-    [OTHER_BUTTON_TYPES.LORD_2]: 'Lord of Destruction',
-}
-
 
 // export const buttonTypeToResourceType = {
 //     [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: RESOURCE_TYPES.FOOD,

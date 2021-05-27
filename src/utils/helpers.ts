@@ -1,14 +1,15 @@
 // displays m if over a million
 // displays k if over a thousand
 // parses numbers to two decimal places
-import { RESOURCE_GENERATOR_MAP } from '../constants/resourceTypes';
-import { WORKER_GENERATOR_MAP } from '../constants/workerTypes';
+import { RESOURCE_GENERATOR_MAP } from '../constants/resources/resourceTypes';
+import { WORKER_GENERATOR_MAP } from '../constants/workers/workerTypes';
 import { SCIENCE_BUTTON_PREREQS } from '~/constants/buttons/scienceButtons';
 import { EMPIRE_BUTTON_PREREQS } from '~/constants/buttons/empireButtons';
 import { get } from 'svelte/store';
 import {
     researchedSciences as researchedSciencesFromStore,
-    obtainedResources as obtainedResourcesFromStore
+    obtainedResources as obtainedResourcesFromStore,
+    curStoryProgress
 } from '~/store/gameState';
 import { BUTTON_CATEGORIES } from '~/constants/buttons/buttons';
 import * as humanUnits from '~/constants/military/units/humans'
@@ -70,6 +71,9 @@ export const buttonPrereqsMet = (type: string, buttonCategory: string) => {
     }
     for (let resource of resourcePrereqs) {
         if (!obtainedResources.has(resource)) return false;
+    }
+    if (prereqList[type].storyPrereq) {
+        return get(curStoryProgress) >= prereqList[type].storyPrereq;
     }
     return true;
 }

@@ -29,6 +29,7 @@
     $: {
         switch ($buttonCategory) {
             case BUTTON_CATEGORIES.EMPIRE:
+                if (!EMPIRE_INFO_BOXES[$buttonType]) break;
                 costs = $empireButtonCosts[$buttonType];
                 title = EMPIRE_INFO_BOXES[$buttonType].title;
                 text = EMPIRE_INFO_BOXES[$buttonType].text;
@@ -44,6 +45,7 @@
             case BUTTON_CATEGORIES.OTHER:
                 title = OTHER_INFO_BOXES[$buttonType].title;
                 text = OTHER_INFO_BOXES[$buttonType].text;
+                costs = [];
                 break;
             default:
                 costs = [];

@@ -1,8 +1,9 @@
 
 import { uniqueId } from 'lodash'
-import { RESOURCE_TYPES } from '../resourceTypes';
+import { RESOURCE_TYPES } from '../resources/resourceTypes';
 import type { IButtonCostList } from '~/interfaces/buttons';
 import type { IPrereqsList } from '~/interfaces/common';
+import { STORY_PROGRESS_LIST } from '~/constants/story';
 
 export const EMPIRE_BUTTON_TYPES = {
     GATHER_FOOD: uniqueId(),
@@ -12,6 +13,7 @@ export const EMPIRE_BUTTON_TYPES = {
     CREATE_TREE_FARM: uniqueId(),
     BUILD_ATTRACTIVE_HOUSE: uniqueId(),
     BUILD_HOUSE: uniqueId(),
+    BUILD_LIBRARY: uniqueId(),
 }
 
 export const EMPIRE_BUTTON_TEXTS = {
@@ -22,6 +24,7 @@ export const EMPIRE_BUTTON_TEXTS = {
     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: 'Create Tree Farm',
     [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: 'Attractive House',
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: 'Build House',
+    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: 'Build Library',
 }
 
 export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
@@ -51,7 +54,13 @@ export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: {
         sciencePrereqs: [],
-        resourcePrereqs: []
+        resourcePrereqs: [],
+        storyPrereq: STORY_PROGRESS_LIST['A2S1']
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: {
+        sciencePrereqs: [],
+        resourcePrereqs: [],
+        storyPrereq: STORY_PROGRESS_LIST['A2S1']
     },
 }
 
@@ -102,6 +111,13 @@ export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
             cost: 0,
         },
     ],
+    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: [
+        {
+            type: RESOURCE_TYPES.HOMES,
+            text: 'Wood',
+            cost: 500,
+        },
+    ],
     // [EMPIRE_BUTTON_TYPES.CREATE_FARM]: [
     //     {
     //         type: [RESOURCE_TYPES.FOOD],
@@ -129,6 +145,9 @@ export const EMPIRE_COST_MULTIPLIERS = {
         return Math.min(val * 1.3 + 33, 1000);
     },
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: (val: number) => {
-        return val * 1.8 + 50
+        return val * 3 + 50
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: (val: number) => {
+        return val * 5 + 50
     },
 }

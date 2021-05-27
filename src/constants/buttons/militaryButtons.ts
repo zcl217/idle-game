@@ -1,6 +1,6 @@
 
 import { uniqueId } from 'lodash'
-import { RESOURCE_TYPES } from '../resourceTypes';
+import { RESOURCE_TYPES } from '../resources/resourceTypes';
 import type { IButtonCostList } from '~/interfaces/buttons';
 import type { IPrereqsList } from '~/interfaces/common';
 

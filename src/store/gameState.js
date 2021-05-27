@@ -1,14 +1,10 @@
 import { writable, get } from 'svelte/store';
-import { RESOURCE_TYPES } from '~/constants/resourceTypes';
+import { RESOURCE_TYPES } from '~/constants/resources/resourceTypes';
 
 
-export const act = writable('1');
-export const scene = writable('0');
+export const curStoryProgress = writable(0);
 export const playerImage = writable('../sprites/peasant.png');
 export const playerName = writable('Peasant');
-export const getCurActScene = () => {
-    return `A${get(act)}S${get(scene)}`;
-}
 export const inExpedition = writable(false);
 export const researchedSciences = writable(new Set());
 

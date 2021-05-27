@@ -1,4 +1,4 @@
-import { OTHER_BUTTON_TYPES } from './buttons/buttons';
+import { OTHER_BUTTON_TYPES } from './buttons/otherButtons';
 import { EMPIRE_BUTTON_TYPES } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
 import { MILITARY_BUTTON_TYPES } from './buttons/militaryButtons';
@@ -30,7 +30,11 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: {
         title: 'Build House',
-        text: 'Build a house. Increases max workers by 1'
+        text: 'Increases max workers by 1'
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: {
+        title: 'Build Library',
+        text: 'Unlocks science. Each library increases knowledge acquisition rate by 5%'
     },
 }
 

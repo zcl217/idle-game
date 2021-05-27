@@ -12,8 +12,9 @@
     import InfoBox from "../components/InfoBox.svelte";
     import { TABS } from "../constants/buttons/buttons";
     import CharacterChoice from "~/components/displayTabs/CharacterChoice.svelte";
-    import { scene, act, inExpedition } from "~/store/gameState.js";
-import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
+    import { curStoryProgress, inExpedition } from "~/store/gameState.js";
+    import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
+    import { STORY_PROGRESS_LIST } from "~/constants/story";
     let darkBackground = true,
         displayMenuTabs = true,
         currentTab = TABS.MAIN_1;
@@ -21,10 +22,10 @@ import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
         currentTab = payload.detail;
     };
     $: {
-        if ($act === "1" && $scene === "5") {
+        if ($curStoryProgress === STORY_PROGRESS_LIST["A1S5"]) {
             currentTab = TABS.CHARACTER_CHOICE;
         }
-        if ($act === "2" && $scene === "1") {
+        if ($curStoryProgress === STORY_PROGRESS_LIST["A2S1"]) {
             currentTab = TABS.MAIN_2;
             displayMenuTabs = true;
         }

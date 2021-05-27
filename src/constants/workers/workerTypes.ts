@@ -1,4 +1,4 @@
-import { RESOURCE_TYPES } from './resourceTypes';
+import { RESOURCE_TYPES } from '../resources/resourceTypes';
 
 export const WORKER_TYPES = {
     FARMER: 'farmer',

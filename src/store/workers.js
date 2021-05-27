@@ -1,6 +1,5 @@
 import { writable } from 'svelte/store';
-import { WORKER_TYPES } from '../constants/workerTypes';
-import { INITIAL_WORKER_STATE } from '../constants/workerStates';
+import { INITIAL_WORKER_STATE } from '../constants/workers/workerStates';
 
 const createNewWorkers = (workers) => {
     const { subscribe, update } = writable(workers);

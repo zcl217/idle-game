@@ -1,9 +1,9 @@
 <script lang="ts">
     import { resources } from "~/store/resources.js";
     import WorkerCountButtons from "../WorkerCountButtons.svelte";
-    import { RESOURCE_TYPES } from "~/constants/resourceTypes";
+    import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
     import { workers } from "~/store/workers";
-    import { WORKER_TYPES } from "~/constants/workerTypes";
+    import { WORKER_TYPES } from "~/constants/workers/workerTypes";
 
     $: assignedWorkers = () => {
         let sum = 0;

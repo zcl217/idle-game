@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
-import { initialResourceCostsState, INITIAL_RESOURCE_STATE } from '../constants/resourceStates';
-import { RESOURCE_GENERATOR_MAP } from '../constants/resourceTypes';
+import { initialResourceCostsState, INITIAL_RESOURCE_STATE } from '../constants/resources/resourceStates';
+import { RESOURCE_GENERATOR_MAP } from '../constants/resources/resourceTypes';
 
 const createNewResources = (resources) => {
     const { subscribe, update } = writable(resources);

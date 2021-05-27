@@ -1,16 +1,14 @@
 <script lang="ts">
     import InfoBoxButton from "../InfoBoxButton.svelte";
     import CharacterFrame from "../CharacterFrame.svelte";
-    import { RESOURCE_TYPES } from "~/constants/resourceTypes";
+    import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
     import { BUTTON_CATEGORIES, BUTTON_WIDTH } from "~/constants/buttons/buttons";
-    import DIALOGUES from "~/constants/dialogueTextAndHandlers";
+    import { DIALOGUES } from "~/constants/story";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
     import { resources } from "~/store/resources.js";
     import {
         playerImage,
         playerName,
-        scene,
-        getCurActScene,
         obtainedResources,
     } from "~/store/gameState.js";
     import {
@@ -21,13 +19,23 @@
 import { buttonPrereqsMet } from "~/utils/helpers";
 
     const handleResource = (buttonType: string) => {
-        switch(buttonType) {
+        switch (buttonType) {
+            case EMPIRE_BUTTON_TYPES.GATHER_FOOD:
+                gatherFoodHandler();
+                break;
+            case EMPIRE_BUTTON_TYPES.GATHER_WOOD:
+                gatherWoodHandler();
+                break;
+            case EMPIRE_BUTTON_TYPES.BUILD_STORAGE:
+                buildStorageHandler(buttonType);
+                break;
             case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
+                buildHouseHandler(buttonType);
                 break;
             default:
                 break;
         }
-    }
+    };
 
     const buildHouseHandler = (buttonType: string) => {
         const homes = RESOURCE_TYPES.HOMES;
@@ -112,7 +120,7 @@ import { buttonPrereqsMet } from "~/utils/helpers";
     };
 </script>
 
-<CharacterFrame characterImage={$playerImage} characterName={$playerName} />
+<!-- <CharacterFrame characterImage={$playerImage} characterName={$playerName} /> -->
 <div class="flex flex-wrap">
     {#key $obtainedResources}
         {#each Object.entries(EMPIRE_BUTTON_TYPES) as [key, id]}
@@ -128,38 +136,4 @@ import { buttonPrereqsMet } from "~/utils/helpers";
             {/if}
         {/each}
     {/key}
-    <InfoBoxButton
-        width={BUTTON_WIDTH}
-        curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
-        curButtonType={EMPIRE_BUTTON_TYPES.BUILD_HOUSE}
-        handler={buildHouseHandler}
-    />
-    {#if $resources[RESOURCE_TYPES.WOOD].display}
-        <InfoBoxButton
-            width={BUTTON_WIDTH}
-            curButtonType={EMPIRE_BUTTON_TYPES.GATHER_WOOD}
-            handler={{}}
-        />
-    {/if}
-    {#if $resources[RESOURCE_TYPES.FARMS].display}
-        <InfoBoxButton
-            width={BUTTON_WIDTH}
-            curButtonType={EMPIRE_BUTTON_TYPES.CREATE_FARM}
-            handler={{}}
-        />
-    {/if}
-    {#if $resources[RESOURCE_TYPES.FARMS].value > 1}
-        <InfoBoxButton
-            width={BUTTON_WIDTH}
-            curButtonType={EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM}
-            handler={createTreeFarmHandler}
-        />
-    {/if}
-    {#if $resources[RESOURCE_TYPES.FARMS].value > 2}
-        <InfoBoxButton
-            width={BUTTON_WIDTH}
-            curButtonType={EMPIRE_BUTTON_TYPES.BUILD_STORAGE}
-            handler={buildStorageHandler}
-        />
-    {/if}
 </div>

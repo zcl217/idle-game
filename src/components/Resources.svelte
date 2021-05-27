@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
     import { resources } from "../store/resources.js";
     import { workers } from "../store/workers.js";
-    import { RESOURCE_TYPES, RESOURCE_DISPLAY_PREREQS } from "../constants/resourceTypes";
+    import { RESOURCE_TYPES } from "../constants/resources/resourceTypes";
+    import { RESOURCE_DISPLAY_PREREQS } from "~/constants/resources/resourcePrereqs"
     import {
         resourceParser,
         calculateGenerationRate,
@@ -11,11 +12,11 @@
         researchedSciences,
     } from "~/store/gameState.js";
     // figure out how to manage resources (maybe from store?) do we use array for this or something with faster access like map?
-    const displayGenerationRate = (type) => {
+    const displayGenerationRate = (type: string) => {
         return type !== RESOURCE_TYPES.STORAGE;
     };
 
-    const resourcePrereqsMet = (type) => {
+    const resourcePrereqsMet = (type: string) => {
         if (!RESOURCE_DISPLAY_PREREQS[type]) return false;
         const { sciencePrereqs } = RESOURCE_DISPLAY_PREREQS[type];
         const { resourcePrereqs } = RESOURCE_DISPLAY_PREREQS[type];

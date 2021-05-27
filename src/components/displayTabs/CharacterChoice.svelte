@@ -1,23 +1,23 @@
 <script lang="ts">
     import InfoBoxButton from "../InfoBoxButton.svelte";
     import CharacterFrame from "../CharacterFrame.svelte";
-    import { BUTTON_WIDTH, BUTTON_CATEGORIES, OTHER_BUTTON_TYPES } from "~/constants/buttons/buttons";
-    import DIALOGUES from "~/constants/dialogueTextAndHandlers";
+    import {
+        BUTTON_WIDTH,
+        BUTTON_CATEGORIES,
+    } from "~/constants/buttons/buttons";
+    import { OTHER_BUTTON_TYPES } from "~/constants/buttons/otherButtons";
+    import { DIALOGUES, STORY_PROGRESS_LIST } from "~/constants/story";
     import { updateDialogue, displayDialogueBox } from "~/store/dialogue";
     import {
         playerImage,
         playerName,
-        act,
-        scene,
-        getCurActScene,
+        curStoryProgress,
     } from "~/store/gameState.js";
 
     const selectLord = (lordType: string) => {
-        act.set("2");
-        scene.set("1");
-
-        const curScene = getCurActScene();
-        updateDialogue(DIALOGUES[curScene]);
+        const nextScene = STORY_PROGRESS_LIST["A2S1"];
+        curStoryProgress.set(nextScene);
+        updateDialogue(DIALOGUES[nextScene]);
         displayDialogueBox.set(true);
     };
 </script>
@@ -43,5 +43,6 @@
                 selectLord("lord2");
             }}
         />
+        <p class="text-red-600">(work in progress)</p>
     </div>
 </div>
