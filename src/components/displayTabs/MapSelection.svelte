@@ -23,7 +23,6 @@
     let zone2Unlocked: boolean = false;
     let zone3Unlocked: boolean = false;
     let enemyPreviewList: { sprite: ISprite; count: number }[] = [];
-    console.log(enemyPreviewList);
     const dispatch = createEventDispatcher();
 
     for (let a = 0; a < 3; a++) {
@@ -38,13 +37,11 @@
     }
 
     $: {
-        console.log($clearedStages);
         if ($clearedStages[STAGE_LIST["1-3"]]) {
             zone2Unlocked = true;
         } else if ($clearedStages[STAGE_LIST["2-3"]]) {
             zone3Unlocked = true;
         }
-        console.log(zone2Unlocked + " " + zone3Unlocked);
     }
 
     // TODO: add half transparent image of the stage of the respective zone to the background

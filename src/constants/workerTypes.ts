@@ -1,13 +1,13 @@
-import { resourceTypes } from './resourceTypes';
+import { RESOURCE_TYPES } from './resourceTypes';
 
-export const workerTypes = {
+export const WORKER_TYPES = {
     FARMER: 'farmer',
     WOODCUTTER: 'woodcutter',
     SCHOLAR: 'scholar',
     MINER: 'miner'
 }
 
-export const workerGeneratorMap = {
-    [resourceTypes.FOOD]: workerTypes.FARMER,
-    [resourceTypes.WOOD]: workerTypes.WOODCUTTER,
+export const WORKER_GENERATOR_MAP = {
+    [RESOURCE_TYPES.FOOD]: WORKER_TYPES.FARMER,
+    [RESOURCE_TYPES.WOOD]: WORKER_TYPES.WOODCUTTER,
 }

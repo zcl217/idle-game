@@ -1,4 +1,4 @@
-import { resourceTypes } from '../resourceTypes';
+import { RESOURCE_TYPES } from '../resourceTypes';
 import { uniqueId } from 'lodash'
 
 export const BUTTON_WIDTH = 211;
@@ -22,13 +22,13 @@ export const OTHER_BUTTON_TEXTS = {
 
 
 // export const buttonTypeToResourceType = {
-//     [empireButtonTypes.GATHER_FOOD]: resourceTypes.FOOD,
-//     [empireButtonTypes.CREATE_FARM]: resourceTypes.FARMS,
-//     [empireButtonTypes.GATHER_WOOD]: resourceTypes.WOOD,
-//     [empireButtonTypes.BUILD_STORAGE]: resourceTypes.STORAGE,
-//     [empireButtonTypes.CREATE_TREE_FARM]: resourceTypes.TREE_FARM,
-//     [empireButtonTypes.BUILD_ATTRACTIVE_HOUSE]: resourceTypes.ATTRACTIVE_HOUSE,
-//     [empireButtonTypes.BUILD_HOUSE]: resourceTypes.HOMES,
+//     [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: RESOURCE_TYPES.FOOD,
+//     [EMPIRE_BUTTON_TYPES.CREATE_FARM]: RESOURCE_TYPES.FARMS,
+//     [EMPIRE_BUTTON_TYPES.GATHER_WOOD]: RESOURCE_TYPES.WOOD,
+//     [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: RESOURCE_TYPES.STORAGE,
+//     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: RESOURCE_TYPES.TREE_FARM,
+//     [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: RESOURCE_TYPES.ATTRACTIVE_HOUSE,
+//     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: RESOURCE_TYPES.HOMES,
 // }
 
 export const TABS = {

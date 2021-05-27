@@ -1,10 +1,10 @@
 
 import { uniqueId } from 'lodash'
-import { resourceTypes } from '../resourceTypes';
+import { RESOURCE_TYPES } from '../resourceTypes';
 import type { IButtonCostList } from '~/interfaces/buttons';
 import type { IPrereqsList } from '~/interfaces/common';
 
-export const empireButtonTypes = {
+export const EMPIRE_BUTTON_TYPES = {
     GATHER_FOOD: uniqueId(),
     CREATE_FARM: uniqueId(),
     GATHER_WOOD: uniqueId(),
@@ -14,97 +14,97 @@ export const empireButtonTypes = {
     BUILD_HOUSE: uniqueId(),
 }
 
-export const empireButtonTexts = {
-    [empireButtonTypes.GATHER_FOOD]: 'Gather Food',
-    [empireButtonTypes.CREATE_FARM]: 'Create Farm',
-    [empireButtonTypes.GATHER_WOOD]: 'Gather Wood',
-    [empireButtonTypes.BUILD_STORAGE]: 'Build Storage',
-    [empireButtonTypes.CREATE_TREE_FARM]: 'Create Tree Farm',
-    [empireButtonTypes.BUILD_ATTRACTIVE_HOUSE]: 'Attractive House',
-    [empireButtonTypes.BUILD_HOUSE]: 'Build House',
+export const EMPIRE_BUTTON_TEXTS = {
+    [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: 'Gather Food',
+    [EMPIRE_BUTTON_TYPES.CREATE_FARM]: 'Create Farm',
+    [EMPIRE_BUTTON_TYPES.GATHER_WOOD]: 'Gather Wood',
+    [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: 'Build Storage',
+    [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: 'Create Tree Farm',
+    [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: 'Attractive House',
+    [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: 'Build House',
 }
 
-export const empireButtonPrereqs: IPrereqsList = {
-    [empireButtonTypes.GATHER_FOOD]: {
+export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
+    [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [empireButtonTypes.CREATE_FARM]: {
+    [EMPIRE_BUTTON_TYPES.CREATE_FARM]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [empireButtonTypes.GATHER_WOOD]: {
+    [EMPIRE_BUTTON_TYPES.GATHER_WOOD]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [empireButtonTypes.CREATE_TREE_FARM]: {
+    [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: {
         sciencePrereqs: [],
-        resourcePrereqs: [resourceTypes.FARMS]
+        resourcePrereqs: [RESOURCE_TYPES.FARMS]
     },
-    [empireButtonTypes.BUILD_STORAGE]: {
+    [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: {
         sciencePrereqs: [],
-        resourcePrereqs: [resourceTypes.TREE_FARM]
+        resourcePrereqs: [RESOURCE_TYPES.TREE_FARM]
     },
-    [empireButtonTypes.BUILD_ATTRACTIVE_HOUSE]: {
+    [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: {
         sciencePrereqs: [],
-        resourcePrereqs: [resourceTypes.STORAGE]
+        resourcePrereqs: [RESOURCE_TYPES.STORAGE]
     },
-    [empireButtonTypes.BUILD_HOUSE]: {
+    [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
 }
 
 
-export const initialEmpireButtonCosts: IButtonCostList = {
-    [empireButtonTypes.CREATE_FARM]: [
+export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
+    [EMPIRE_BUTTON_TYPES.CREATE_FARM]: [
         {
-            type: resourceTypes.FOOD,
+            type: RESOURCE_TYPES.FOOD,
             text: 'Food',
             cost: 20,
         },
         {
-            type: resourceTypes.WOOD,
+            type: RESOURCE_TYPES.WOOD,
             text: 'Wood',
             cost: 10,
         },
     ],
-    [empireButtonTypes.BUILD_STORAGE]: [
+    [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: [
         {
-            type: resourceTypes.WOOD,
+            type: RESOURCE_TYPES.WOOD,
             text: 'Wood',
             cost: 100,
         },
     ],
-    [empireButtonTypes.CREATE_TREE_FARM]: [
+    [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: [
         {
-            type: resourceTypes.WOOD,
+            type: RESOURCE_TYPES.WOOD,
             text: 'Wood',
             cost: 50,
         },
     ],
-    [empireButtonTypes.BUILD_ATTRACTIVE_HOUSE]: [
+    [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: [
         {
-            type: resourceTypes.FOOD,
+            type: RESOURCE_TYPES.FOOD,
             text: 'Food',
             cost: 1,
         },
         {
-            type: resourceTypes.WOOD,
+            type: RESOURCE_TYPES.WOOD,
             text: 'Wood',
             cost: 0,
         },
     ],
-    [empireButtonTypes.BUILD_HOUSE]: [
+    [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: [
         {
-            type: resourceTypes.HOMES,
+            type: RESOURCE_TYPES.HOMES,
             text: 'Wood',
             cost: 0,
         },
     ],
-    // [empireButtonTypes.CREATE_FARM]: [
+    // [EMPIRE_BUTTON_TYPES.CREATE_FARM]: [
     //     {
-    //         type: [resourceTypes.FOOD],
+    //         type: [RESOURCE_TYPES.FOOD],
     //         text: 'Food',
     //         cost: 10,
     //     },
@@ -115,20 +115,20 @@ export const initialEmpireButtonCosts: IButtonCostList = {
 
 }
 
-export const empireCostMultipliers = {
-    [empireButtonTypes.CREATE_FARM]: (val: number) => {
+export const EMPIRE_COST_MULTIPLIERS = {
+    [EMPIRE_BUTTON_TYPES.CREATE_FARM]: (val: number) => {
         return val * 1.3 + 5
     },
-    [empireButtonTypes.BUILD_STORAGE]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: (val: number) => {
         return val * 1.2 + 20
     },
-    [empireButtonTypes.CREATE_TREE_FARM]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: (val: number) => {
         return val * 1.5
     },
-    [empireButtonTypes.BUILD_ATTRACTIVE_HOUSE]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: (val: number) => {
         return Math.min(val * 1.3 + 33, 1000);
     },
-    [empireButtonTypes.BUILD_HOUSE]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: (val: number) => {
         return val * 1.8 + 50
     },
 }

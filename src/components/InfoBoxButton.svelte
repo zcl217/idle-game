@@ -11,9 +11,9 @@
         OTHER_BUTTON_TEXTS,
         BUTTON_WIDTH
     } from "~/constants/buttons/buttons";
-    import { empireButtonTexts } from "~/constants/buttons/empireButtons";
-    import { scienceButtonTexts } from "~/constants/buttons/scienceButtons";
-    import { militaryButtonTexts } from "~/constants/buttons/militaryButtons";
+    import { EMPIRE_BUTTON_TEXTS } from "~/constants/buttons/empireButtons";
+    import { SCIENCE_BUTTON_TEXTS } from "~/constants/buttons/scienceButtons";
+    import { MILITARY_BUTTON_TEXTS } from "~/constants/buttons/militaryButtons";
     import { onDestroy } from "svelte";
     export let handler: any,
         curButtonType: string,
@@ -50,10 +50,10 @@
     {#if curButtonCategory === BUTTON_CATEGORIES.OTHER}
         <p>{OTHER_BUTTON_TEXTS[curButtonType]}</p>
     {:else if curButtonCategory === BUTTON_CATEGORIES.EMPIRE}
-        <p>{empireButtonTexts[curButtonType]}</p>
+        <p>{EMPIRE_BUTTON_TEXTS[curButtonType]}</p>
     {:else if curButtonCategory === BUTTON_CATEGORIES.SCIENCE}
-        <p>{scienceButtonTexts[curButtonType]}</p>
+        <p>{SCIENCE_BUTTON_TEXTS[curButtonType]}</p>
     {:else if curButtonCategory === BUTTON_CATEGORIES.MILITARY}
-        <p>{militaryButtonTexts[curButtonType]}</p>
+        <p>{MILITARY_BUTTON_TEXTS[curButtonType]}</p>
     {/if}
 </button>

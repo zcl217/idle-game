@@ -1,10 +1,10 @@
 // displays m if over a million
 // displays k if over a thousand
 // parses numbers to two decimal places
-import { resourceGeneratorMap } from '../constants/resourceTypes';
-import { workerGeneratorMap } from '../constants/workerTypes';
-import { scienceButtonPrereqs } from '~/constants/buttons/scienceButtons';
-import { empireButtonPrereqs, empireButtonTypes } from '~/constants/buttons/empireButtons';
+import { RESOURCE_GENERATOR_MAP } from '../constants/resourceTypes';
+import { WORKER_GENERATOR_MAP } from '../constants/workerTypes';
+import { SCIENCE_BUTTON_PREREQS } from '~/constants/buttons/scienceButtons';
+import { EMPIRE_BUTTON_PREREQS } from '~/constants/buttons/empireButtons';
 import { get } from 'svelte/store';
 import {
     researchedSciences as researchedSciencesFromStore,
@@ -12,11 +12,11 @@ import {
 } from '~/store/gameState';
 import { BUTTON_CATEGORIES } from '~/constants/buttons/buttons';
 import * as humanUnits from '~/constants/military/units/humans'
-import { unitType } from '~/constants/military/units/unitTypes'
-import { spriteSheetMap } from '~/constants/military/spriteSheetMap';
+import { UNIT_TYPES } from '~/constants/military/units/unitTypes'
+import { SPRITESHEET_MAP } from '~/constants/military/spriteSheetMap';
 import type { ICoordinates, IPrereqsList } from '~/interfaces/common';
 import type { ISprite } from '~/interfaces/military/sprite';
-import { spriteSizes } from '~/constants/military/sprites';
+import { SPRITE_SIZES } from '~/constants/military/sprites';
 
 export const resourceParser = (value: number): string => {
     const million = 1000000;
@@ -39,10 +39,10 @@ const parseDecimals = (input: number) => {
 }
 
 export const calculateGenerationRate = (type: string, resources: any, workers: any) => {
-    const generator = resourceGeneratorMap[type];
+    const generator = RESOURCE_GENERATOR_MAP[type];
     if (!resources || !generator) return '0';
     let resourcesGenerated = resources[generator].value * resources[generator].generationValue;
-    const workerType = workerGeneratorMap[type];
+    const workerType = WORKER_GENERATOR_MAP[type];
     if (!workers || !workerType) return resourceParser(resourcesGenerated);
     resourcesGenerated += workers[workerType].value * workers[workerType].generationValue;
     return resourceParser(resourcesGenerated);
@@ -52,10 +52,10 @@ export const buttonPrereqsMet = (type: string, buttonCategory: string) => {
     let prereqList = {} as IPrereqsList;
     switch (buttonCategory) {
         case BUTTON_CATEGORIES.EMPIRE:
-            prereqList = empireButtonPrereqs;
+            prereqList = EMPIRE_BUTTON_PREREQS;
             break;
         case BUTTON_CATEGORIES.SCIENCE:
-            prereqList = scienceButtonPrereqs;
+            prereqList = SCIENCE_BUTTON_PREREQS;
             break;
         default:
             return;
@@ -76,8 +76,8 @@ export const buttonPrereqsMet = (type: string, buttonCategory: string) => {
 
 export const getSprite = (input: string) => {
     switch (input) {
-        case unitType.HEAVY_INFANTRY:
-            return humanUnits.heavyInfantry;
+        case UNIT_TYPES.HEAVY_INFANTRY:
+            return humanUnits.HEAVY_INFANTRY;
         default:
             return {};
     }

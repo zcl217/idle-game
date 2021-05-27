@@ -9,7 +9,7 @@ import type { IDialogueList } from "~/interfaces/dialogue"
     Ex.
     A1S1 = Act 1 Scene 1
 */
-const dialogues: IDialogueList = {
+const DIALOGUES: IDialogueList = {
     'A1S1': {
         characterImage: '../sprites/sage.png',
         characterName: 'Mysterious Mage',
@@ -19,12 +19,12 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('4');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => {
             scene.set('2');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         }
     },
     'A1S2': {
@@ -37,7 +37,7 @@ const dialogues: IDialogueList = {
             displayDialogueBox.set(false);
             scene.set('3');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => { }
     },
@@ -50,7 +50,7 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('4');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => {
             displayDialogueBox.set(false);
@@ -79,7 +79,7 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('2');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => {}
     },
@@ -92,7 +92,7 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('3');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => {}
     },
@@ -105,7 +105,7 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('4');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => {}
     },
@@ -118,7 +118,7 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('5');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => {}
     },
@@ -131,7 +131,7 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('6');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => {}
     },
@@ -144,7 +144,7 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('7');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => {}
     },
@@ -157,7 +157,7 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('8');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         },
         noHandler: () => {}
     },
@@ -170,13 +170,13 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('10');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
             displayDialogueBox.set(false);
         },
         noHandler: () => {
             scene.set('9');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
         }
     },
     'A2S9': {
@@ -188,7 +188,7 @@ const dialogues: IDialogueList = {
         yesHandler: () => {
             scene.set('10');
             const curScene = getCurActScene();
-            updateDialogue(dialogues[curScene]);
+            updateDialogue(DIALOGUES[curScene]);
             displayDialogueBox.set(false);
         },
         noHandler: () => {
@@ -196,4 +196,4 @@ const dialogues: IDialogueList = {
     }
 }
 
-export default dialogues;
+export default DIALOGUES;

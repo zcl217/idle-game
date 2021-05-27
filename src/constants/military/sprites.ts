@@ -1,10 +1,10 @@
 import type { ICoordinates } from "~/interfaces/common"
-import { cellHeight, cellWidth } from "./maps"
+import { CELL_HEIGHT, CELL_WIDTH } from "./maps"
 
-export const spriteSizes = {
+export const SPRITE_SIZES = {
     "TYPE_1": {
-        x: cellWidth,
-        y: cellHeight
+        x: CELL_WIDTH,
+        y: CELL_HEIGHT
     },
     "TYPE_2": {
         x: 168,
@@ -12,13 +12,13 @@ export const spriteSizes = {
     }
 }
 
-export const unitStates = {
+export const UNIT_STATES = {
     IDLE: "idle",
     ATTACK: "attack",
     MOVE: "move",
 }
 
-export const spriteType = {
+export const SPRITE_TYPE = {
     PLAYER: 'player',
     ENEMY: 'enemy',
 }

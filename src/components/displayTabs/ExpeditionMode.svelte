@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { heavyInfantry } from "~/constants/military/units/humans";
+    import { HEAVY_INFANTRY } from "~/constants/military/units/humans";
     import Sprite from "~/components/military/Sprite.svelte";
     import { tweened } from "svelte/motion";
     import {
-        spriteSizes,
-        unitStates,
-        spriteType,
+        SPRITE_SIZES,
+        UNIT_STATES,
+        SPRITE_TYPE,
     } from "~/constants/military/sprites";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { MAP_1, UNIT_PATHS } from "~/constants/military/maps";
@@ -33,7 +33,7 @@
         setGridPath,
     } from "~/utils/expeditionMode";
     import type { ICoordinates } from "~/interfaces/common";
-    import { spriteSheetMap } from "~/constants/military/spriteSheetMap";
+    import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
     import { cloneDeep, uniqueId } from "lodash";
     import type { IProjectile } from "~/interfaces/military/projectile";
     import Projectile from "../military/Projectile.svelte";
@@ -117,7 +117,7 @@
         }
     }
 
-    // const sprite1: ISprite = Object.assign({}, heavyInfantry);
+    // const sprite1: ISprite = Object.assign({}, HEAVY_INFANTRY);
     // sprite1.unitPath = UNIT_PATHS.MAP_1.PATH_1;
 
     // svelte can't react to object property changes, so

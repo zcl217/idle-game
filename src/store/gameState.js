@@ -1,5 +1,5 @@
 import { writable, get } from 'svelte/store';
-import { resourceTypes } from '~/constants/resourceTypes';
+import { RESOURCE_TYPES } from '~/constants/resourceTypes';
 
 
 export const act = writable('1');
@@ -12,7 +12,7 @@ export const getCurActScene = () => {
 export const inExpedition = writable(false);
 export const researchedSciences = writable(new Set());
 
-const initialResourceSet = new Set(resourceTypes.FOOD, resourceTypes.WOOD, resourceTypes.FARMS)
+const initialResourceSet = new Set(RESOURCE_TYPES.FOOD, RESOURCE_TYPES.WOOD, RESOURCE_TYPES.FARMS)
 
 const createNewObtainedResources = (initialResourceSet) => {
     const { subscribe, update } = writable(new Set(initialResourceSet));

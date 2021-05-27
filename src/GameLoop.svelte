@@ -2,7 +2,7 @@
     import { resources } from "./store/resources";
     import { workers } from "./store/workers";
     import { act, scene } from "./store/gameState";
-    import { resourceTypes, generatableResources } from './constants/resourceTypes';
+    import { RESOURCE_TYPES, GENERATABLE_RESOURCES } from './constants/resourceTypes';
     import { calculateGenerationRate } from './utils/helpers';
 
     let previousTime = new Date();
@@ -18,7 +18,7 @@
     };
 
     const processResources = (secondsElapsed: number) => {
-        for (let resource of generatableResources) {
+        for (let resource of GENERATABLE_RESOURCES) {
             handleResourceGeneration(secondsElapsed, resource)
         }
     }

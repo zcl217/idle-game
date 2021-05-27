@@ -1,6 +1,6 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite";
 
-export const wolf3SpriteSheetInfo: ISpriteSheetInfo = {
+export const WOLF3_SPRITESHEET_INFO: ISpriteSheetInfo = {
     spriteSheet: "~/../sprites/spriteSheets/enemies/wolf3.png",
     idleFrames: [
         {

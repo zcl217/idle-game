@@ -1,22 +1,22 @@
 import type { ISprite } from "~/interfaces/military/sprite"
 import { UNIT_PATHS } from "../maps"
-import { spriteSizes, unitStates, spriteType } from "../sprites"
-import { unitType } from "./unitTypes"
+import { SPRITE_SIZES, UNIT_STATES, SPRITE_TYPE } from "../sprites"
+import { UNIT_TYPES } from "./unitTypes"
 
-export const heavyInfantry: ISprite = {
+export const HEAVY_INFANTRY: ISprite = {
     spriteInfo: {
         damage: 10,
         melee: true,
         maxHp: 50,
         name: "Heavy Infantry",
         // be careful of cyclical dependency.
-        // the unitType mapping refers to this sprite,
+        // the UNIT_TYPES mapping refers to this sprite,
         // so it doesn't make sense to refer to the unit type mapping again
         // to define the type of this.
-        //unitType: unitType.HEAVY_INFANTRY,
-        unitType: unitType.HEAVY_INFANTRY,
-        spriteSize: spriteSizes.TYPE_2,
-        spriteType: spriteType.PLAYER,
+        //unitType: UNIT_TYPES.HEAVY_INFANTRY,
+        unitType: UNIT_TYPES.HEAVY_INFANTRY,
+        spriteSize: SPRITE_SIZES.TYPE_2,
+        spriteType: SPRITE_TYPE.PLAYER,
         animationSpeed: 3,
         attackAnimationSpeed: 1,
         hpBarOffsetX: 10,
@@ -33,7 +33,7 @@ export const heavyInfantry: ISprite = {
         facingRight: true,
     },
     state: {
-        currentState: unitStates.IDLE,
+        currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
         currentHp: 50,
         currentFrameList: []
@@ -43,7 +43,7 @@ export const heavyInfantry: ISprite = {
     offsetY: -20
 }
 
-export const mage: ISprite = {
+export const MAGE: ISprite = {
     spriteInfo: {
         damage: 5,
         attackRange: 2,
@@ -51,13 +51,13 @@ export const mage: ISprite = {
         maxHp: 50,
         name: "Mage",
         // be careful of cyclical dependency.
-        // the unitType mapping refers to this sprite,
+        // the UNIT_TYPES mapping refers to this sprite,
         // so it doesn't make sense to refer to the unit type mapping again
         // to define the type of this.
-        //unitType: unitType.HEAVY_INFANTRY,
-        unitType: unitType.MAGE,
-        spriteSize: spriteSizes.TYPE_1,
-        spriteType: spriteType.PLAYER,
+        //unitType: UNIT_TYPES.HEAVY_INFANTRY,
+        unitType: UNIT_TYPES.MAGE,
+        spriteSize: SPRITE_SIZES.TYPE_1,
+        spriteType: SPRITE_TYPE.PLAYER,
         animationSpeed: 1,
         hpBarOffsetX: 9,
         hpBarOffsetY: -15
@@ -72,7 +72,7 @@ export const mage: ISprite = {
         facingRight: true,
     },
     state: {
-        currentState: unitStates.IDLE,
+        currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
         currentHp: 50,
         currentFrameList: [],

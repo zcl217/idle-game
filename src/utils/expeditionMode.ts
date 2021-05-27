@@ -1,16 +1,16 @@
 import { cloneDeep, uniqueId } from "lodash";
-import { cellHeight, cellWidth, MAP_1, UNIT_PATHS } from "~/constants/military/maps";
-import { unitStates, spriteType } from "~/constants/military/sprites";
-import { wolf1, wolf3 } from "~/constants/military/units/monsters";
+import { CELL_HEIGHT, CELL_WIDTH, MAP_1, UNIT_PATHS } from "~/constants/military/maps";
+import { UNIT_STATES, SPRITE_TYPE } from "~/constants/military/sprites";
+import { WOLF1, WOLF3 } from "~/constants/military/units/monsters";
 import type { ICoordinates } from "~/interfaces/common";
 import type { IExpeditionCell } from "~/interfaces/military/expeditionGrid";
 import type { IMap } from "~/interfaces/military/map";
 import type { ISprite } from "~/interfaces/military/sprite";
 import { tweened, spring } from "svelte/motion";
 import { get } from 'svelte/store';
-import { spriteSheetMap } from "~/constants/military/spriteSheetMap";
+import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
 import type { IProjectile } from "~/interfaces/military/projectile";
-import { unitProjectiles } from "~/constants/military/projectiles";
+import { UNIT_PROJECTILES } from "~/constants/military/projectiles";
 import { createEventDispatcher } from "svelte";
 
 export const initializeGrid = (mapType: number) => {
@@ -94,7 +94,7 @@ export const initializeEnemies = (level: number, enemyUnits: ISprite[], grid: IE
         case 1: {
             // we need a settimeout to add enemyUnits into the array
             // so they don't spawn right away.
-            let enemy = cloneDeep(wolf3);
+            let enemy = cloneDeep(WOLF3);
             enemy.state.unitPath = UNIT_PATHS.MAP_1.PATH_1;
             let { row, col } = enemy.state.unitPath[0];
             let startingCell = grid[row][col];
@@ -103,7 +103,7 @@ export const initializeEnemies = (level: number, enemyUnits: ISprite[], grid: IE
             createMultipleEnemies(enemy, enemyUnits, startingCell, delay, remainingEnemies);
             break;
         }
-        
+
     }
 }
 
@@ -121,8 +121,8 @@ function createMultipleEnemies(
 }
 
 export function initializeUnitPosition(unit: ISprite, row: number, col: number) {
-    let startingPositionX = col * cellWidth;
-    let startingPositionY = row * cellHeight;
+    let startingPositionX = col * CELL_WIDTH;
+    let startingPositionY = row * CELL_HEIGHT;
     unit.position.positionXTweened = tweened(startingPositionX, {
         duration: unit.position.tweenedDelay || 1000
     });
@@ -155,15 +155,15 @@ function processAttack(
 ) {
     // console.log(unit.state.currentState);
     // enemies can't attack while moving
-    if (unit.spriteInfo.spriteType === spriteType.ENEMY &&
-        unit.state.currentState !== unitStates.ATTACK) return;
+    if (unit.spriteInfo.spriteType === SPRITE_TYPE.ENEMY &&
+        unit.state.currentState !== UNIT_STATES.ATTACK) return;
     let target = getAttackTarget(unit, grid);
     //  console.log(target);
     if (!target) {
-        changeUnitState(unit, unitStates.IDLE);
+        changeUnitState(unit, UNIT_STATES.IDLE);
         return;
     };
-    changeUnitState(unit, unitStates.ATTACK);
+    changeUnitState(unit, UNIT_STATES.ATTACK);
 
     // if unit is already attacking then skip
     // (we check currentFrame against 1 and not 0 because handleUnitAnimations is run
@@ -205,10 +205,10 @@ function fireProjectile(
     enemyUnits: ISprite[],
     projectiles: IProjectile[]
 ) {
-    let newProjectile = cloneDeep(unitProjectiles[unit.spriteInfo.unitType]);
+    let newProjectile = cloneDeep(UNIT_PROJECTILES[unit.spriteInfo.unitType]);
     newProjectile.projectileId = uniqueId();
-    let startingPositionX = unit.position.coordinates.col * cellWidth;
-    let startingPositionY = unit.position.coordinates.row * cellHeight;
+    let startingPositionX = unit.position.coordinates.col * CELL_WIDTH;
+    let startingPositionY = unit.position.coordinates.row * CELL_HEIGHT;
     newProjectile.target = target;
     newProjectile.damage = unit.spriteInfo.damage;
     const projectileSpeed = calculateProjectileSpeed(
@@ -222,8 +222,8 @@ function fireProjectile(
     newProjectile.positionYTweened = tweened(startingPositionY, {
         duration: projectileSpeed
     });
-    let targetPositionX = target.position.coordinates.col * cellWidth;
-    let targetPositionY = target.position.coordinates.row * cellHeight;
+    let targetPositionX = target.position.coordinates.col * CELL_WIDTH;
+    let targetPositionY = target.position.coordinates.row * CELL_HEIGHT;
     newProjectile.positionXTweened.set(targetPositionX);
     // TODO: use handleProjectiles instead so we can add more logic
     // FIX THIS PART SINCE WE'RE USING TWO DIFFERENT PROJECTILE SYSTEMS NOW
@@ -248,13 +248,13 @@ function fireHomingProjectile(
     enemyUnits: ISprite[],
     projectiles: IProjectile[]
 ) {
-    let newProjectile = cloneDeep(unitProjectiles[unit.spriteInfo.unitType]);
+    let newProjectile = cloneDeep(UNIT_PROJECTILES[unit.spriteInfo.unitType]);
     newProjectile.projectileId = uniqueId();
     newProjectile.homing = true;
     // newProjectile.damage = unit.spriteInfo.damage;
     newProjectile.damage = 1;
-    let startingPositionX = unit.position.coordinates.col * cellWidth;
-    let startingPositionY = unit.position.coordinates.row * cellHeight;
+    let startingPositionX = unit.position.coordinates.col * CELL_WIDTH;
+    let startingPositionY = unit.position.coordinates.row * CELL_HEIGHT;
     newProjectile.target = target;
     newProjectile.positionSpring = spring({ x: startingPositionX, y: startingPositionY }, {
         stiffness: 0.05,
@@ -280,10 +280,10 @@ function processUnitDeath(
     playerUnits: ISprite[],
     enemyUnits: ISprite[]
 ) {
-    if (target.spriteInfo.spriteType === spriteType.PLAYER) {
+    if (target.spriteInfo.spriteType === SPRITE_TYPE.PLAYER) {
         targetCell.playerUnit = undefined;
         removeFromUnitList(target, playerUnits);
-    } else if (target.spriteInfo.spriteType === spriteType.ENEMY) {
+    } else if (target.spriteInfo.spriteType === SPRITE_TYPE.ENEMY) {
         removeFromUnitList(target, targetCell.enemyUnitList);
         removeFromUnitList(target, enemyUnits);
     }
@@ -310,14 +310,14 @@ const getAttackTarget = (curUnit: ISprite, grid: IExpeditionCell[][]): ISprite |
             grid
         );
     }
-    if (curUnit.spriteInfo.spriteType === spriteType.PLAYER) {
+    if (curUnit.spriteInfo.spriteType === SPRITE_TYPE.PLAYER) {
         // return the first enemy unit found in the coordinates within attack range
         for (let coordinate of coordinatesInRange) {
             let currentCell = grid[coordinate.row][coordinate.col];
             if (currentCell.enemyUnitList.length > 0)
                 return currentCell.enemyUnitList[0];
         }
-    } else if (curUnit.spriteInfo.spriteType === spriteType.ENEMY) {
+    } else if (curUnit.spriteInfo.spriteType === SPRITE_TYPE.ENEMY) {
         for (let coordinate of coordinatesInRange) {
             let currentCell = grid[coordinate.row][coordinate.col];
             if (currentCell.playerUnit) return currentCell.playerUnit;
@@ -407,21 +407,21 @@ export const handleEnemyMovements = (enemyUnits: ISprite[], grid: IExpeditionCel
         if (
             // remove -1 if we're doing currentPathIndex++ instead of prefix
             unit.state.currentPathIndex >= unitPath.length - 1 ||
-            unit.state.currentState !== unitStates.IDLE
+            unit.state.currentState !== UNIT_STATES.IDLE
         ) continue;
 
-        changeUnitState(unit, unitStates.MOVE);
+        changeUnitState(unit, UNIT_STATES.MOVE);
         const previousCol = unitPath[unit.state.currentPathIndex].col;
         const { row, col } = unitPath[unit.state.currentPathIndex + 1];
         unit.position.facingRight = col >= previousCol;
         // attack the blocking player unit
         if (grid[row][col].playerUnit) {
-            changeUnitState(unit, unitStates.ATTACK);
+            changeUnitState(unit, UNIT_STATES.ATTACK);
         } else {
 
             grid[row][col].enemyUnitArriving = true;
-            unit.position.positionXTweened.set(col * cellWidth);
-            unit.position.positionYTweened.set(row * cellHeight).then(() => {
+            unit.position.positionXTweened.set(col * CELL_WIDTH);
+            unit.position.positionYTweened.set(row * CELL_HEIGHT).then(() => {
                 handleCompletedMovement(unit, grid, enemyUnits, lifeCount);
                 grid[row][col].enemyUnitArriving = false;
                 unit.position.coordinates = { row, col };
@@ -444,16 +444,17 @@ function handleCompletedMovement(
     if (!unitExistsInList(unit, previousCell.enemyUnitList)) return;
     removeFromUnitList(unit, previousCell.enemyUnitList);
 
+    const currentCellCoordinates = unit.state.unitPath[unit.state.currentPathIndex];
+    const currentCell = grid[currentCellCoordinates.row][currentCellCoordinates.col];
     //console.log(unit.state.currentPathIndex + " " + unit.state.unitPath.length);
     // TODO: if unit reaches end we need to decrease life count
     if (unit.state.currentPathIndex >= unit.state.unitPath.length - 1) {
         lifeCount.update((n: number) => n > 0 ? n - 1 : n);
         removeFromUnitList(unit, enemyUnits);
-    };
-    const currentCellCoordinates = unit.state.unitPath[unit.state.currentPathIndex];
-    const currentCell = grid[currentCellCoordinates.row][currentCellCoordinates.col];
-    currentCell.enemyUnitList.push(unit);
-    changeUnitState(unit, unitStates.IDLE);
+    } else {
+        currentCell.enemyUnitList.push(unit);
+        changeUnitState(unit, UNIT_STATES.IDLE);
+    }
 }
 
 function unitExistsInList(target: ISprite, list: ISprite[]) {
@@ -506,10 +507,10 @@ const animateUnit = (unit: ISprite, frame: number) => {
 function getAnimationSpeed(unit: ISprite): number {
     let stateSpecificAnimationSpeed;
     switch (unit.state.currentState) {
-        case unitStates.MOVE:
+        case UNIT_STATES.MOVE:
             stateSpecificAnimationSpeed = unit.spriteInfo.movementAnimationSpeed;
             break;
-        case unitStates.ATTACK:
+        case UNIT_STATES.ATTACK:
             stateSpecificAnimationSpeed = unit.spriteInfo.attackAnimationSpeed;
             break;
         default:
@@ -520,20 +521,20 @@ function getAnimationSpeed(unit: ISprite): number {
 
 function setFrameList(unit: ISprite) {
     switch (unit.state.currentState) {
-        case unitStates.IDLE:
-            unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].idleFrames;
+        case UNIT_STATES.IDLE:
+            unit.state.currentFrameList = SPRITESHEET_MAP[unit.spriteInfo.unitType].idleFrames;
             break;
-        case unitStates.MOVE:
-            unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].moveFrames;
+        case UNIT_STATES.MOVE:
+            unit.state.currentFrameList = SPRITESHEET_MAP[unit.spriteInfo.unitType].moveFrames;
             break;
-        case unitStates.ATTACK:
+        case UNIT_STATES.ATTACK:
             if (unit.state.currentFrame === 0) {
-                unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].attackFrames;
+                unit.state.currentFrameList = SPRITESHEET_MAP[unit.spriteInfo.unitType].attackFrames;
             } else {
                 // on attack completion, we don't loop it but instead go back to the idle state
                 // (the attack is complete after one animation)                
-                changeUnitState(unit, unitStates.IDLE);
-                unit.state.currentFrameList = spriteSheetMap[unit.spriteInfo.unitType].idleFrames;
+                changeUnitState(unit, UNIT_STATES.IDLE);
+                unit.state.currentFrameList = SPRITESHEET_MAP[unit.spriteInfo.unitType].idleFrames;
             }
             break;
         default:

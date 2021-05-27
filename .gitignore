@@ -5,3 +5,4 @@ package-lock.json
 yarn.lock
 roadmap.md
 key points.md
+.eslintrc.js

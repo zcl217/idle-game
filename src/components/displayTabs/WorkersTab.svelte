@@ -1,9 +1,9 @@
 <script lang="ts">
     import { resources } from "~/store/resources.js";
     import WorkerCountButtons from "../WorkerCountButtons.svelte";
-    import { resourceTypes } from "~/constants/resourceTypes";
+    import { RESOURCE_TYPES } from "~/constants/resourceTypes";
     import { workers } from "~/store/workers";
-    import { workerTypes } from "~/constants/workerTypes";
+    import { WORKER_TYPES } from "~/constants/workerTypes";
 
     $: assignedWorkers = () => {
         let sum = 0;
@@ -12,7 +12,7 @@
         }
         return sum;
     }
-    $: maxWorkers = $resources[resourceTypes.HOMES].value;
+    $: maxWorkers = $resources[RESOURCE_TYPES.HOMES].value;
     $: availableWorkers = maxWorkers - assignedWorkers();
 
     const handleWorkerChange = (workerType: string, operation: string) => {
@@ -34,52 +34,52 @@
 
     {#if true}
         <div class="flex justify-between w-11/12 my-2 text-xl">
-            <span> Farmers: {$workers[workerTypes.FARMER].value} </span>
+            <span> Farmers: {$workers[WORKER_TYPES.FARMER].value} </span>
             <WorkerCountButtons
                 on:increment={() => {
-                    handleWorkerChange(workerTypes.FARMER, "increment");
+                    handleWorkerChange(WORKER_TYPES.FARMER, "increment");
                 }}
                 on:decrement={() => {
-                    handleWorkerChange(workerTypes.FARMER, "decrement");
+                    handleWorkerChange(WORKER_TYPES.FARMER, "decrement");
                 }}
             />
         </div>
     {/if}
     {#if true}
         <div class="flex justify-between w-11/12 my-2 text-xl">
-            <span> Woodcutters: {$workers[workerTypes.WOODCUTTER].value} </span>
+            <span> Woodcutters: {$workers[WORKER_TYPES.WOODCUTTER].value} </span>
             <WorkerCountButtons
                 on:increment={() => {
-                    handleWorkerChange(workerTypes.WOODCUTTER, "increment");
+                    handleWorkerChange(WORKER_TYPES.WOODCUTTER, "increment");
                 }}
                 on:decrement={() => {
-                    handleWorkerChange(workerTypes.WOODCUTTER, "decrement");
+                    handleWorkerChange(WORKER_TYPES.WOODCUTTER, "decrement");
                 }}
             />
         </div>
     {/if}
     {#if true}
         <div class="flex justify-between w-11/12 my-2 text-xl">
-            <span> Scholars: {$workers[workerTypes.SCHOLAR].value} </span>
+            <span> Scholars: {$workers[WORKER_TYPES.SCHOLAR].value} </span>
             <WorkerCountButtons
                 on:increment={() => {
-                    handleWorkerChange(workerTypes.SCHOLAR, "increment");
+                    handleWorkerChange(WORKER_TYPES.SCHOLAR, "increment");
                 }}
                 on:decrement={() => {
-                    handleWorkerChange(workerTypes.SCHOLAR, "decrement");
+                    handleWorkerChange(WORKER_TYPES.SCHOLAR, "decrement");
                 }}
             />
         </div>
     {/if}
     {#if true}
         <div class="flex justify-between w-11/12 my-2 text-xl">
-            <span> Miners: {$workers[workerTypes.MINER].value} </span>
+            <span> Miners: {$workers[WORKER_TYPES.MINER].value} </span>
             <WorkerCountButtons
                 on:increment={() => {
-                    handleWorkerChange(workerTypes.MINER, "increment");
+                    handleWorkerChange(WORKER_TYPES.MINER, "increment");
                 }}
                 on:decrement={() => {
-                    handleWorkerChange(workerTypes.MINER, "decrement");
+                    handleWorkerChange(WORKER_TYPES.MINER, "decrement");
                 }}
             />
         </div>

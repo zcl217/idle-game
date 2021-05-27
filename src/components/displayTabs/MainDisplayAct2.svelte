@@ -1,9 +1,9 @@
 <script lang="ts">
     import InfoBoxButton from "../InfoBoxButton.svelte";
     import CharacterFrame from "../CharacterFrame.svelte";
-    import { resourceTypes } from "~/constants/resourceTypes";
+    import { RESOURCE_TYPES } from "~/constants/resourceTypes";
     import { BUTTON_CATEGORIES, BUTTON_WIDTH } from "~/constants/buttons/buttons";
-    import dialogues from "~/constants/dialogueTextAndHandlers";
+    import DIALOGUES from "~/constants/dialogueTextAndHandlers";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
     import { resources } from "~/store/resources.js";
     import {
@@ -14,15 +14,15 @@
         obtainedResources,
     } from "~/store/gameState.js";
     import {
-        empireButtonTypes,
-        empireCostMultipliers,
+        EMPIRE_BUTTON_TYPES,
+        EMPIRE_COST_MULTIPLIERS,
     } from "~/constants/buttons/empireButtons";
     import { empireButtonCosts } from "~/store/buttonCosts";
 import { buttonPrereqsMet } from "~/utils/helpers";
 
     const handleResource = (buttonType: string) => {
         switch(buttonType) {
-            case empireButtonTypes.BUILD_HOUSE:
+            case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
                 break;
             default:
                 break;
@@ -30,67 +30,67 @@ import { buttonPrereqsMet } from "~/utils/helpers";
     }
 
     const buildHouseHandler = (buttonType: string) => {
-        const homes = resourceTypes.HOMES;
+        const homes = RESOURCE_TYPES.HOMES;
         if (!hasEnoughResources(buttonType)) return;
         spendResources(buttonType);
         resources.updateResourceValue(homes, $resources[homes].value + 1);
         empireButtonCosts.updateButtonCosts(
             buttonType,
-            empireCostMultipliers[buttonType]
+            EMPIRE_COST_MULTIPLIERS[buttonType]
         );
-        obtainedResources.add(resourceTypes.HOMES);
+        obtainedResources.add(RESOURCE_TYPES.HOMES);
     };
 
     const gatherFoodHandler = () => {
-        const food = resourceTypes.FOOD;
+        const food = RESOURCE_TYPES.FOOD;
         resources.updateResourceValue(food, $resources[food].value + 10);
-        obtainedResources.add(resourceTypes.FOOD);
+        obtainedResources.add(RESOURCE_TYPES.FOOD);
     };
 
     const createFarmHandler = (buttonType: string) => {
-        const farms = resourceTypes.FARMS;
+        const farms = RESOURCE_TYPES.FARMS;
         if (!hasEnoughResources(buttonType)) return;
         spendResources(buttonType);
         resources.updateResourceValue(farms, $resources[farms].value + 1);
         empireButtonCosts.updateButtonCosts(
             buttonType,
-            empireCostMultipliers[buttonType]
+            EMPIRE_COST_MULTIPLIERS[buttonType]
         );
-        obtainedResources.add(resourceTypes.FARMS);
+        obtainedResources.add(RESOURCE_TYPES.FARMS);
     };
 
     const gatherWoodHandler = () => {
-        const wood = resourceTypes.WOOD;
+        const wood = RESOURCE_TYPES.WOOD;
         resources.updateResourceValue(wood, $resources[wood].value + 100);
-        obtainedResources.add(resourceTypes.WOOD);
+        obtainedResources.add(RESOURCE_TYPES.WOOD);
     };
 
     const buildStorageHandler = (buttonType: string) => {
-        const storage = resourceTypes.STORAGE;
+        const storage = RESOURCE_TYPES.STORAGE;
         if (!hasEnoughResources(buttonType)) return;
         spendResources(buttonType);
         resources.updateResourceValue(storage, $resources[storage].value + 1);
-        const food = resourceTypes.FOOD;
+        const food = RESOURCE_TYPES.FOOD;
         resources.updateResourceLimit(food, $resources[food].limit + 100);
-        const wood = resourceTypes.WOOD;
+        const wood = RESOURCE_TYPES.WOOD;
         resources.updateResourceLimit(wood, $resources[wood].limit + 100);
         empireButtonCosts.updateButtonCosts(
             buttonType,
-            empireCostMultipliers[buttonType]
+            EMPIRE_COST_MULTIPLIERS[buttonType]
         );
-        obtainedResources.add(resourceTypes.STORAGE);
+        obtainedResources.add(RESOURCE_TYPES.STORAGE);
     };
 
     const createTreeFarmHandler = (buttonType: string) => {
-        const treeFarm = resourceTypes.TREE_FARM;
+        const treeFarm = RESOURCE_TYPES.TREE_FARM;
         if (!hasEnoughResources(buttonType)) return;
         spendResources(buttonType);
         resources.updateResourceValue(treeFarm, $resources[treeFarm].value + 1);
         empireButtonCosts.updateButtonCosts(
             buttonType,
-            empireCostMultipliers[buttonType]
+            EMPIRE_COST_MULTIPLIERS[buttonType]
         );
-        obtainedResources.add(resourceTypes.TREE_FARM);
+        obtainedResources.add(RESOURCE_TYPES.TREE_FARM);
     };
 
     const hasEnoughResources = (buttonType: string) => {
@@ -115,7 +115,7 @@ import { buttonPrereqsMet } from "~/utils/helpers";
 <CharacterFrame characterImage={$playerImage} characterName={$playerName} />
 <div class="flex flex-wrap">
     {#key $obtainedResources}
-        {#each Object.entries(empireButtonTypes) as [key, id]}
+        {#each Object.entries(EMPIRE_BUTTON_TYPES) as [key, id]}
             {#if buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)}
                 <InfoBoxButton
                     width={BUTTON_WIDTH}
@@ -131,34 +131,34 @@ import { buttonPrereqsMet } from "~/utils/helpers";
     <InfoBoxButton
         width={BUTTON_WIDTH}
         curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
-        curButtonType={empireButtonTypes.BUILD_HOUSE}
+        curButtonType={EMPIRE_BUTTON_TYPES.BUILD_HOUSE}
         handler={buildHouseHandler}
     />
-    {#if $resources[resourceTypes.WOOD].display}
+    {#if $resources[RESOURCE_TYPES.WOOD].display}
         <InfoBoxButton
             width={BUTTON_WIDTH}
-            curButtonType={empireButtonTypes.GATHER_WOOD}
+            curButtonType={EMPIRE_BUTTON_TYPES.GATHER_WOOD}
             handler={{}}
         />
     {/if}
-    {#if $resources[resourceTypes.FARMS].display}
+    {#if $resources[RESOURCE_TYPES.FARMS].display}
         <InfoBoxButton
             width={BUTTON_WIDTH}
-            curButtonType={empireButtonTypes.CREATE_FARM}
+            curButtonType={EMPIRE_BUTTON_TYPES.CREATE_FARM}
             handler={{}}
         />
     {/if}
-    {#if $resources[resourceTypes.FARMS].value > 1}
+    {#if $resources[RESOURCE_TYPES.FARMS].value > 1}
         <InfoBoxButton
             width={BUTTON_WIDTH}
-            curButtonType={empireButtonTypes.CREATE_TREE_FARM}
+            curButtonType={EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM}
             handler={createTreeFarmHandler}
         />
     {/if}
-    {#if $resources[resourceTypes.FARMS].value > 2}
+    {#if $resources[RESOURCE_TYPES.FARMS].value > 2}
         <InfoBoxButton
             width={BUTTON_WIDTH}
-            curButtonType={empireButtonTypes.BUILD_STORAGE}
+            curButtonType={EMPIRE_BUTTON_TYPES.BUILD_STORAGE}
             handler={buildStorageHandler}
         />
     {/if}

@@ -1,6 +1,6 @@
 import { uniqueId } from 'lodash'
 
-export const unitType = {
+export const UNIT_TYPES = {
     SPEARMAN: uniqueId(),
     PIKEMAN: uniqueId(),
     HALBERDIER: uniqueId(),

@@ -2,7 +2,7 @@
     import InfoBoxButton from "../InfoBoxButton.svelte";
     import CharacterFrame from "../CharacterFrame.svelte";
     import { BUTTON_WIDTH, BUTTON_CATEGORIES, OTHER_BUTTON_TYPES } from "~/constants/buttons/buttons";
-    import dialogues from "~/constants/dialogueTextAndHandlers";
+    import DIALOGUES from "~/constants/dialogueTextAndHandlers";
     import { updateDialogue, displayDialogueBox } from "~/store/dialogue";
     import {
         playerImage,
@@ -17,7 +17,7 @@
         scene.set("1");
 
         const curScene = getCurActScene();
-        updateDialogue(dialogues[curScene]);
+        updateDialogue(DIALOGUES[curScene]);
         displayDialogueBox.set(true);
     };
 </script>

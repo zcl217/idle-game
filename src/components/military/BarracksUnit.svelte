@@ -1,7 +1,7 @@
 <script lang="ts">
     import InfoBoxButton from "~/components/InfoBoxButton.svelte";
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
-    import { militaryButtonTypes } from "~/constants/buttons/militaryButtons";
+    import { MILITARY_BUTTON_TYPES } from "~/constants/buttons/militaryButtons";
     import type { ISprite } from "~/interfaces/military/sprite";
     import FramedSprite from "./FramedSprite.svelte";
 
@@ -12,6 +12,8 @@
 
     // these will get long so either need a map
     // or put the huge switch cases in a separate utils file
+    // need to think about how we're going to design the data structures for our
+    // deployable units
     const trainUnit = () => {
         switch (sprite.spriteInfo.unitType) {
         }
@@ -25,13 +27,13 @@
     const getTrainButtonType = () => {
         switch (sprite.spriteInfo.unitType) {
         }
-        return militaryButtonTypes.TRAIN_HEAVY_INFANTRY;
+        return MILITARY_BUTTON_TYPES.TRAIN_HEAVY_INFANTRY;
     };
 
     const getUpgradeButtonType = () => {
         switch (sprite.spriteInfo.unitType) {
         }
-        return militaryButtonTypes.UPGRADE_HEAVY_INFANTRY;
+        return MILITARY_BUTTON_TYPES.UPGRADE_HEAVY_INFANTRY;
     };
 </script>
 

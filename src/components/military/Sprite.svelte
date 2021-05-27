@@ -1,6 +1,6 @@
 <script lang="ts">
     import { tweened } from "svelte/motion";
-    import { spriteSheetMap } from "~/constants/military/spriteSheetMap";
+    import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { getExpeditionBackgroundPosition } from "~/utils/helpers";
 
@@ -25,7 +25,7 @@
         offsetY: number = 0;
 
     $: {
-        spriteSheet = spriteSheetMap[sprite.spriteInfo.unitType].spriteSheet;
+        spriteSheet = SPRITESHEET_MAP[sprite.spriteInfo.unitType].spriteSheet;
         width = sprite.spriteInfo.spriteSize.x;
         height = sprite.spriteInfo.spriteSize.y;
         positionXTweened = sprite.position.positionXTweened;
@@ -35,8 +35,8 @@
         currentHp = sprite.state.currentHp;
         maxHp = sprite.spriteInfo.maxHp;
         hpBarOffsetX = sprite.spriteInfo.hpBarOffsetX;
-        hpBarOffsetY = sprite.spriteInfo.hpBarOffsetY || 0,
-        offsetX = sprite.offsetX;
+        (hpBarOffsetY = sprite.spriteInfo.hpBarOffsetY || 0),
+            (offsetX = sprite.offsetX);
         offsetY = sprite.offsetY || 0;
     }
 </script>

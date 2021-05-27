@@ -4,8 +4,8 @@
     import { unitToDeploy } from "~/store/military";
     import Sprite from "./Sprite.svelte";
     import { getExpeditionBackgroundPosition } from "~/utils/helpers";
-    import { spriteSheetMap } from "~/constants/military/spriteSheetMap";
-    import { cellHeight, cellWidth } from "~/constants/military/maps";
+    import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
+    import { CELL_HEIGHT, CELL_WIDTH } from "~/constants/military/maps";
 
     export let handleCellClick: any,
         cell: IExpeditionCell,
@@ -50,8 +50,8 @@
     class="bg-cover"
     style="
         background-image: {cell.backgroundImage};
-        width: {cellWidth}px;
-        height: {cellHeight}px;
+        width: {CELL_WIDTH}px;
+        height: {CELL_HEIGHT}px;
     "
     on:mouseenter={handleCellEnter}
     on:mouseleave={handleCellLeave}
@@ -78,7 +78,7 @@
     {#if displayDeployableSprite}
         <div
             class="absolute opacity-50"
-            style="top: {row * cellHeight}px; left: {col * cellWidth}px"
+            style="top: {row * CELL_HEIGHT}px; left: {col * CELL_WIDTH}px"
         >
             <Sprite {sprite} />
         </div>

@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { initialEmpireButtonCosts } from '~/constants/buttons/empireButtons';
+import { INITIAL_EMPIRE_BUTTON_COSTS } from '~/constants/buttons/empireButtons';
 
 const createNewEmpireButtonCosts = (empireButtonCosts) => {
     const { subscribe, update } = writable(empireButtonCosts);
@@ -21,4 +21,4 @@ const createNewEmpireButtonCosts = (empireButtonCosts) => {
 }
 
 
-export const empireButtonCosts = createNewEmpireButtonCosts(initialEmpireButtonCosts);
+export const empireButtonCosts = createNewEmpireButtonCosts(INITIAL_EMPIRE_BUTTON_COSTS);

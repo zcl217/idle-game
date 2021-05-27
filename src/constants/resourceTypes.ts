@@ -1,7 +1,7 @@
 import type { IPrereqsList } from "~/interfaces/common"
-import { scienceButtonTypes } from "./buttons/scienceButtons"
+import { SCIENCE_BUTTON_TYPES } from "./buttons/scienceButtons"
 
-export const resourceTypes = {
+export const RESOURCE_TYPES = {
     FOOD: 'food',
     FARMS: 'farms',
     WOOD: 'wood',
@@ -13,42 +13,42 @@ export const resourceTypes = {
     KNOWLEDGE: 'knowledge',
 }
 
-export const generatableResources = [
-    resourceTypes.FOOD,
-    resourceTypes.WOOD,
-    resourceTypes.GOLD,
-    resourceTypes.KNOWLEDGE
+export const GENERATABLE_RESOURCES = [
+    RESOURCE_TYPES.FOOD,
+    RESOURCE_TYPES.WOOD,
+    RESOURCE_TYPES.GOLD,
+    RESOURCE_TYPES.KNOWLEDGE
 ]
 
-export const resourceGeneratorMap = {
-    [resourceTypes.FOOD]: resourceTypes.FARMS,
-    [resourceTypes.WOOD]: resourceTypes.TREE_FARM,
+export const RESOURCE_GENERATOR_MAP = {
+    [RESOURCE_TYPES.FOOD]: RESOURCE_TYPES.FARMS,
+    [RESOURCE_TYPES.WOOD]: RESOURCE_TYPES.TREE_FARM,
 
 }
 
-export const resourceDisplayPrereqs: IPrereqsList = {
-    [resourceTypes.FOOD]: {
+export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
+    [RESOURCE_TYPES.FOOD]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [resourceTypes.WOOD]: {
+    [RESOURCE_TYPES.WOOD]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [resourceTypes.FARMS]: {
+    [RESOURCE_TYPES.FARMS]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [resourceTypes.TREE_FARM]: {
+    [RESOURCE_TYPES.TREE_FARM]: {
         sciencePrereqs: [],
-        resourcePrereqs: [resourceTypes.FARMS]
+        resourcePrereqs: [RESOURCE_TYPES.FARMS]
     },
-    [resourceTypes.STORAGE]: {
+    [RESOURCE_TYPES.STORAGE]: {
         sciencePrereqs: [],
-        resourcePrereqs: [resourceTypes.TREE_FARM]
+        resourcePrereqs: [RESOURCE_TYPES.TREE_FARM]
     },
-    [resourceTypes.HOMES]: {
-        sciencePrereqs: [scienceButtonTypes.WORKERS],
+    [RESOURCE_TYPES.HOMES]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.WORKERS],
         resourcePrereqs: []
     },
 }

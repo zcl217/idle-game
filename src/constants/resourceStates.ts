@@ -1,42 +1,42 @@
-import { resourceTypes } from './resourceTypes';
+import { RESOURCE_TYPES } from './resourceTypes';
 import type { IResourceList } from '~/interfaces/resource'
 
-export const initialResourceState: IResourceList = {
-    [resourceTypes.FOOD]: {
+export const INITIAL_RESOURCE_STATE: IResourceList = {
+    [RESOURCE_TYPES.FOOD]: {
         value: 0,
         limit: 100,
     },
-    [resourceTypes.WOOD]: {
+    [RESOURCE_TYPES.WOOD]: {
         value: 0,
         limit: 100,
     },
-    [resourceTypes.FARMS]: {
+    [RESOURCE_TYPES.FARMS]: {
         value: 0,
         generationValue: 1,
         limit: Number.MAX_VALUE,
     },
-    [resourceTypes.TREE_FARM]: {
+    [RESOURCE_TYPES.TREE_FARM]: {
         value: 0,
         generationValue: 2,
         limit: Number.MAX_VALUE,
     },
-    [resourceTypes.STORAGE]: {
+    [RESOURCE_TYPES.STORAGE]: {
         value: 0,
         limit: 10,
     },
-    [resourceTypes.ATTRACTIVE_HOUSE]: {
+    [RESOURCE_TYPES.ATTRACTIVE_HOUSE]: {
         value: 0,
         limit: Number.MAX_VALUE,
     },
-    [resourceTypes.HOMES]: {
+    [RESOURCE_TYPES.HOMES]: {
         value: 1,
         limit: Number.MAX_VALUE,
     },
-    [resourceTypes.KNOWLEDGE]: {
+    [RESOURCE_TYPES.KNOWLEDGE]: {
         value: 0,
         limit: Number.MAX_VALUE,
     },
-    [resourceTypes.GOLD]: {
+    [RESOURCE_TYPES.GOLD]: {
         value: 0,
         limit: 100,
     }

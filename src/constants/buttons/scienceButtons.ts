@@ -2,7 +2,7 @@
 import { uniqueId } from 'lodash'
 import type { IPrereqsList } from '~/interfaces/common';
 
-export const scienceButtonTypes = {
+export const SCIENCE_BUTTON_TYPES = {
     WORKERS: uniqueId(),
     WOODEN_AXE: uniqueId(),
     IRON_AXE: uniqueId(),
@@ -21,57 +21,57 @@ export const scienceButtonTypes = {
 
 }
 
-export const scienceButtonTexts = {
-    [scienceButtonTypes.WOODEN_AXE]: 'Wooden Axe',
-    [scienceButtonTypes.IRON_AXE]: 'Iron Axe',
-    [scienceButtonTypes.STEEL_AXE]: 'Steel Axe',
-    [scienceButtonTypes.WOODEN_HOE]: 'Wooden Hoe',
-    [scienceButtonTypes.IRON_HOE]: 'Iron Hoe',
-    [scienceButtonTypes.STEEL_HOE]: 'Steel Hoe',
-    [scienceButtonTypes.LIBRARY]: 'Library',
-    [scienceButtonTypes.ORE_MINING]: 'Ore Mining',
-    [scienceButtonTypes.IRON_SMELTING]: 'Iron Smelting',
-    [scienceButtonTypes.STEELMAKING]: 'Steelmaking',
+export const SCIENCE_BUTTON_TEXTS = {
+    [SCIENCE_BUTTON_TYPES.WOODEN_AXE]: 'Wooden Axe',
+    [SCIENCE_BUTTON_TYPES.IRON_AXE]: 'Iron Axe',
+    [SCIENCE_BUTTON_TYPES.STEEL_AXE]: 'Steel Axe',
+    [SCIENCE_BUTTON_TYPES.WOODEN_HOE]: 'Wooden Hoe',
+    [SCIENCE_BUTTON_TYPES.IRON_HOE]: 'Iron Hoe',
+    [SCIENCE_BUTTON_TYPES.STEEL_HOE]: 'Steel Hoe',
+    [SCIENCE_BUTTON_TYPES.LIBRARY]: 'Library',
+    [SCIENCE_BUTTON_TYPES.ORE_MINING]: 'Ore Mining',
+    [SCIENCE_BUTTON_TYPES.IRON_SMELTING]: 'Iron Smelting',
+    [SCIENCE_BUTTON_TYPES.STEELMAKING]: 'Steelmaking',
 }
 
-export const scienceButtonPrereqs: IPrereqsList = {
-    [scienceButtonTypes.WOODEN_AXE]: {
+export const SCIENCE_BUTTON_PREREQS: IPrereqsList = {
+    [SCIENCE_BUTTON_TYPES.WOODEN_AXE]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [scienceButtonTypes.IRON_AXE]: {
+    [SCIENCE_BUTTON_TYPES.IRON_AXE]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [scienceButtonTypes.STEEL_AXE]: {
+    [SCIENCE_BUTTON_TYPES.STEEL_AXE]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [scienceButtonTypes.WOODEN_HOE]: {
+    [SCIENCE_BUTTON_TYPES.WOODEN_HOE]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [scienceButtonTypes.IRON_HOE]: {
+    [SCIENCE_BUTTON_TYPES.IRON_HOE]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [scienceButtonTypes.STEEL_HOE]: {
+    [SCIENCE_BUTTON_TYPES.STEEL_HOE]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [scienceButtonTypes.LIBRARY]: {
+    [SCIENCE_BUTTON_TYPES.LIBRARY]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [scienceButtonTypes.ORE_MINING]: {
+    [SCIENCE_BUTTON_TYPES.ORE_MINING]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [scienceButtonTypes.IRON_SMELTING]: {
+    [SCIENCE_BUTTON_TYPES.IRON_SMELTING]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [scienceButtonTypes.STEELMAKING]: {
+    [SCIENCE_BUTTON_TYPES.STEELMAKING]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },

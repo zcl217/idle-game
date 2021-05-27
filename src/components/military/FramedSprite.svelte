@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { spriteSizes } from "~/constants/military/sprites";
-    import { spriteSheetMap } from "~/constants/military/spriteSheetMap";
+    import { SPRITE_SIZES } from "~/constants/military/sprites";
+    import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { getMenuBackgroundPosition } from "~/utils/helpers";
 
@@ -10,16 +10,16 @@
     let currentFrame = 0;
     let backgroundPosition = getMenuBackgroundPosition(
         sprite,
-        spriteSheetMap[sprite.spriteInfo.unitType].idleFrames,
+        SPRITESHEET_MAP[sprite.spriteInfo.unitType].idleFrames,
         currentFrame
     );
 
-    let isType1 = sprite.spriteInfo.spriteSize === spriteSizes.TYPE_1;
+    let isType1 = sprite.spriteInfo.spriteSize === SPRITE_SIZES.TYPE_1;
 
     onMount(() => {
         interval = setInterval(() => {
             let idleFrames =
-                spriteSheetMap[sprite.spriteInfo.unitType].idleFrames;
+                SPRITESHEET_MAP[sprite.spriteInfo.unitType].idleFrames;
             if (currentFrame >= idleFrames.length) currentFrame = 0;
             backgroundPosition = getMenuBackgroundPosition(
                 sprite,
@@ -40,7 +40,7 @@
         <div
             class={isType1 ? "type1FrameSize" : "h-24 w-24"}
             style="
-            background-image: url('${spriteSheetMap[sprite.spriteInfo.unitType]
+            background-image: url('${SPRITESHEET_MAP[sprite.spriteInfo.unitType]
                 .spriteSheet}');
             background-position: {backgroundPosition};
         "

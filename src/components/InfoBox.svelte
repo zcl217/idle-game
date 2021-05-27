@@ -8,10 +8,10 @@
     } from "../store/infoBox.js";
     import { resources } from "../store/resources";
     import {
-        empireInfoBoxes,
-        militaryInfoBoxes,
-        otherInfoBoxes,
-        scienceInfoBoxes,
+        EMPIRE_INFO_BOXES,
+        MILITARY_INFO_BOXES,
+        OTHER_INFO_BOXES,
+        SCIENCE_INFO_BOXES,
     } from "../constants/infoBoxes";
     import { resourceParser } from "../utils/helpers";
     import { empireButtonCosts } from "~/store/buttonCosts";
@@ -30,20 +30,20 @@
         switch ($buttonCategory) {
             case BUTTON_CATEGORIES.EMPIRE:
                 costs = $empireButtonCosts[$buttonType];
-                title = empireInfoBoxes[$buttonType].title;
-                text = empireInfoBoxes[$buttonType].text;
+                title = EMPIRE_INFO_BOXES[$buttonType].title;
+                text = EMPIRE_INFO_BOXES[$buttonType].text;
                 break;
             case BUTTON_CATEGORIES.SCIENCE:
-                title = scienceInfoBoxes[$buttonType].title;
-                text = scienceInfoBoxes[$buttonType].text;
+                title = SCIENCE_INFO_BOXES[$buttonType].title;
+                text = SCIENCE_INFO_BOXES[$buttonType].text;
                 break;
             case BUTTON_CATEGORIES.MILITARY:
-                title = militaryInfoBoxes[$buttonType].title;
-                text = militaryInfoBoxes[$buttonType].text;
+                title = MILITARY_INFO_BOXES[$buttonType].title;
+                text = MILITARY_INFO_BOXES[$buttonType].text;
                 break;
             case BUTTON_CATEGORIES.OTHER:
-                title = otherInfoBoxes[$buttonType].title;
-                text = otherInfoBoxes[$buttonType].text;
+                title = OTHER_INFO_BOXES[$buttonType].title;
+                text = OTHER_INFO_BOXES[$buttonType].text;
                 break;
             default:
                 costs = [];

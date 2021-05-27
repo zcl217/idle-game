@@ -1,6 +1,6 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite"
 
-export const mageSpriteSheetInfo: ISpriteSheetInfo = {
+export const MAGE_SPRITESHEET_INFO: ISpriteSheetInfo = {
     spriteSheet: "~/../sprites/spriteSheets/mage.png",
     idleFrames: [
         {
