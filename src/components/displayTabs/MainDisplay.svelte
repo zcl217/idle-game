@@ -8,7 +8,7 @@
     } from "~/constants/buttons/buttons";
     import { DIALOGUES, STORY_PROGRESS_LIST } from "~/constants/story";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
-    import { resources } from "~/store/resources.js";
+    import { resources } from "~/store/resources";
     import { empireButtonCosts } from "~/store/buttonCosts";
     import {
         playerImage,
@@ -16,13 +16,29 @@
         researchedSciences,
         obtainedResources,
         curStoryProgress,
-    } from "~/store/gameState.js";
+    } from "~/store/gameState";
     import { buttonPrereqsMet } from "~/utils/helpers";
     import {
-        EMPIRE_BUTTON_TEXTS,
         EMPIRE_BUTTON_TYPES,
         EMPIRE_COST_MULTIPLIERS,
     } from "~/constants/buttons/empireButtons";
+
+    let buttonsToDisplay: Set<string> = new Set();
+
+    $: {
+        $obtainedResources;
+        let oldLength = buttonsToDisplay.size;
+        for (let [key, id] of Object.entries(EMPIRE_BUTTON_TYPES)) {
+            if (buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)) {
+                buttonsToDisplay.add(id);
+            }
+        }
+        // trigger reactivity
+        console.log(buttonsToDisplay);
+        console.log(EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE);
+        if (buttonsToDisplay.size !== oldLength)
+            buttonsToDisplay = buttonsToDisplay;
+    }
 
     const handleResource = (buttonType: string) => {
         switch (buttonType) {
@@ -49,8 +65,13 @@
         }
     };
     const gatherFoodHandler = () => {
-        curStoryProgress.set(STORY_PROGRESS_LIST['A2S1']);
-        updateDialogue(DIALOGUES[$curStoryProgress]);
+        // curStoryProgress.set(STORY_PROGRESS_LIST['A2S1']);
+        // updateDialogue(DIALOGUES[$curStoryProgress]);
+        // displayDialogueBox.set(true);
+
+        const nextScene = STORY_PROGRESS_LIST["A1S1"];
+        curStoryProgress.set(nextScene);
+        updateDialogue(DIALOGUES[nextScene]);
         displayDialogueBox.set(true);
 
         const food = RESOURCE_TYPES.FOOD;
@@ -108,7 +129,10 @@
         const attractiveHouse = RESOURCE_TYPES.ATTRACTIVE_HOUSE;
         if (!hasEnoughResources(buttonType)) return;
         spendResources(buttonType);
-        resources.updateResourceValue(attractiveHouse, $resources[attractiveHouse].value + 1);
+        resources.updateResourceValue(
+            attractiveHouse,
+            $resources[attractiveHouse].value + 1
+        );
         empireButtonCosts.updateButtonCosts(
             buttonType,
             EMPIRE_COST_MULTIPLIERS[buttonType]
@@ -119,9 +143,11 @@
             /* 1. loop running several times if we spam click buttons
             not sure how we fixed this last time
             */
-            const nextScene = STORY_PROGRESS_LIST['A1S1'];
-            curStoryProgress.set(nextScene);
-            updateDialogue(DIALOGUES[nextScene]);
+            if ($curStoryProgress !== STORY_PROGRESS_LIST["A1S3"]) {
+                const nextScene = STORY_PROGRESS_LIST["A1S1"];
+                curStoryProgress.set(nextScene);
+                updateDialogue(DIALOGUES[nextScene]);
+            }
             displayDialogueBox.set(true);
         }, 3);
         obtainedResources.add(RESOURCE_TYPES.ATTRACTIVE_HOUSE);
@@ -147,8 +173,8 @@
 </script>
 
 <!-- <CharacterFrame characterImage={$playerImage} characterName={$playerName} /> -->
-<div class="flex flex-wrap">
-    {#key $obtainedResources}
+<div class="container flex flex-wrap justify-around">
+    <!-- {#key $obtainedResources}
         {#each Object.entries(EMPIRE_BUTTON_TYPES) as [key, id]}
             {#if buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)}
                 <InfoBoxButton
@@ -161,5 +187,26 @@
                 />
             {/if}
         {/each}
-    {/key}
+    {/key} -->
+    {#each [...buttonsToDisplay] as id}
+        <div class="flex justify-center">
+            <InfoBoxButton
+                width={BUTTON_WIDTH}
+                curButtonType={id}
+                curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
+                handler={() => {
+                    handleResource(id);
+                }}
+            />
+        </div>
+    {/each}
+    {#if buttonsToDisplay.size % 2 !== 0}
+        <div />
+    {/if}
 </div>
+
+<style>
+    .container > * {
+        flex: 50%;
+    }
+</style>

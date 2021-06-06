@@ -1,15 +1,13 @@
 // displays m if over a million
 // displays k if over a thousand
 // parses numbers to two decimal places
-import { RESOURCE_GENERATOR_MAP } from '../constants/resources/resourceTypes';
-import { WORKER_GENERATOR_MAP } from '../constants/workers/workerTypes';
 import { SCIENCE_BUTTON_PREREQS } from '~/constants/buttons/scienceButtons';
 import { EMPIRE_BUTTON_PREREQS } from '~/constants/buttons/empireButtons';
 import { get } from 'svelte/store';
 import {
     researchedSciences as researchedSciencesFromStore,
     obtainedResources as obtainedResourcesFromStore,
-    curStoryProgress
+    curStoryProgress,
 } from '~/store/gameState';
 import { BUTTON_CATEGORIES } from '~/constants/buttons/buttons';
 import * as humanUnits from '~/constants/military/units/humans'
@@ -37,16 +35,6 @@ export const resourceParser = (value: number): string => {
 
 const parseDecimals = (input: number) => {
     return Math.round(input * 100) / 100;
-}
-
-export const calculateGenerationRate = (type: string, resources: any, workers: any) => {
-    const generator = RESOURCE_GENERATOR_MAP[type];
-    if (!resources || !generator) return '0';
-    let resourcesGenerated = resources[generator].value * resources[generator].generationValue;
-    const workerType = WORKER_GENERATOR_MAP[type];
-    if (!workers || !workerType) return resourceParser(resourcesGenerated);
-    resourcesGenerated += workers[workerType].value * workers[workerType].generationValue;
-    return resourceParser(resourcesGenerated);
 }
 
 export const buttonPrereqsMet = (type: string, buttonCategory: string) => {
@@ -78,12 +66,30 @@ export const buttonPrereqsMet = (type: string, buttonCategory: string) => {
     return true;
 }
 
-export const getSprite = (input: string) => {
+export const getSprite = (input: string): ISprite => {
     switch (input) {
+        case UNIT_TYPES.SPEARMAN:
+            return humanUnits.SPEARMAN;
+        case UNIT_TYPES.PIKEMAN:
+            return humanUnits.PIKEMAN;
+        case UNIT_TYPES.HALBERDIER:
+            return humanUnits.HALBERDIER;
+        case UNIT_TYPES.FOOTPAD:
+            return humanUnits.FOOTPAD;
+        case UNIT_TYPES.OUTLAW:
+            return humanUnits.OUTLAW;
         case UNIT_TYPES.HEAVY_INFANTRY:
             return humanUnits.HEAVY_INFANTRY;
+        case UNIT_TYPES.SHOCKTROOPER:
+            return humanUnits.SHOCKTROOPER;
+        case UNIT_TYPES.SIEGETROOPER:
+            return humanUnits.SIEGETROOPER;
+        case UNIT_TYPES.MAGE:
+            return humanUnits.MAGE;
+        case UNIT_TYPES.ARCH_MAGE:
+            return humanUnits.ARCH_MAGE;
         default:
-            return {};
+            return {} as ISprite;
     }
 }
 

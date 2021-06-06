@@ -1,7 +1,7 @@
 import { cloneDeep, uniqueId } from "lodash";
 import { CELL_HEIGHT, CELL_WIDTH, MAP_1, UNIT_PATHS } from "~/constants/military/maps";
 import { UNIT_STATES, SPRITE_TYPE } from "~/constants/military/sprites";
-import { WOLF1, WOLF3 } from "~/constants/military/units/monsters";
+import { BAT, GHAST, GHOST, SHADOW, SKELETON, SKELETON_ARCHER, WOLF1, WOLF2, WOLF3 } from "~/constants/military/units/monsters";
 import type { ICoordinates } from "~/interfaces/common";
 import type { IExpeditionCell } from "~/interfaces/military/expeditionGrid";
 import type { IMap } from "~/interfaces/military/map";
@@ -12,6 +12,9 @@ import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
 import type { IProjectile } from "~/interfaces/military/projectile";
 import { UNIT_PROJECTILES } from "~/constants/military/projectiles";
 import { createEventDispatcher } from "svelte";
+import { STAGE_LIST } from "~/constants/military/stageList";
+import { ENEMY_SPAWN_LIST } from "~/constants/military/enemySpawnList";
+import { removedEnemyUnitCount } from "~/store/military";
 
 export const initializeGrid = (mapType: number) => {
     let grid: IExpeditionCell[][] = [];
@@ -88,26 +91,55 @@ export const setGridPath = (grid: IExpeditionCell[][], mapType: number) => {
     }
 };
 
-export const initializeEnemies = (level: number, enemyUnits: ISprite[], grid: IExpeditionCell[][]) => {
-    console.log(enemyUnits)
-    switch (level) {
-        case 1: {
-            // we need a settimeout to add enemyUnits into the array
-            // so they don't spawn right away.
-            let enemy = cloneDeep(WOLF3);
-            enemy.state.unitPath = UNIT_PATHS.MAP_1.PATH_1;
+export const initializeEnemies = (stage: string, enemyUnits: ISprite[], grid: IExpeditionCell[][]) => {
+    console.log(enemyUnits);
+
+    let totalEnemies = 0;
+    for (let enemySpawnInfo of ENEMY_SPAWN_LIST[stage]) {
+        totalEnemies += enemySpawnInfo.amount;
+        setTimeout(() => {
+            let enemy = cloneDeep(enemySpawnInfo.enemyUnit);
+            enemy.state.unitPath = enemySpawnInfo.path;
             let { row, col } = enemy.state.unitPath[0];
             let startingCell = grid[row][col];
-            const delay = 1000;
-            const remainingEnemies = 5;
-            createMultipleEnemies(enemy, enemyUnits, startingCell, delay, remainingEnemies);
+            createEnemies(enemy,
+                enemyUnits,
+                startingCell,
+                enemySpawnInfo.intervalDelay,
+                enemySpawnInfo.amount);
+        }, enemySpawnInfo.spawnDelay);
+    }
+
+    return totalEnemies;
+    switch (stage) {
+        case STAGE_LIST["1-1"]:
+
+            break;
+        case '1': {
+            let temp = [WOLF1, SKELETON_ARCHER];
+            // let temp = [SKELETON, SKELETON_ARCHER, GHOST, SHADOW, BAT, GHAST]
+            let a = 0;
+            let handler = setInterval(() => {
+                // we need a settimeout to add enemyUnits into the array
+                // so they don't spawn right away.
+                let enemy = cloneDeep(temp[a]);
+                enemy.state.unitPath = UNIT_PATHS.MAP_1.PATH_1;
+                let { row, col } = enemy.state.unitPath[0];
+                let startingCell = grid[row][col];
+                const delay = 1000;
+                const remainingEnemies = 3;
+                createEnemies(enemy, enemyUnits, startingCell, delay, remainingEnemies);
+
+                a++;
+                if (a >= temp.length) clearInterval(handler);
+            }, 1000);
             break;
         }
 
     }
 }
 
-function createMultipleEnemies(
+function createEnemies(
     enemy: ISprite, enemyUnits: ISprite[], startingCell: IExpeditionCell, delay: number, remainingEnemies: number) {
     if (remainingEnemies === 0) return;
     let newEnemy = cloneDeep(enemy);
@@ -116,7 +148,7 @@ function createMultipleEnemies(
     enemyUnits.push(newEnemy);
     startingCell.enemyUnitList.push(newEnemy);
     setTimeout(() => {
-        createMultipleEnemies(enemy, enemyUnits, startingCell, delay, remainingEnemies - 1);
+        createEnemies(enemy, enemyUnits, startingCell, delay, remainingEnemies - 1);
     }, delay)
 }
 
@@ -133,7 +165,7 @@ export function initializeUnitPosition(unit: ISprite, row: number, col: number) 
 }
 
 export const setLifeCount = (level: number, lifeCount: any) => {
-    lifeCount.set(30);
+    lifeCount.set(2);
 }
 
 export const handleDamageCalculations = (
@@ -154,13 +186,9 @@ function processAttack(
     projectiles: IProjectile[]
 ) {
     // console.log(unit.state.currentState);
-    // enemies can't attack while moving
-    if (unit.spriteInfo.spriteType === SPRITE_TYPE.ENEMY &&
-        unit.state.currentState !== UNIT_STATES.ATTACK) return;
     let target = getAttackTarget(unit, grid);
-    //  console.log(target);
+
     if (!target) {
-        changeUnitState(unit, UNIT_STATES.IDLE);
         return;
     };
     changeUnitState(unit, UNIT_STATES.ATTACK);
@@ -171,12 +199,25 @@ function processAttack(
     // the unit state will animate the attack by one frame before we end up calculating
     // the actual damage)
     if (unit.state.currentFrame !== 1) return;
+    const currentCol = unit.position.coordinates.col;
+    const targetCol = target.position.coordinates.col;
+    unit.position.facingRight = targetCol >= currentCol;
     if (unit.spriteInfo.melee) {
         processDamageCalculation(unit.spriteInfo.damage, target, grid, playerUnits, enemyUnits);
     } else {
+        // TODO: bug with projectiles: disappears before reaching the target
+        // my guess: due to how the frame rendering works, if you place mage at wrong time
+        // the dmg is processed before the fireball animation completes
+        // (and projectiles are removed after dmg is processed)
+        // although... I thought we're checking the px of the projectile to handle the
+        // dmg calculation so I feel like that's not the true cause
+
         // fire a projectile. when the projectile hits the enemy, that's when we calculate dmg
-        fireHomingProjectile(unit, target, grid, playerUnits, enemyUnits, projectiles);
-        //  fireProjectile(unit, target, grid, playerUnits, enemyUnits, projectiles);
+        if (unit.spriteInfo.isEnemy) {
+            fireProjectile(unit, target, grid, playerUnits, enemyUnits, projectiles);
+        } else {
+            fireHomingProjectile(unit, target, projectiles);
+        }
     }
 }
 
@@ -207,8 +248,7 @@ function fireProjectile(
 ) {
     let newProjectile = cloneDeep(UNIT_PROJECTILES[unit.spriteInfo.unitType]);
     newProjectile.projectileId = uniqueId();
-    let startingPositionX = unit.position.coordinates.col * CELL_WIDTH;
-    let startingPositionY = unit.position.coordinates.row * CELL_HEIGHT;
+    newProjectile.homing = false;
     newProjectile.target = target;
     newProjectile.damage = unit.spriteInfo.damage;
     const projectileSpeed = calculateProjectileSpeed(
@@ -216,6 +256,8 @@ function fireProjectile(
         unit.position.coordinates,
         target.position.coordinates
     );
+    let startingPositionX = unit.position.coordinates.col * CELL_WIDTH;
+    let startingPositionY = unit.position.coordinates.row * CELL_HEIGHT;
     newProjectile.positionXTweened = tweened(startingPositionX, {
         duration: projectileSpeed
     });
@@ -225,37 +267,23 @@ function fireProjectile(
     let targetPositionX = target.position.coordinates.col * CELL_WIDTH;
     let targetPositionY = target.position.coordinates.row * CELL_HEIGHT;
     newProjectile.positionXTweened.set(targetPositionX);
-    // TODO: use handleProjectiles instead so we can add more logic
-    // FIX THIS PART SINCE WE'RE USING TWO DIFFERENT PROJECTILE SYSTEMS NOW
-    // (the non homing version is more flexible in controlling the exact speed of it)
-    newProjectile.positionYTweened.set(targetPositionY).then(() => {
-        processDamageCalculation(newProjectile.damage, target, grid, playerUnits, enemyUnits);
-        for (let a = 0; a < projectiles.length; a++) {
-            if (projectiles[a].projectileId === newProjectile.projectileId) {
-                projectiles.splice(a, 1);
-                return;
-            }
-        }
-    });
+    newProjectile.positionYTweened.set(targetPositionY);
     projectiles.push(newProjectile);
 }
 
 function fireHomingProjectile(
     unit: ISprite,
     target: ISprite,
-    grid: IExpeditionCell[][],
-    playerUnits: ISprite[],
-    enemyUnits: ISprite[],
     projectiles: IProjectile[]
 ) {
     let newProjectile = cloneDeep(UNIT_PROJECTILES[unit.spriteInfo.unitType]);
     newProjectile.projectileId = uniqueId();
     newProjectile.homing = true;
-    // newProjectile.damage = unit.spriteInfo.damage;
-    newProjectile.damage = 1;
+    newProjectile.damage = unit.spriteInfo.damage;
+    newProjectile.target = target;
     let startingPositionX = unit.position.coordinates.col * CELL_WIDTH;
     let startingPositionY = unit.position.coordinates.row * CELL_HEIGHT;
-    newProjectile.target = target;
+    console.log(startingPositionX + " " + startingPositionY);
     newProjectile.positionSpring = spring({ x: startingPositionX, y: startingPositionY }, {
         stiffness: 0.05,
         damping: 0.5
@@ -280,12 +308,13 @@ function processUnitDeath(
     playerUnits: ISprite[],
     enemyUnits: ISprite[]
 ) {
-    if (target.spriteInfo.spriteType === SPRITE_TYPE.PLAYER) {
-        targetCell.playerUnit = undefined;
-        removeFromUnitList(target, playerUnits);
-    } else if (target.spriteInfo.spriteType === SPRITE_TYPE.ENEMY) {
+    if (target.spriteInfo.isEnemy) {
         removeFromUnitList(target, targetCell.enemyUnitList);
         removeFromUnitList(target, enemyUnits);
+        removedEnemyUnitCount.increment();
+    } else {
+        targetCell.playerUnit = undefined;
+        removeFromUnitList(target, playerUnits);
     }
 }
 
@@ -302,7 +331,7 @@ const getAttackTarget = (curUnit: ISprite, grid: IExpeditionCell[][]): ISprite |
     let coordinates = curUnit.position.coordinates;
     let coordinatesInRange: ICoordinates[] = [];
     if (curUnit.spriteInfo.melee) {
-        coordinatesInRange = getAdjacentCoordinates(coordinates, grid);
+        coordinatesInRange = getAdjacentCoordinates(coordinates, grid, true);
     } else {
         coordinatesInRange = getCoordinateRange(
             coordinates,
@@ -310,26 +339,25 @@ const getAttackTarget = (curUnit: ISprite, grid: IExpeditionCell[][]): ISprite |
             grid
         );
     }
-    if (curUnit.spriteInfo.spriteType === SPRITE_TYPE.PLAYER) {
+    if (curUnit.spriteInfo.isEnemy) {
+        for (let coordinate of coordinatesInRange) {
+            let currentCell = grid[coordinate.row][coordinate.col];
+            if (currentCell.playerUnit) return currentCell.playerUnit;
+        }
+    } else {
         // return the first enemy unit found in the coordinates within attack range
         for (let coordinate of coordinatesInRange) {
             let currentCell = grid[coordinate.row][coordinate.col];
             if (currentCell.enemyUnitList.length > 0)
                 return currentCell.enemyUnitList[0];
         }
-    } else if (curUnit.spriteInfo.spriteType === SPRITE_TYPE.ENEMY) {
-        for (let coordinate of coordinatesInRange) {
-            let currentCell = grid[coordinate.row][coordinate.col];
-            if (currentCell.playerUnit) return currentCell.playerUnit;
-        }
-    } else {
-        return undefined;
     }
 };
 
 const getAdjacentCoordinates = (
     coordinates: ICoordinates,
-    grid: IExpeditionCell[][]
+    grid: IExpeditionCell[][],
+    isMelee: boolean
 ): ICoordinates[] => {
     const coordinateList: ICoordinates[] = [];
     const { row, col } = coordinates;
@@ -351,7 +379,7 @@ const getAdjacentCoordinates = (
             col: col + 1,
         }
     );
-    return pruneCoordinateList(coordinateList, grid, true);
+    return pruneCoordinateList(coordinateList, grid, isMelee);
 };
 
 const directions = [
@@ -367,10 +395,11 @@ const directions = [
 const getCoordinateRange = (
     coordinates: ICoordinates,
     radius: number,
-    grid: IExpeditionCell[][]
+    grid: IExpeditionCell[][],
 ): ICoordinates[] => {
     const coordinateList: ICoordinates[] = [];
     const { row, col } = coordinates;
+
     for (let rangeX = (radius * -1); rangeX <= radius; rangeX++) {
         for (let rangeY = (radius * -1); rangeY <= radius; rangeY++) {
             coordinateList.push({
@@ -379,13 +408,14 @@ const getCoordinateRange = (
             });
         }
     }
+
     return pruneCoordinateList(coordinateList, grid);
 };
 
 function pruneCoordinateList(
     coordinateList: ICoordinates[],
     grid: IExpeditionCell[][],
-    melee: boolean = false
+    isMelee: boolean = false
 ): ICoordinates[] {
     let prunedList: ICoordinates[] = [];
     for (let coordinates of coordinateList) {
@@ -395,7 +425,7 @@ function pruneCoordinateList(
             coordinates.row >= grid.length ||
             coordinates.col >= grid[0].length
         ) continue;
-        if (melee && !grid[coordinates.row][coordinates.col].isPath) continue;
+        if (isMelee && !grid[coordinates.row][coordinates.col].isPath) continue;
         prunedList.push(coordinates);
     }
     return prunedList;
@@ -447,9 +477,9 @@ function handleCompletedMovement(
     const currentCellCoordinates = unit.state.unitPath[unit.state.currentPathIndex];
     const currentCell = grid[currentCellCoordinates.row][currentCellCoordinates.col];
     //console.log(unit.state.currentPathIndex + " " + unit.state.unitPath.length);
-    // TODO: if unit reaches end we need to decrease life count
     if (unit.state.currentPathIndex >= unit.state.unitPath.length - 1) {
         lifeCount.update((n: number) => n > 0 ? n - 1 : n);
+        removedEnemyUnitCount.increment();
         removeFromUnitList(unit, enemyUnits);
     } else {
         currentCell.enemyUnitList.push(unit);
@@ -542,12 +572,58 @@ function setFrameList(unit: ISprite) {
     }
 }
 
-export const handleProjectiles = (projectiles: IProjectile[]) => {
-    // if projectile reach target, remove from array and deal damage and handle death
-    for (let projectile of projectiles) {
-        if (projectile.positionXTweened) continue;
+export const handleProjectiles = (
+    projectiles: IProjectile[],
+    grid: IExpeditionCell[][],
+    playerUnits: ISprite[],
+    enemyUnits: ISprite[]
+) => {
+    for (let a = projectiles.length - 1; a >= 0; a--) {
+        // check if collision.
+        let projectile = projectiles[a];
+        if (projectile.homing) {
+            let targetX = get(projectile.target.position.positionXTweened) as number;
+            let targetY = get(projectile.target.position.positionYTweened) as number;
+            projectile.positionSpring.set({ x: targetX, y: targetY });
+            const positionSpring: any = get(projectile.positionSpring);
+            //console.log(targetX +  " " + targetY + " " + $positionSpring.x)
+            // console.log(targetX + " " + targetY + " " + $positionSpring.x + " " + $positionSpring.y);
+            let xDifference = Math.abs(positionSpring.x - targetX);
+            let yDifference = Math.abs(positionSpring.y - targetY);
+            if (xDifference < 25 && yDifference < 25) {
+                processDamageCalculation(
+                    projectile.damage,
+                    projectile.target,
+                    grid,
+                    playerUnits,
+                    enemyUnits
+                );
+                projectiles.splice(a, 1);
+            }
+        } else {
+            let tweenedTargetX =
+                projectile.target.position.coordinates.col * CELL_WIDTH;
+            let tweenedTargetY =
+                projectile.target.position.coordinates.row * CELL_HEIGHT;
+            const invalidTarget =
+                tweenedTargetX === undefined ||
+                tweenedTargetY === undefined;
+            const projectileReachedTarget =
+                get(projectile.positionXTweened) === tweenedTargetX &&
+                get(projectile.positionYTweened) === tweenedTargetY;
+            if (invalidTarget || projectileReachedTarget) {
+                processDamageCalculation(
+                    projectile.damage,
+                    projectile.target,
+                    grid,
+                    playerUnits,
+                    enemyUnits
+                );
+                projectiles.splice(a, 1);
+            }
+        }
     }
-};
+}
 
 function changeUnitState(unit: ISprite, newState: string) {
     if (unit.state.currentState === newState) return;

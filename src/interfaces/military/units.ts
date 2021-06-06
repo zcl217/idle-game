@@ -5,5 +5,5 @@
 
 export interface IMilitaryUnit {
     count: number;
-    type: number;
+    type: string;
 }

@@ -9,7 +9,7 @@
         noText,
         yesHandler,
         noHandler,
-    } from "../store/dialogue.js";
+    } from "../store/dialogue";
 </script>
 
 {#if $displayDialogueBox}
@@ -24,7 +24,7 @@
             />
         </div>
         <div
-            class="text-sm"
+            class="text-sm dialogueText"
             class:mt-10={$characterImage !== ""}
             class:text-center={$characterImage === ""}
         >
@@ -53,8 +53,12 @@
 {/if}
 
 <style>
-    /* .text-shadow {
+    .dialogueText {
+        font-family: Arial, Helvetica, sans-serif !important;
+        line-height: 25px !important;
+        font-size: 23px !important;
         color: #fff;
-        text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000;
-    } */
+        text-shadow: 1.5px 0 0 #000, 0 -1.5px 0 #000, 0 1.5px 0 #000,
+            -1.5px 0 0 #000;
+    }
 </style>

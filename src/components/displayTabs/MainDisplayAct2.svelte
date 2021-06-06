@@ -2,21 +2,46 @@
     import InfoBoxButton from "../InfoBoxButton.svelte";
     import CharacterFrame from "../CharacterFrame.svelte";
     import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
-    import { BUTTON_CATEGORIES, BUTTON_WIDTH } from "~/constants/buttons/buttons";
+    import {
+        BUTTON_CATEGORIES,
+        BUTTON_WIDTH,
+    } from "~/constants/buttons/buttons";
     import { DIALOGUES } from "~/constants/story";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
-    import { resources } from "~/store/resources.js";
+    import { resources } from "~/store/resources";
     import {
         playerImage,
         playerName,
         obtainedResources,
-    } from "~/store/gameState.js";
+researchedSciences,
+    } from "~/store/gameState";
     import {
         EMPIRE_BUTTON_TYPES,
         EMPIRE_COST_MULTIPLIERS,
     } from "~/constants/buttons/empireButtons";
     import { empireButtonCosts } from "~/store/buttonCosts";
-import { buttonPrereqsMet } from "~/utils/helpers";
+    import { buttonPrereqsMet } from "~/utils/helpers";
+import { workers } from "~/store/workers";
+import { WORKER_TYPES } from "~/constants/workers/workerTypes";
+
+    let buttonsToDisplay: Set<string> = new Set();
+    let hiddenButtons: Set<string> = new Set();
+    hiddenButtons.add(EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE);
+
+    $: {
+        $obtainedResources;
+        $researchedSciences;
+        let oldLength = buttonsToDisplay.size;
+        for (let [key, id] of Object.entries(EMPIRE_BUTTON_TYPES)) {
+            if (hiddenButtons.has(id)) continue;
+            if (buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)) {
+                buttonsToDisplay.add(id);
+            }
+        }
+        // trigger reactivity
+        if (buttonsToDisplay.size !== oldLength)
+            buttonsToDisplay = buttonsToDisplay;
+    }
 
     const handleResource = (buttonType: string) => {
         switch (buttonType) {
@@ -26,27 +51,24 @@ import { buttonPrereqsMet } from "~/utils/helpers";
             case EMPIRE_BUTTON_TYPES.GATHER_WOOD:
                 gatherWoodHandler();
                 break;
+            case EMPIRE_BUTTON_TYPES.CREATE_FARM:
+                createFarmHandler(buttonType);
+                break;
+            case EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM:
+                createTreeFarmHandler(buttonType);
+                break;
             case EMPIRE_BUTTON_TYPES.BUILD_STORAGE:
                 buildStorageHandler(buttonType);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
                 buildHouseHandler(buttonType);
                 break;
+            case EMPIRE_BUTTON_TYPES.BUILD_LIBRARY:
+                buildLibraryHandler(buttonType);
+                break;
             default:
                 break;
         }
-    };
-
-    const buildHouseHandler = (buttonType: string) => {
-        const homes = RESOURCE_TYPES.HOMES;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
-        resources.updateResourceValue(homes, $resources[homes].value + 1);
-        empireButtonCosts.updateButtonCosts(
-            buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
-        );
-        obtainedResources.add(RESOURCE_TYPES.HOMES);
     };
 
     const gatherFoodHandler = () => {
@@ -101,9 +123,37 @@ import { buttonPrereqsMet } from "~/utils/helpers";
         obtainedResources.add(RESOURCE_TYPES.TREE_FARM);
     };
 
+    const buildHouseHandler = (buttonType: string) => {
+        const homes = RESOURCE_TYPES.HOMES;
+        if (!hasEnoughResources(buttonType)) return;
+        spendResources(buttonType);
+        resources.updateResourceValue(homes, $resources[homes].value + 1);
+        empireButtonCosts.updateButtonCosts(
+            buttonType,
+            EMPIRE_COST_MULTIPLIERS[buttonType]
+        );
+        obtainedResources.add(RESOURCE_TYPES.HOMES);
+        workers.increment(WORKER_TYPES.UNASSIGNED);
+    };
+
+    const buildLibraryHandler = (buttonType: string) => {
+        const library = RESOURCE_TYPES.LIBRARIES;
+        if (!hasEnoughResources(buttonType)) return;
+        spendResources(buttonType);
+        resources.updateResourceValue(library, $resources[library].value + 1);
+        empireButtonCosts.updateButtonCosts(
+            buttonType,
+            EMPIRE_COST_MULTIPLIERS[buttonType]
+        );
+        obtainedResources.add(RESOURCE_TYPES.LIBRARIES);
+    };
+
     const hasEnoughResources = (buttonType: string) => {
+        console.log(buttonType);
+        console.log($empireButtonCosts);
         for (let resource of $empireButtonCosts[buttonType]) {
             const curResourceAmount = $resources[resource.type].value;
+            console.log(curResourceAmount + " " + resource.cost);
             if (curResourceAmount < resource.cost) return false;
         }
         return true;
@@ -121,19 +171,26 @@ import { buttonPrereqsMet } from "~/utils/helpers";
 </script>
 
 <!-- <CharacterFrame characterImage={$playerImage} characterName={$playerName} /> -->
-<div class="flex flex-wrap">
-    {#key $obtainedResources}
-        {#each Object.entries(EMPIRE_BUTTON_TYPES) as [key, id]}
-            {#if buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)}
-                <InfoBoxButton
-                    width={BUTTON_WIDTH}
-                    curButtonType={id}
-                    curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
-                    handler={() => {
-                        handleResource(id);
-                    }}
-                />
-            {/if}
-        {/each}
-    {/key}
+<div class="container flex flex-wrap">
+    {#each [...buttonsToDisplay] as id}
+        <div class="flex justify-center">
+            <InfoBoxButton
+                width={BUTTON_WIDTH}
+                curButtonType={id}
+                curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
+                handler={() => {
+                    handleResource(id);
+                }}
+            />
+        </div>
+    {/each}
+    {#if buttonsToDisplay.size % 2 !== 0}
+        <div/>
+    {/if}
 </div>
+
+<style>
+    .container > * {
+        flex: 50%;
+    }
+</style>

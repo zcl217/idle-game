@@ -2,6 +2,7 @@ import { OTHER_BUTTON_TYPES } from './buttons/otherButtons';
 import { EMPIRE_BUTTON_TYPES } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
 import { MILITARY_BUTTON_TYPES } from './buttons/militaryButtons';
+import { SCIENCE_BUTTON_TYPES } from './buttons/scienceButtons';
 
 export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: {
@@ -36,13 +37,145 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
         title: 'Build Library',
         text: 'Unlocks science. Each library increases knowledge acquisition rate by 5%'
     },
+    [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: {
+        title: 'Build Iron Smelter',
+        text: ''
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: {
+        title: 'Build Blast Furnace',
+        text: ''
+    },
 }
 
 export const SCIENCE_INFO_BOXES: IInfoBoxList = {
+    [SCIENCE_BUTTON_TYPES.MATHEMATICS]: {
+        title: 'Mathematics',
+        text: 'Unlocks more advanced technology',
+    },
+    [SCIENCE_BUTTON_TYPES.CRANE]: {
+        title: 'Treadmill Crane',
+        text: 'Unlocks more advanced buildings',
+    },
+    [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE]: {
+        title: 'Laws of Nature',
+        text: 'Unlocks more advanced technology',
+    },
+    [SCIENCE_BUTTON_TYPES.ART_OF_WAR]: {
+        title: 'Art of War',
+        text: 'Unlocks unit upgrades in the barracks',
+    },
+    [SCIENCE_BUTTON_TYPES.CONSCRIPTION]: {
+        title: 'Conscription',
+        text: 'Unlocks unit training in the barracks',
+    },
+    [SCIENCE_BUTTON_TYPES.BLOCK_PRINTING]: {
+        title: 'Block Printing',
+        text: 'Increases knowledge acquisition speed by 50%',
+    },
+    [SCIENCE_BUTTON_TYPES.COMPARTMENTALIZATION]: {
+        title: 'Compartmentalization',
+        text: 'Unlocks warehouses',
+    },
+    [SCIENCE_BUTTON_TYPES.DOUBLE_BIT_AXE]: {
+        title: 'Double-Bit Axe',
+        text: 'Increases woodcutting speed by 50%',
+    },
+    [SCIENCE_BUTTON_TYPES.BOW_SAW]: {
+        title: 'Bow Saw',
+        text: 'Increases woodcutting speed by 50% (stacks with previous upgrades)',
+    },
+    [SCIENCE_BUTTON_TYPES.TWO_MAN_SAW]: {
+        title: 'Two-Man Saw',
+        text: 'Increases woodcutting speed by 50% (stacks with previous upgrades)',
+    },
+    [SCIENCE_BUTTON_TYPES.HORSE_COLLAR]: {
+        title: 'Horse Collar',
+        text: 'Increases farming speed by 50%',
+    },
+    [SCIENCE_BUTTON_TYPES.HEAVY_PLOW]: {
+        title: 'Heavy Plow',
+        text: 'Increases farming speed by 50% (stacks with previous upgrades)',
+    },
+    [SCIENCE_BUTTON_TYPES.CROP_ROTATION]: {
+        title: 'Crop Rotation',
+        text: 'Increases farming speed by 50% (stacks with previous upgrades)',
+    },
+    [SCIENCE_BUTTON_TYPES.WOODEN_PICKAXE]: {
+        title: 'Wooden Pickaxe',
+        text: 'Increases mining speed by 50%',
+    },
+    [SCIENCE_BUTTON_TYPES.IRON_PICKAXE]: {
+        title: 'Iron Pickaxe',
+        text: 'Increases mining speed by 50% (stacks with previous upgrades)',
+    },
+    [SCIENCE_BUTTON_TYPES.SHAFT_MINING]: {
+        title: 'Shaft Mining',
+        text: 'Increases mining speed by 50% (stacks with previous upgrades)',
+    },
+    [SCIENCE_BUTTON_TYPES.ORE_MINING]: {
+        title: 'Ore Mining',
+        text: 'Unlocks ore mining',
+    },
+    [SCIENCE_BUTTON_TYPES.IRON_SMELTING]: {
+        title: 'Iron Smelting',
+        text: 'Unlocks iron processing',
+    },
+    [SCIENCE_BUTTON_TYPES.STEELMAKING]: {
+        title: 'Steelmaking',
+        text: 'Unlocks steel',
+    },
+    [SCIENCE_BUTTON_TYPES.BARRACKS]: {
+        title: 'Barracks',
+        text: 'Unlocks the barracks and expedition tab',
+    },
+    [SCIENCE_BUTTON_TYPES.SLINGSHOTS]: {
+        title: 'Slingshots',
+        text: 'Unlocks the footpad unit line',
+    },
+    [SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY]: {
+        title: 'Heavy Infantry',
+        text: 'Unlocks the heavy infantry unit line',
+    },
+    [SCIENCE_BUTTON_TYPES.MAGIC]: {
+        title: 'Magic',
+        text: 'Unlocks the mage unit line',
+    },
 
 }
 
 export const MILITARY_INFO_BOXES: IInfoBoxList = {
+    [MILITARY_BUTTON_TYPES.TRAIN_SPEARMAN]: {
+        title: 'Train Spearman',
+        text: 'Increases spearman count by one'
+    },
+    [MILITARY_BUTTON_TYPES.UPGRADE_SPEARMAN]: {
+        title: 'Upgrade Spearman',
+        text: 'Upgrades all spearmen'
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_PIKEMAN]: {
+        title: 'Train Pikeman',
+        text: 'Increases pikeman count by one'
+    },
+    [MILITARY_BUTTON_TYPES.UPGRADE_PIKEMAN]: {
+        title: 'Upgrade Pikeman',
+        text: 'Upgrades all pikemen'
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_HALBERDIER]: {
+        title: 'Train Halberdier',
+        text: 'Increases halberdier count by one'
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_FOOTPAD]: {
+        title: 'Train Footpad',
+        text: 'Increases footpad count by one'
+    },
+    [MILITARY_BUTTON_TYPES.UPGRADE_FOOTPAD]: {
+        title: 'Upgrade Footpad',
+        text: 'Upgrades all footpads'
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_OUTLAW]: {
+        title: 'Train Outlaw',
+        text: 'Increases outlaw count by one'
+    },
     [MILITARY_BUTTON_TYPES.TRAIN_HEAVY_INFANTRY]: {
         title: 'Train Heavy Infantry',
         text: 'Increases heavy infantry count by one'
@@ -50,7 +183,31 @@ export const MILITARY_INFO_BOXES: IInfoBoxList = {
     [MILITARY_BUTTON_TYPES.UPGRADE_HEAVY_INFANTRY]: {
         title: 'Upgrade Heavy Infantry',
         text: 'Upgrades all heavy infantries'
-    }
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_SHOCKTROOPER]: {
+        title: 'Train Shocktrooper',
+        text: 'Increases shocktrooper count by one'
+    },
+    [MILITARY_BUTTON_TYPES.UPGRADE_SHOCKTROOPER]: {
+        title: 'Upgrade Shocktrooper',
+        text: 'Upgrades all shocktroopers'
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_SIEGETROOPER]: {
+        title: 'Train Siegetrooper',
+        text: 'Increases siegetrooper count by one'
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_MAGE]: {
+        title: 'Train Mage',
+        text: 'Increases mage count by one'
+    },
+    [MILITARY_BUTTON_TYPES.UPGRADE_MAGE]: {
+        title: 'Upgrade Mage',
+        text: 'Upgrades all mages'
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_ARCH_MAGE]: {
+        title: 'Train Arch Mage',
+        text: 'Increases arch mage count by one'
+    },
 }
 
 export const OTHER_INFO_BOXES: IInfoBoxList = {

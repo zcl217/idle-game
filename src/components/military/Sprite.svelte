@@ -55,7 +55,7 @@
     "
         class="absolute"
     />
-    {#if maxHp > 0}
+    {#if currentHp < maxHp && maxHp > 0}
         <div
             style="
             

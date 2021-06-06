@@ -1,13 +1,19 @@
+import { uniqueId } from 'lodash';
 import { RESOURCE_TYPES } from '../resources/resourceTypes';
 
 export const WORKER_TYPES = {
-    FARMER: 'farmer',
-    WOODCUTTER: 'woodcutter',
-    SCHOLAR: 'scholar',
-    MINER: 'miner'
+    UNASSIGNED: uniqueId(),
+    FARMER: uniqueId(),
+    WOODCUTTER: uniqueId(),
+    SCHOLAR: uniqueId(),
+    MINER: uniqueId()
 }
 
 export const WORKER_GENERATOR_MAP = {
     [RESOURCE_TYPES.FOOD]: WORKER_TYPES.FARMER,
     [RESOURCE_TYPES.WOOD]: WORKER_TYPES.WOODCUTTER,
+    [RESOURCE_TYPES.KNOWLEDGE]: WORKER_TYPES.SCHOLAR,
+    [RESOURCE_TYPES.RAW_ORE]: WORKER_TYPES.MINER,
+    [RESOURCE_TYPES.COAL]: WORKER_TYPES.MINER,
+    [RESOURCE_TYPES.GOLD]: WORKER_TYPES.MINER,
 }

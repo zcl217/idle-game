@@ -10,9 +10,12 @@
     import type { ISprite } from "~/interfaces/military/sprite";
     import { MAP_1, UNIT_PATHS } from "~/constants/military/maps";
     import {
+        highlightAttackRange,
         highlightMeleeCells,
         highlightRangedCells,
         lifeCount,
+        removedEnemyUnitCount,
+        unitHasBeenDeployed,
         unitToDeploy,
     } from "~/store/military";
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
@@ -24,11 +27,11 @@
         setLifeCount,
         handleDamageCalculations,
         handleEnemyMovements,
-        handleProjectiles,
         handleUnitAnimations,
         initializeEnemies,
         initializeGrid,
         initializeUnitPosition,
+        handleProjectiles,
         processDamageCalculation,
         setGridPath,
     } from "~/utils/expeditionMode";
@@ -37,9 +40,11 @@
     import { cloneDeep, uniqueId } from "lodash";
     import type { IProjectile } from "~/interfaces/military/projectile";
     import Projectile from "../military/Projectile.svelte";
+    import { STAGE_LIST } from "~/constants/military/stageList";
 
     export let mapType: number = 1,
-        level = 1;
+        level = 1,
+        stage: string = STAGE_LIST["1-1"];
 
     const dispatch = createEventDispatcher();
 
@@ -47,10 +52,12 @@
     let enemyUnits: ISprite[] = [];
     let playerUnits: ISprite[] = [];
     let projectiles: IProjectile[] = [];
-    let enemiesRemaining: number = 0;
+    // if enemies remaining is initialized as 0, we instantly win
+    let enemiesRemaining: number = 1;
     let interval = 0;
 
     onMount(() => {
+      //  handleVictory();
         grid = initializeGrid(mapType);
         setGridPath(grid, mapType);
         setLifeCount(level, lifeCount);
@@ -70,10 +77,7 @@
             for the difference between game loop and their own movement delay).
             how would we fix this?
         */
-
-        // IMPORTANT: there's a bug where the deployable (half opacity) image remains
-        // on the field if you hover over an area and then an enemy walks into that area
-        let delay = 200;
+        let delay = 100;
         let frame = 0;
         interval = setInterval(() => {
             frame++;
@@ -83,7 +87,7 @@
                 enemyUnits,
                 projectiles
             );
-            handleProjectiles(projectiles);
+            handleProjectiles(projectiles, grid, playerUnits, enemyUnits);
             /*
              if we want to implement faster/slower movements,
              we need the setinterval to be at the lowest tick (the fastest moving unit
@@ -95,13 +99,18 @@
             // when all enemies are dead, emit event to parent that stage is over
             // OR if you run out of lives,
             if (frame > 60) frame = 0;
-            enemyUnits = enemyUnits;
+            //
+            enemyUnits = enemyUnits.sort(
+                (unitA: ISprite, unitB: ISprite) =>
+                    unitB.state.currentHp - unitA.state.currentHp
+            );
+            //enemyUnits = enemyUnits;
             playerUnits = playerUnits;
             grid = grid;
             projectiles = projectiles;
         }, delay);
         setTimeout(() => {
-            initializeEnemies(level, enemyUnits, grid);
+            enemiesRemaining = initializeEnemies(stage, enemyUnits, grid);
         }, delay);
     };
 
@@ -111,33 +120,35 @@
 
     $: {
         if ($lifeCount === 0) {
-            clearInterval(interval);
-            //emit to emit defeat to parent
-            dispatch("DEFEAT");
+            setTimeout(() => {
+                handleDefeat();
+            }, 500);
         }
     }
 
-    // const sprite1: ISprite = Object.assign({}, HEAVY_INFANTRY);
-    // sprite1.unitPath = UNIT_PATHS.MAP_1.PATH_1;
+    $: {
+        enemiesRemaining -= $removedEnemyUnitCount;
+        removedEnemyUnitCount.reset();
+        if (enemiesRemaining === 0) {
+            setTimeout(() => {
+                handleVictory();
+            }, 1000);
+        }
+    }
 
-    // svelte can't react to object property changes, so
-    // just make the sprite list a store value
-    // ? but i'm doing sprites = sprites right now so I think it's fine
-    $: sprites = [
-        ,//  sprite1,
-        // {
-        //     spriteSheet: "~/../sprites/spriteSheets/heavy infantry.png",
-        //     positionX: tweened(144, {
-        //         duration: 400,
-        //     }),
-        //     positionY: 144,
-        //     spriteSheetPositionX: 0,
-        //     spriteSheetPositionY: 0,
-        //     damage: 0,
-        //     maxHp: 0,
-        //     name: "test",
-        // },
-    ];
+    const handleVictory = () => {
+        clearInterval(interval);
+        dispatch("VICTORY");
+    };
+
+    const handleDefeat = () => {
+        clearInterval(interval);
+        // set it to 1 so we don't instantly lose when we load this component
+        // (since we lose when lives are 0)
+        lifeCount.set(1);
+        //emit to emit defeat to parent
+        dispatch("DEFEAT");
+    };
 
     $: {
         // console.log("hightlight melee cells");
@@ -172,14 +183,42 @@
         if ($highlightRangedCells) {
             for (let row of grid) {
                 for (let cell of row) {
-                    if (!cell.isPath && !cell.playerUnit)
+                    if (!cell.isPath && !cell.playerUnit) {
                         cell.isDeployable = true;
+                    } else {
+                        cell.isDeployable = false;
+                    }
                 }
             }
         } else if (!$highlightRangedCells && !$highlightMeleeCells) {
             turnOffCellHighlighting();
         }
         grid = grid;
+    }
+
+    $: {
+        if ($highlightRangedCells) {
+            for (let row of grid) {
+                for (let cell of row) {
+                    cell.highlightAttackRange = undefined;
+                }
+            }
+            const coordinates = $highlightAttackRange;
+            let curRow = coordinates.row;
+            let curCol = coordinates.col;
+            let attackRange = $unitToDeploy.spriteInfo.attackRange;
+            if (curRow !== undefined && curCol !== undefined) {
+                for (let row = 0; row < grid.length; row++) {
+                    for (let col = 0; col < grid[0].length; col++) {
+                        if (row === curRow && col === curCol) continue;
+                        let rowDiff = Math.abs(curRow - row);
+                        let colDiff = Math.abs(curCol - col);
+                        if (rowDiff <= attackRange && colDiff <= attackRange)
+                            grid[row][col].highlightAttackRange = true;
+                    }
+                }
+            }
+        }
     }
 
     const handleCellClick = (cell: IExpeditionCell) => {
@@ -197,7 +236,7 @@
                 cell.coordinates.col
             );
             playerUnits.push(newPlayerUnit);
-            unitToDeploy.set({});
+            unitHasBeenDeployed.set(true);
         }
     };
 
@@ -205,37 +244,30 @@
         for (let row of grid) {
             for (let cell of row) {
                 cell.isDeployable = false;
+                cell.highlightAttackRange = false;
             }
         }
         highlightMeleeCells.set(false);
         highlightRangedCells.set(false);
-    };
-
-    const handleHomingProjectileCollision = (projectile: IProjectile) => {
-        processDamageCalculation(
-            projectile.damage,
-            projectile.target,
-            grid,
-            playerUnits,
-            enemyUnits
-        );
-        for (let a = 0; a < projectiles.length; a++) {
-            if (projectiles[a].projectileId === projectile.projectileId) {
-                projectiles.splice(a, 1);
-                break;
-            }
-        }
-        projectiles = projectiles;
+        highlightAttackRange.set({} as ICoordinates);
     };
 </script>
 
 <div class="text-center" />
-<div class="flex justify-between px-10 my-3">
-    <p>Stage 1-1</p>
-    <p>Lives: {$lifeCount}</p>
-    <!-- <p> Enemies Remaining: {enemiesRemaining} </p> -->
+<div class="flex justify-between px-10 mb-3">
+    <div class="flex flex-col">
+        <p class="my-1">Enemies Remaining: {enemiesRemaining}</p>
+        <p>Lives: {$lifeCount}</p>
+    </div>
+    <button
+        class="flex items-center h-12 rpgui-button golden"
+        type="button"
+        on:click={handleDefeat}
+    >
+        <p class="p-4">RETREAT</p>
+    </button>
 </div>
-<div class="mx-auto border-2 border-black w-648px h-504px">
+<div class="mx-auto border-4 border-black w-656px h-512px">
     <div class="relative flex flex-row flex-wrap w-648px h-504px">
         <!--    {#key $highlightMeleeCells} -->
         <!--   {#key test} -->
@@ -264,10 +296,11 @@
         {/each}
         {#each projectiles as projectile}
             <Projectile
-                handleHomingProjectileCollision={() => {
-                    handleHomingProjectileCollision(projectile);
-                }}
-                {projectile}
+                spriteSheet={projectile.spriteSheet}
+                positionSpring={projectile.positionSpring}
+                positionXTweened={projectile.positionXTweened}
+                positionYTweened={projectile.positionYTweened}
+                homing={projectile.homing}
             />
         {/each}
         <!-- {/key} -->
@@ -275,10 +308,15 @@
 </div>
 
 <style>
+    .w-656px {
+        width: 656px;
+    }
+    .h-512px {
+        height: 512px;
+    }
     .w-648px {
         width: 650px;
     }
-
     .h-504px {
         height: 504px;
     }

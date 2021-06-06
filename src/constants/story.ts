@@ -1,4 +1,4 @@
-import { displayDialogueBox, updateDialogue } from "../store/dialogue.js";
+import { displayDialogueBox, updateDialogue } from "../store/dialogue";
 import { curStoryProgress } from "../store/gameState";
 import type { IDialogueList } from "~/interfaces/dialogue"
 import { get } from "svelte/store";
@@ -83,14 +83,14 @@ export const DIALOGUES: IDialogueList = {
     [STORY_PROGRESS_LIST['A1S4']]: {
         characterImage: '../sprites/sage.png',
         characterName: 'Mysterious Mage',
-        mainText: `A wise decision indeed. A life of glory and riches await you! Since my kindness knows no bounds, I'll even let you decide what kind of lord you want to become. Oh, by the way, once you decide, <span class="text-red-600">you cannot change your mind</span>. Enjoy! Oh, take this book, it'll come in handy later.`,
+        mainText: `A wise decision indeed. A life of glory and riches await you! Since my kindness knows no bounds, I'll even let you decide what kind of lord you want to become. Oh, by the way, once you decide, <span class="text-red-600" style="font-family: inherit">you cannot change your mind</span>. Enjoy! Oh, take this book, it'll come in handy later.`,
         yesText: 'Continue',
         noText: '',
         yesHandler: () => {
-            //toggle main display
             const nextScene = STORY_PROGRESS_LIST['A1S5'];
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
+            displayDialogueBox.set(false);
         },
         noHandler: () => { }
     },
@@ -136,8 +136,8 @@ export const DIALOGUES: IDialogueList = {
     [STORY_PROGRESS_LIST['A2S4']]: {
         characterImage: '../sprites/grand-knight.png',
         characterName: 'Xinef',
-        mainText: `And so, high mage Aedus, one of the seven legendary heroes, told me that he would summon a champion unrivaled in power and intellect to assist in our conquest. To be honest, the demons are so powerful that I'm not even sure why we're attacking them head on, but your presence brings me great comfort. Although, with all due respect, I am not sure why you're wearing dirty peasant clothes...`,
-        yesText: 'Explain the situation to him',
+        mainText: `And so, high mage Aedus, one of the seven legendary heroes, told me that he would summon a champion unrivaled in power and intellect to assist in our conquest. To be honest, the demons are so powerful that I'm not even sure why we're attacking them head on, but your presence brings me great comfort. (Not sure what's with the dirty peasant clothes though...)`,
+        yesText: 'Explain the situation',
         noText: '',
         yesHandler: () => {
             const nextScene = STORY_PROGRESS_LIST['A2S5'];
@@ -175,7 +175,7 @@ export const DIALOGUES: IDialogueList = {
     [STORY_PROGRESS_LIST['A2S7']]: {
         characterImage: '../sprites/peasant.png',
         characterName: '',
-        mainText: `*You pull out the dusty book that seems so old that it'll disintegrate if a mosquito sneezes on it. Immense knowledge flows into your mind. You feel as if you can build an entire kingdom from scratch now. A familiar voice also appears in your mind...*`,
+        mainText: `*You pull out the dusty book that seems so old that it'll disintegrate if a mosquito sneezes on it. You open the book and, before you're even able to read a single word, vast knowledge flows into your mind as the book magically disappears. You feel as if you can build an entire kingdom from scratch now. A familiar voice also appears in your mind...*`,
         yesText: 'Continue',
         noText: '',
         yesHandler: () => {
@@ -188,7 +188,7 @@ export const DIALOGUES: IDialogueList = {
     [STORY_PROGRESS_LIST['A2S8']]: {
         characterImage: '../sprites/sage.png',
         characterName: 'Aedus',
-        mainText: `<span class="text-white"> Greetings, champion! I know what you're about to say, but I never explicitly said *when* you'd become a lord right? And isn't it more fun to earn it through your own hard work? (just kidding lol, I'm not bothering with those demons. Good thing I was able to grab some random guy before I wasted too much of my ti- oh shoot, doesn't this thing record my thoughts too...?) Erm. At least the book I gave you was useful...? </span>`,
+        mainText: `Greetings, champion! I know what you're about to say, but I never explicitly said *when* you'd become a lord right? And isn't it more fun to earn it through your own hard work? (just kidding lol, I'm not bothering with those demons. Good thing I was able to grab some random guy before I wasted too much of my ti- oh shoot, doesn't this thing record my thoughts too...?) Erm. At least the book I gave you was useful...? *clears throat* Good luck out there, champion!`,
         yesText: 'Seriously?',
         noText: '',
         yesHandler: () => {
@@ -201,7 +201,7 @@ export const DIALOGUES: IDialogueList = {
     [STORY_PROGRESS_LIST['A2S9']]: {
         characterImage: '../sprites/grand-knight.png',
         characterName: 'Xinef',
-        mainText: `Seeing how you went into a daze after that book disintegrated, I take it you learned something useful? Please tell me you did.`,
+        mainText: `Seeing how you went into a daze after that book disappeared, I take it you learned something useful? Please tell me you did.`,
         yesText: 'Tell him what happened',
         noText: '',
         yesHandler: () => {
@@ -216,7 +216,7 @@ export const DIALOGUES: IDialogueList = {
         characterImage: '../sprites/grand-knight.png',
         characterName: 'Xinef',
         mainText: `... I see. Don't worry, I feel like beating up that old man, I mean, I feel like giving high mage Aedus a *serious talk* just as much as you. Oh well, nothing we can do about it. And I'm quite interested in your newfound knowledge capable of building 'an entire kingdom from scratch'. There's still a while before we launch our offensive, so why don't you try building something? Maybe it'll come in handy in the war effort. `,
-        yesText: 'Okay',
+        yesText: 'Alright',
         noText: `No, I'm leaving`,
         yesHandler: () => {
             const nextScene = STORY_PROGRESS_LIST['A2S12'];

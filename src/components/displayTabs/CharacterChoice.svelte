@@ -12,7 +12,7 @@
         playerImage,
         playerName,
         curStoryProgress,
-    } from "~/store/gameState.js";
+    } from "~/store/gameState";
 
     const selectLord = (lordType: string) => {
         const nextScene = STORY_PROGRESS_LIST["A2S1"];

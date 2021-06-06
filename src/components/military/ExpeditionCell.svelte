@@ -1,11 +1,12 @@
 <script lang="ts">
     import type { IExpeditionCell } from "~/interfaces/military/expeditionGrid";
     import type { ISprite } from "~/interfaces/military/sprite";
-    import { unitToDeploy } from "~/store/military";
+    import { highlightAttackRange, unitToDeploy } from "~/store/military";
     import Sprite from "./Sprite.svelte";
     import { getExpeditionBackgroundPosition } from "~/utils/helpers";
     import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
     import { CELL_HEIGHT, CELL_WIDTH } from "~/constants/military/maps";
+import type { ICoordinates } from "~/interfaces/common";
 
     export let handleCellClick: any,
         cell: IExpeditionCell,
@@ -22,6 +23,7 @@
             // and then show low opacity sprite on it
             sprite = $unitToDeploy;
             displayDeployableSprite = true;
+            highlightAttackRange.set({ row, col });
         }
     };
 
@@ -37,6 +39,7 @@
             // get the type of unit to deploy from store
             // and then hide low opacity sprite
             displayDeployableSprite = false;
+            highlightAttackRange.set({} as ICoordinates);
         }
     };
 
@@ -57,21 +60,12 @@
     on:mouseleave={handleCellLeave}
     on:click={emitCellClick}
 >
+    {#if cell.highlightAttackRange}
+        <div class="attackRangeCell" />
+    {/if}
     {#if cell.isDeployable}
         <div
             style="background-color: rgba(123, 239, 178, 0.5)"
-            class="highlightedCell"
-        />
-    {/if}
-    {#if cell.startOfPath}
-        <div
-            style="background-color: rgba(240, 52, 52, 0.5)"
-            class="highlightedCell"
-        />
-    {/if}
-    {#if cell.endOfPath}
-        <div
-            style="background-color: rgba(30, 139, 195, 0.5)"
             class="highlightedCell"
         />
     {/if}
@@ -87,9 +81,22 @@
 
 <style>
     .highlightedCell {
-        width: 90%;
-        height: 90%;
+        /* width: 90%;
+        height: 90%; */
+        width: 65px;
+        height: 65px;
         border-radius: 50px;
         margin: 0 auto;
+        position: absolute;
+    }
+
+    .attackRangeCell {
+        /* width: 90%;
+        height: 90%; */
+        width: 70px;
+        height: 70px;
+        background-color: rgba(240, 52, 52, 0.5);
+
+        position: absolute;
     }
 </style>

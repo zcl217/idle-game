@@ -8,6 +8,7 @@
     export let sprite: ISprite;
     let interval = 0;
     let currentFrame = 0;
+    console.log(sprite);
     let backgroundPosition = getMenuBackgroundPosition(
         sprite,
         SPRITESHEET_MAP[sprite.spriteInfo.unitType].idleFrames,

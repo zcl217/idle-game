@@ -28,7 +28,7 @@ interface ISpriteInfo {
     // a unique identifier. initialize this when we actually create the sprite
     unitId?: string;
     spriteSize: ISpriteSize;
-    spriteType: string;
+    isEnemy: boolean;
     animationSpeed: number;
     // more specific animation speeds in case the all purpose animationSpeed isn't enough
     movementAnimationSpeed?: number;

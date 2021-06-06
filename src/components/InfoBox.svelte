@@ -5,7 +5,7 @@
         buttonCategory,
         buttonPositionX,
         buttonPositionY,
-    } from "../store/infoBox.js";
+    } from "../store/infoBox";
     import { resources } from "../store/resources";
     import {
         EMPIRE_INFO_BOXES,
@@ -17,6 +17,7 @@
     import { empireButtonCosts } from "~/store/buttonCosts";
     import type { IButtonCost } from "~/interfaces/buttons";
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
+import { SCIENCE_BUTTON_COSTS } from "~/constants/buttons/scienceButtons";
 
     let infoBox: any,
         costs: IButtonCost[] = [],
@@ -35,6 +36,7 @@
                 text = EMPIRE_INFO_BOXES[$buttonType].text;
                 break;
             case BUTTON_CATEGORIES.SCIENCE:
+                costs = SCIENCE_BUTTON_COSTS[$buttonType];
                 title = SCIENCE_INFO_BOXES[$buttonType].title;
                 text = SCIENCE_INFO_BOXES[$buttonType].text;
                 break;

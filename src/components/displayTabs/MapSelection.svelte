@@ -3,7 +3,9 @@
     import {
         ENEMY_PREVIEW_LIST,
         STAGE_LIST,
+        STAGE_REWARD_LIST,
     } from "~/constants/military/stageList";
+    import { RESOURCE_NAMES } from "~/constants/resources/resourceTypes";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { clearedStages } from "~/store/military";
     import FramedSprite from "../military/FramedSprite.svelte";
@@ -12,17 +14,18 @@
     const ZONES = {
         ONE: 1,
         TWO: 2,
-        THREE: 3
+        THREE: 3,
     };
 
     let selectedZone = 0;
-    let selectedStage = "1-1";
+    let selectedStage = '';
     const zone1: string[] = [];
     const zone2: string[] = [];
     const zone3: string[] = [];
     let zone2Unlocked: boolean = false;
     let zone3Unlocked: boolean = false;
-    let enemyPreviewList: { sprite: ISprite; count: number }[] = [];
+    let enemyPreviewList: { sprite: ISprite; amount: number }[] = [];
+    let enemySpawnPointText = "Enemy spawn point: Bottom";
     const dispatch = createEventDispatcher();
 
     for (let a = 0; a < 3; a++) {
@@ -47,37 +50,27 @@
     // TODO: add half transparent image of the stage of the respective zone to the background
 
     const handleStageSelection = (stage: string) => {
-        enemyPreviewList = ENEMY_PREVIEW_LIST[stage];
-        selectedStage = stage;
-        console.log(enemyPreviewList);
-        console.log(stage);
-        // switch (stage) {
-        //     case STAGE_LIST["1-1"]:
-        //         enemyPreviewList = ENEMY_PREVIEW_LIST[stage];
-        //         break;
-        //     case STAGE_LIST["1-2"]:
-        //         break;
-        //     case STAGE_LIST["1-3"]:
-        //         break;
-        //     case STAGE_LIST["2-1"]:
-        //         break;
-        //     case STAGE_LIST["2-2"]:
-        //         break;
-        //     case STAGE_LIST["2-3"]:
-        //         break;
-        //     case STAGE_LIST["3-1"]:
-        //         break;
-        //     case STAGE_LIST["3-2"]:
-        //         break;
-        //     case STAGE_LIST["3-3"]:
-        //         break;
-        // }
+        selectedStage = STAGE_LIST[stage];
+        enemyPreviewList = ENEMY_PREVIEW_LIST[selectedStage];
     };
 
     const handleZoneSelection = (zone: number) => {
         selectedZone = zone;
         enemyPreviewList = [];
         console.log(enemyPreviewList);
+        switch (zone) {
+            case 1:
+                enemySpawnPointText = "Enemy spawn point: Bottom";
+                break;
+            case 2:
+                enemySpawnPointText = "";
+                break;
+            case 3:
+                enemySpawnPointText = "";
+                break;
+            default:
+                break;
+        }
     };
 
     const startExpedition = (stage: string) => {
@@ -115,34 +108,54 @@
     <div class="flex flex-col justify-around flex-grow h-5/6">
         {#if selectedZone === ZONES.ONE}
             {#each zone1 as stage}
-                <button
-                    class="w-10 rpgui-button {selectedStage === STAGE_LIST[stage] ? 'selected' : ''}"
-                    type="button"
-                    on:click={() => handleStageSelection(STAGE_LIST[stage])}
-                >
-                    {stage}
-                </button>
+                <div class="flex flex-row items-center">
+                    <button
+                        class=" w-10 rpgui-button {selectedStage ===
+                        STAGE_LIST[stage]
+                            ? 'selected'
+                            : ''}"
+                        type="button"
+                        on:click={() => handleStageSelection(stage)}
+                    >
+                        {stage}
+                    </button>
+                    {#if $clearedStages[STAGE_LIST[stage]]}
+                        <div class="w-5 h-5 ml-2 bg-greenCheckmark" />
+                    {/if}
+                </div>
             {/each}
         {:else if selectedZone === ZONES.TWO}
             {#each zone2 as stage}
                 <button
-                    class="w-10 rpgui-button {selectedStage === STAGE_LIST[stage] ? 'selected' : ''}"
+                    class="w-10 rpgui-button {selectedStage ===
+                    STAGE_LIST[stage]
+                        ? 'selected'
+                        : ''}"
                     type="button"
-                    on:click={() => handleStageSelection(STAGE_LIST[stage])}
+                    on:click={() => handleStageSelection(stage)}
                 >
                     {stage}
                 </button>
+                {#if $clearedStages[stage]}
+                    <div class="text-green-600">Clear!</div>
+                {/if}
             {/each}
         {:else if selectedZone === ZONES.THREE}
             {#each zone3 as stage}
                 <button
-                    class="w-10 rpgui-button {selectedStage === STAGE_LIST[stage] ? 'selected' : ''}"
+                    class="w-10 rpgui-button {selectedStage ===
+                    STAGE_LIST[stage]
+                        ? 'selected'
+                        : ''}"
                     style=""
                     type="button"
-                    on:click={() => handleStageSelection(STAGE_LIST[stage])}
+                    on:click={() => handleStageSelection(stage)}
                 >
                     {stage}
                 </button>
+                {#if $clearedStages[stage]}
+                    <div class="text-green-600">Clear!</div>
+                {/if}
             {/each}
         {/if}
     </div>
@@ -156,23 +169,40 @@
                     {:else}
                         <div class="flex py-1">
                             <FramedSprite sprite={enemy.sprite} />
-                            <p class="flex items-center mr-5 font-bold ml-7">
-                                x {enemy.count}
+                            <p
+                                class="flex items-center ml-5 mr-5 font-bold w-14"
+                            >
+                                x {enemy.amount}
                             </p>
                         </div>
                     {/if}
                 {/each}
             </div>
-            <div class="flex justify-center">
-                <button
-                    class="absolute w-20 h-20 rpgui-button bottom-5"
-                    type="button"
-                    on:click={() => {
-                        startExpedition(STAGE_LIST[selectedStage]);
-                    }}
-                >
-                    <p class="text-green">START</p>
-                </button>
+            <div class="flex">
+                <div class="absolute text-red-700 bottom-28">
+                    {enemySpawnPointText}
+                </div>
+                <div class="absolute flex justify-between w-4/6 bottom-5">
+                    <div class="w-2/3 pr-3 bottom-10">
+                        <p>Resources generated</p>
+                        <div class="flex flex-row flex-wrap justify-between">
+                            {#each STAGE_REWARD_LIST[selectedStage] as reward}
+                                <p class="flex-basis" style="flex-basis: 50%">
+                                    {RESOURCE_NAMES[reward.resource]}: {reward.amountPerSecond}/s
+                                </p>
+                            {/each}
+                        </div>
+                    </div>
+                    <button
+                        class="w-20 h-20 mr-5 rpgui-button"
+                        type="button"
+                        on:click={() => {
+                            startExpedition(selectedStage);
+                        }}
+                    >
+                        <p class="text-green">START</p>
+                    </button>
+                </div>
             </div>
         </div>
     {/if}
@@ -180,6 +210,6 @@
 
 <style>
     .selected {
-        background-image: url('img/button-down.png');
+        background-image: url("img/button-down.png");
     }
 </style>

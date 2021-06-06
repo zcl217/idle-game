@@ -11,4 +11,5 @@ export interface IExpeditionCell {
     enemyUnitList: ISprite[];
     enemyUnitArriving: boolean;
     playerUnit?: ISprite;
+    highlightAttackRange?: boolean;
 }
