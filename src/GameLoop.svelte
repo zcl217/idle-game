@@ -33,10 +33,10 @@
     };
 
     const processResources = (secondsElapsed: number) => {
-        for (let resource of GENERATABLE_RESOURCES)
-            handleResourceGeneration(secondsElapsed, resource);
         if ($ironSmeltersActivated) handleIronGeneration(secondsElapsed);
         if ($blastFurnacesActivated) handleSteelGeneration(secondsElapsed);
+        for (let resource of GENERATABLE_RESOURCES)
+            handleResourceGeneration(secondsElapsed, resource);
     };
 
     const handleResourceGeneration = (secondsElapsed: number, type: string) => {
@@ -70,21 +70,18 @@
         const iron = RESOURCE_TYPES.IRON;
         const oreRequired =
             ironSmelterCount * IRON_SMELTER_ORE_INPUT * secondsElapsed;
-        if ($resources[iron].value < oreRequired) return;
+        if ($resources[ore].value < oreRequired) return;
         const coalRequired =
             ironSmelterCount * IRON_SMELTER_COAL_INPUT * secondsElapsed;
         if ($resources[coal].value < coalRequired) return;
-        let newOreValue = $resources[coal].value - coalRequired;
+        let newOreValue = $resources[ore].value - oreRequired;
         resources.updateResourceValue(ore, newOreValue);
         let newCoalValue = $resources[coal].value - coalRequired;
         resources.updateResourceValue(coal, newCoalValue);
         const newIronValue =
             $resources[iron].value +
             ironSmelterCount * IRON_SMELTER_IRON_OUTPUT * secondsElapsed;
-        resources.updateResourceValue(
-            iron,
-            $resources[iron].value + newIronValue
-        );
+        resources.updateResourceValue(iron, newIronValue);
     };
 
     const handleSteelGeneration = (secondsElapsed: number) => {
@@ -108,10 +105,7 @@
         const newSteelValue =
             $resources[steel].value +
             blastFurnaceCount * BLAST_FURNACE_STEEL_OUTPUT * secondsElapsed;
-        resources.updateResourceValue(
-            steel,
-            $resources[steel].value + newSteelValue
-        );
+        resources.updateResourceValue(steel, newSteelValue);
     };
 
     const processEvents = (secondsElapsed: number) => {};

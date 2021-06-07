@@ -17,11 +17,17 @@
         obtainedResources,
         curStoryProgress,
     } from "~/store/gameState";
-    import { buttonPrereqsMet } from "~/utils/helpers";
     import {
+        buttonPrereqsMet,
+        hasEnoughResources,
+        spendResources,
+    } from "~/utils/helpers";
+    import {
+        BUTTON_RESOURCE_MAPPING,
         EMPIRE_BUTTON_TYPES,
         EMPIRE_COST_MULTIPLIERS,
     } from "~/constants/buttons/empireButtons";
+import { STORAGE_CAPACITY } from "~/constants/gameState";
 
     let buttonsToDisplay: Set<string> = new Set();
 
@@ -33,29 +39,23 @@
                 buttonsToDisplay.add(id);
             }
         }
-        // trigger reactivity
-        console.log(buttonsToDisplay);
-        console.log(EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE);
         if (buttonsToDisplay.size !== oldLength)
             buttonsToDisplay = buttonsToDisplay;
     }
 
     const handleResource = (buttonType: string) => {
+        const resourceType = BUTTON_RESOURCE_MAPPING[buttonType];
+        if (
+            buttonType === EMPIRE_BUTTON_TYPES.GATHER_FOOD ||
+            buttonType === EMPIRE_BUTTON_TYPES.GATHER_WOOD
+        ) {
+            gatherResource(resourceType);
+            return;
+        }
+        if (!createBuilding(buttonType, resourceType)) return;
         switch (buttonType) {
-            case EMPIRE_BUTTON_TYPES.GATHER_FOOD:
-                gatherFoodHandler();
-                break;
-            case EMPIRE_BUTTON_TYPES.GATHER_WOOD:
-                gatherWoodHandler();
-                break;
-            case EMPIRE_BUTTON_TYPES.CREATE_FARM:
-                createFarmHandler(buttonType);
-                break;
-            case EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM:
-                createTreeFarmHandler(buttonType);
-                break;
             case EMPIRE_BUTTON_TYPES.BUILD_STORAGE:
-                buildStorageHandler(buttonType);
+                incrementResourceLimits(STORAGE_CAPACITY);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE:
                 buildAttractiveHouseHandler(buttonType);
@@ -64,79 +64,36 @@
                 break;
         }
     };
-    const gatherFoodHandler = () => {
-        // curStoryProgress.set(STORY_PROGRESS_LIST['A2S1']);
-        // updateDialogue(DIALOGUES[$curStoryProgress]);
-        // displayDialogueBox.set(true);
-
-        const nextScene = STORY_PROGRESS_LIST["A1S1"];
-        curStoryProgress.set(nextScene);
-        updateDialogue(DIALOGUES[nextScene]);
-        displayDialogueBox.set(true);
-
-        const food = RESOURCE_TYPES.FOOD;
-        resources.updateResourceValue(food, $resources[food].value + 10);
-        obtainedResources.add(RESOURCE_TYPES.FOOD);
+    const gatherResource = (type: string) => {
+        resources.updateResourceValue(type, $resources[type].value + 100);
+        obtainedResources.add(type);
     };
-
-    const createFarmHandler = (buttonType: string) => {
-        const farms = RESOURCE_TYPES.FARMS;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
-        resources.updateResourceValue(farms, $resources[farms].value + 1);
-        empireButtonCosts.updateButtonCosts(
-            buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
-        );
-        obtainedResources.add(RESOURCE_TYPES.FARMS);
-    };
-
-    const gatherWoodHandler = () => {
-        const wood = RESOURCE_TYPES.WOOD;
-        resources.updateResourceValue(wood, $resources[wood].value + 100);
-        obtainedResources.add(RESOURCE_TYPES.WOOD);
-    };
-
-    const buildStorageHandler = (buttonType: string) => {
-        const storage = RESOURCE_TYPES.STORAGE;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
-        resources.updateResourceValue(storage, $resources[storage].value + 1);
-        const food = RESOURCE_TYPES.FOOD;
-        resources.updateResourceLimit(food, $resources[food].limit + 100);
-        const wood = RESOURCE_TYPES.WOOD;
-        resources.updateResourceLimit(wood, $resources[wood].limit + 100);
-        empireButtonCosts.updateButtonCosts(
-            buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
-        );
-        obtainedResources.add(RESOURCE_TYPES.STORAGE);
-    };
-
-    const createTreeFarmHandler = (buttonType: string) => {
-        const treeFarm = RESOURCE_TYPES.TREE_FARM;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
-        resources.updateResourceValue(treeFarm, $resources[treeFarm].value + 1);
-        empireButtonCosts.updateButtonCosts(
-            buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
-        );
-        obtainedResources.add(RESOURCE_TYPES.TREE_FARM);
-    };
-
-    const buildAttractiveHouseHandler = (buttonType: string) => {
-        const attractiveHouse = RESOURCE_TYPES.ATTRACTIVE_HOUSE;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
+    const createBuilding = (
+        buttonType: string,
+        resourceType: string
+    ): boolean => {
+        if (!hasEnoughResources($empireButtonCosts, $resources, buttonType))
+            return false;
+        spendResources($empireButtonCosts, resources, buttonType);
         resources.updateResourceValue(
-            attractiveHouse,
-            $resources[attractiveHouse].value + 1
+            resourceType,
+            $resources[resourceType].value + 1
         );
         empireButtonCosts.updateButtonCosts(
             buttonType,
             EMPIRE_COST_MULTIPLIERS[buttonType]
         );
+        obtainedResources.add(resourceType);
+        return true;
+    };
+    const incrementResourceLimits = (payload: number) => {
+        for (let [name, resource] of Object.entries($resources)) {
+            if (resource.limit < Number.MAX_VALUE - 5000) {
+                resources.updateResourceLimit(name, $resources[name].limit + payload);
+            }
+        }
+    };
+    const buildAttractiveHouseHandler = (buttonType: string) => {
         setTimeout(() => {
             //trigger dialogue
             // bug right now:
@@ -151,24 +108,6 @@
             displayDialogueBox.set(true);
         }, 3);
         obtainedResources.add(RESOURCE_TYPES.ATTRACTIVE_HOUSE);
-    };
-
-    const hasEnoughResources = (buttonType: string) => {
-        for (let resource of $empireButtonCosts[buttonType]) {
-            const curResourceAmount = $resources[resource.type].value;
-            if (curResourceAmount < resource.cost) return false;
-        }
-        return true;
-    };
-
-    const spendResources = (buttonType: string) => {
-        for (let resource of $empireButtonCosts[buttonType]) {
-            const curResourceAmount = $resources[resource.type].value;
-            resources.updateResourceValue(
-                resource.type,
-                curResourceAmount - resource.cost
-            );
-        }
     };
 </script>
 

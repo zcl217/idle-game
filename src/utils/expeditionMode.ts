@@ -1,5 +1,5 @@
 import { cloneDeep, uniqueId } from "lodash";
-import { CELL_HEIGHT, CELL_WIDTH, MAP_1, UNIT_PATHS } from "~/constants/military/maps";
+import { CELL_HEIGHT, CELL_WIDTH, MAP_1, MAP_2, UNIT_PATHS } from "~/constants/military/maps";
 import { UNIT_STATES, SPRITE_TYPE } from "~/constants/military/sprites";
 import { BAT, GHAST, GHOST, SHADOW, SKELETON, SKELETON_ARCHER, WOLF1, WOLF2, WOLF3 } from "~/constants/military/units/monsters";
 import type { ICoordinates } from "~/interfaces/common";
@@ -11,7 +11,6 @@ import { get } from 'svelte/store';
 import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
 import type { IProjectile } from "~/interfaces/military/projectile";
 import { UNIT_PROJECTILES } from "~/constants/military/projectiles";
-import { createEventDispatcher } from "svelte";
 import { STAGE_LIST } from "~/constants/military/stageList";
 import { ENEMY_SPAWN_LIST } from "~/constants/military/enemySpawnList";
 import { removedEnemyUnitCount } from "~/store/military";
@@ -46,26 +45,38 @@ export const initializeGrid = (mapType: number) => {
 };
 
 const isStart = (row: number, col: number, mapType: number) => {
+    let startCoordinates = [];
     switch (mapType) {
         case 1:
-            for (let startCoordinates of MAP_1.start) {
-                if (startCoordinates.row === row && startCoordinates.col === col)
-                    return true;
-            }
+            startCoordinates = MAP_1.start;
+            break;
+        case 2:
+            startCoordinates = MAP_2.start;
+            break;
         default:
             return false;
+    }
+    for (let coordinates of startCoordinates) {
+        if (coordinates.row === row && coordinates.col === col)
+            return true;
     }
 }
 
 const isEnd = (row: number, col: number, mapType: number) => {
+    let endCoordinates = [];
     switch (mapType) {
         case 1:
-            for (let endCoordinates of MAP_1.end) {
-                if (endCoordinates.row === row && endCoordinates.col === col)
-                    return true;
-            }
+            endCoordinates = MAP_1.end;
+            break;
+        case 2:
+            endCoordinates = MAP_2.end;
+            break;
         default:
             return false;
+    }
+    for (let coordinates of endCoordinates) {
+        if (coordinates.row === row && coordinates.col === col)
+            return true;
     }
 }
 
@@ -80,20 +91,21 @@ export const setGridPath = (grid: IExpeditionCell[][], mapType: number) => {
             mapLayout = MAP_1;
             break;
         case 2:
+            mapLayout = MAP_2;
             break;
         case 3:
             break;
     }
-    let { path } = mapLayout;
-    console.log(grid);
+    let { path, undeployable } = mapLayout;
     for (let p of path) {
         grid[p.row][p.col].isPath = true;
+    }
+    for (let p of undeployable) {
+        grid[p.row][p.col].undeployableTerrain = true;
     }
 };
 
 export const initializeEnemies = (stage: string, enemyUnits: ISprite[], grid: IExpeditionCell[][]) => {
-    console.log(enemyUnits);
-
     let totalEnemies = 0;
     for (let enemySpawnInfo of ENEMY_SPAWN_LIST[stage]) {
         totalEnemies += enemySpawnInfo.amount;
@@ -205,13 +217,6 @@ function processAttack(
     if (unit.spriteInfo.melee) {
         processDamageCalculation(unit.spriteInfo.damage, target, grid, playerUnits, enemyUnits);
     } else {
-        // TODO: bug with projectiles: disappears before reaching the target
-        // my guess: due to how the frame rendering works, if you place mage at wrong time
-        // the dmg is processed before the fireball animation completes
-        // (and projectiles are removed after dmg is processed)
-        // although... I thought we're checking the px of the projectile to handle the
-        // dmg calculation so I feel like that's not the true cause
-
         // fire a projectile. when the projectile hits the enemy, that's when we calculate dmg
         if (unit.spriteInfo.isEnemy) {
             fireProjectile(unit, target, grid, playerUnits, enemyUnits, projectiles);
@@ -230,7 +235,8 @@ export const processDamageCalculation = (
 ) => {
     target.state.currentHp -= damage;
     // remove sprite from cell and master list
-    if (target.state.currentHp <= 0) {
+    if (target.state.currentHp <= 0 && !target.state.isDead) {
+        target.state.isDead = true;
         const targetCoordinates = target.position.coordinates;
         let targetCell: IExpeditionCell =
             grid[targetCoordinates.row][targetCoordinates.col];
@@ -283,7 +289,6 @@ function fireHomingProjectile(
     newProjectile.target = target;
     let startingPositionX = unit.position.coordinates.col * CELL_WIDTH;
     let startingPositionY = unit.position.coordinates.row * CELL_HEIGHT;
-    console.log(startingPositionX + " " + startingPositionY);
     newProjectile.positionSpring = spring({ x: startingPositionX, y: startingPositionY }, {
         stiffness: 0.05,
         damping: 0.5
@@ -501,18 +506,6 @@ export const handleUnitAnimations = (playerUnits: ISprite[], enemyUnits: ISprite
 
 const animateUnit = (unit: ISprite, frame: number) => {
     // animate units based on their animation speed
-    // (if the animation speed is too slow then they won't end up animating, so
-    // make sure the delays are properly set)
-
-
-    /*
-         might have to implement a separate animation timer for attack...
-         (heavy infantry attack has too many frames)
-         to do this, we first have to get the type of unit state they're in,
-         and then use the appropriate animationspeed thing
-         (use optional property to skip unnecessary processing. maybe at most half
-         of the units will have a separate animation timer)
-    */
     let animationSpeed = 1;
     animationSpeed = getAnimationSpeed(unit);
     if (frame % animationSpeed !== 0) return;
@@ -525,12 +518,10 @@ const animateUnit = (unit: ISprite, frame: number) => {
     }
     frameList = unit.state.currentFrameList;
     const spriteSheetPosition = frameList[unit.state.currentFrame];
-    // console.log(spriteSheetPosition)
     unit.position.spriteSheetPositionX =
         spriteSheetPosition.col * -unit.spriteInfo.spriteSize.x;
     unit.position.spriteSheetPositionY =
         spriteSheetPosition.row * -unit.spriteInfo.spriteSize.y;
-    /// console.log(sprite.spriteSheetPositionX + " " + sprite.spriteSheetPositionY);
     unit.state.currentFrame++;
 };
 

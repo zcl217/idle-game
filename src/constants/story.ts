@@ -30,8 +30,6 @@ export const STORY_PROGRESS_LIST: Record<string, number> = {
     A2S12: index++,
 }
 
-console.log(STORY_PROGRESS_LIST);
-
 
 export const DIALOGUES: IDialogueList = {
     [STORY_PROGRESS_LIST['A1S1']]: {

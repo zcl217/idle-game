@@ -16,6 +16,7 @@ import { SPRITESHEET_MAP } from '~/constants/military/spriteSheetMap';
 import type { ICoordinates, IPrereqsList } from '~/interfaces/common';
 import type { ISprite } from '~/interfaces/military/sprite';
 import { SPRITE_SIZES } from '~/constants/military/sprites';
+import type { IResourceList } from '~/interfaces/resource';
 
 export const resourceParser = (value: number): string => {
     const million = 1000000;
@@ -36,6 +37,24 @@ export const resourceParser = (value: number): string => {
 const parseDecimals = (input: number) => {
     return Math.round(input * 100) / 100;
 }
+
+export const hasEnoughResources = (buttonCostList: any, resources: IResourceList, buttonType: string) => {
+    for (let resource of buttonCostList[buttonType]) {
+        const curResourceAmount = resources[resource.type].value;
+        if (curResourceAmount < resource.cost) return false;
+    }
+    return true;
+};
+
+export const spendResources = (buttonCostList: any, resources: any, buttonType: string) => {
+    for (let resource of buttonCostList[buttonType]) {
+        const curResourceAmount = (get(resources) as any)[resource.type].value;
+        resources.updateResourceValue(
+            resource.type,
+            curResourceAmount - resource.cost
+        );
+    }
+};
 
 export const buttonPrereqsMet = (type: string, buttonCategory: string) => {
     let prereqList = {} as IPrereqsList;

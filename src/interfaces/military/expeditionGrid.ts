@@ -12,4 +12,5 @@ export interface IExpeditionCell {
     enemyUnitArriving: boolean;
     playerUnit?: ISprite;
     highlightAttackRange?: boolean;
+    undeployableTerrain?: boolean;
 }

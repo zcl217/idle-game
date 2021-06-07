@@ -17,7 +17,9 @@
     import { empireButtonCosts } from "~/store/buttonCosts";
     import type { IButtonCost } from "~/interfaces/buttons";
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
-import { SCIENCE_BUTTON_COSTS } from "~/constants/buttons/scienceButtons";
+import { SCIENCE_BUTTON_COSTS, SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
+import { MILITARY_BUTTON_COSTS } from "~/constants/buttons/militaryButtons";
+import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
 
     let infoBox: any,
         costs: IButtonCost[] = [],
@@ -41,6 +43,7 @@ import { SCIENCE_BUTTON_COSTS } from "~/constants/buttons/scienceButtons";
                 text = SCIENCE_INFO_BOXES[$buttonType].text;
                 break;
             case BUTTON_CATEGORIES.MILITARY:
+                costs = MILITARY_BUTTON_COSTS[$buttonType];
                 title = MILITARY_INFO_BOXES[$buttonType].title;
                 text = MILITARY_INFO_BOXES[$buttonType].text;
                 break;

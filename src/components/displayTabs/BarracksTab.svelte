@@ -5,8 +5,6 @@
     import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
     import { researchedSciences } from "~/store/gameState";
     import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
-    import { PIKEMAN } from "~/constants/military/units/humans";
-
     const displayUnit = (unitType: string): boolean => {
         switch (unitType) {
             case UNIT_TYPES.FOOTPAD:
@@ -24,11 +22,10 @@
 </script>
 
 <div class="flex flex-row flex-wrap justify-between">
-    {#each $militaryUnitList as unit}
+    {#each Object.entries($militaryUnitList) as [key, unit]}
         {#if displayUnit(unit.type)}
             <BarracksUnit
                 sprite={getSprite(unit.type)}
-                unitCount={unit.count}
             />
         {/if}
     {/each}

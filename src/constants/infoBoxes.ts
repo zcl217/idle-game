@@ -3,6 +3,7 @@ import { EMPIRE_BUTTON_TYPES } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
 import { MILITARY_BUTTON_TYPES } from './buttons/militaryButtons';
 import { SCIENCE_BUTTON_TYPES } from './buttons/scienceButtons';
+import { BLAST_FURNACE_STEEL_OUTPUT, GRANARY_CAPACITY, IRON_SMELTER_IRON_OUTPUT, SAWMILL_CAPACITY, STORAGE_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
 
 export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: {
@@ -19,7 +20,7 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: {
         title: 'Build Storage',
-        text: 'Increase food and wood limit by 100 per storage'
+        text: `Increase resource limit by ${STORAGE_CAPACITY} per storage`
     },
     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: {
         title: 'Create Tree Farm',
@@ -35,15 +36,27 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: {
         title: 'Build Library',
-        text: 'Unlocks science. Each library increases knowledge acquisition rate by 5%'
+        text: `Unlocks science. Increases knowledge acquisition by 5% per library`
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: {
+        title: 'Build Warehouse',
+        text: `Increases resource limit by ${WAREHOUSE_CAPACITY} per storage`
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: {
+        title: 'Build Granary',
+        text: `Increases food storage limit by ${GRANARY_CAPACITY} and food acquisition by 5% per granary`
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: {
+        title: 'Build Sawmill',
+        text: `Increase wood storage limit by ${SAWMILL_CAPACITY} and wood acquisition by 5% per sawmill`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: {
         title: 'Build Iron Smelter',
-        text: ''
+        text: `Converts raw ore into iron. Each smelter can generate ${IRON_SMELTER_IRON_OUTPUT}/s`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: {
         title: 'Build Blast Furnace',
-        text: ''
+        text: `Converts iron into steel. Each furnace can generat ${BLAST_FURNACE_STEEL_OUTPUT}/s`
     },
 }
 
@@ -71,10 +84,6 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
     [SCIENCE_BUTTON_TYPES.BLOCK_PRINTING]: {
         title: 'Block Printing',
         text: 'Increases knowledge acquisition speed by 50%',
-    },
-    [SCIENCE_BUTTON_TYPES.COMPARTMENTALIZATION]: {
-        title: 'Compartmentalization',
-        text: 'Unlocks warehouses',
     },
     [SCIENCE_BUTTON_TYPES.DOUBLE_BIT_AXE]: {
         title: 'Double-Bit Axe',

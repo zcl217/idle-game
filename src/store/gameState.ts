@@ -1,16 +1,6 @@
 import { writable, get } from 'svelte/store';
 import { RESOURCE_TYPES } from '~/constants/resources/resourceTypes';
 
-
-export const curStoryProgress = writable(0);
-export const playerImage = writable('../sprites/peasant.png');
-export const playerName = writable('Peasant');
-export const inExpedition = writable(false);
-export const insufficientFood = writable(false);
-export const ironSmeltersActivated = writable(false);
-export const blastFurnacesActivated = writable(false);
-export const researchedSciences = writable(new Set<string>(['a', 'b', 'c', 'd']));
-
 const initialExpeditionResourceRate = {} as Record<string, number>;
 for (const r in RESOURCE_TYPES) initialExpeditionResourceRate[RESOURCE_TYPES[r]] = 0;
 
@@ -27,7 +17,6 @@ const createResourcesFromExpeditions = (expeditionResourceRate: Record<string, n
         set
     };
 }
-export const resourcesFromExpeditions = createResourcesFromExpeditions(initialExpeditionResourceRate);
 
 const initialResourceSet = new Set([RESOURCE_TYPES.FOOD, RESOURCE_TYPES.WOOD, RESOURCE_TYPES.FARMS]);
 const createNewObtainedResources = (initialResourceSet: Set<string>) => {
@@ -46,7 +35,17 @@ const createNewObtainedResources = (initialResourceSet: Set<string>) => {
         })
     }
 }
+
+export const blastFurnacesActivated = writable(false);
+export const curStoryProgress = writable(0);
+export const inExpedition = writable(false);
+export const insufficientFood = writable(false);
+export const ironSmeltersActivated = writable(false);
 export const obtainedResources = createNewObtainedResources(initialResourceSet);
+export const playerImage = writable('../sprites/peasant.png');
+export const playerName = writable('Peasant');
+export const researchedSciences = writable(new Set<string>(['a', 'b', 'c', 'd']));
+export const resourcesFromExpeditions = createResourcesFromExpeditions(initialExpeditionResourceRate);
 
 /*
 const createNewMessageLog = () => {

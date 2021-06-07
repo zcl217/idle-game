@@ -23,21 +23,25 @@
     import { FOOTPAD } from "~/constants/military/units/humans";
     import { set } from "lodash";
 
-    let ironSmelterInput = "off";
+    let ironSmelterInput = $ironSmeltersActivated ? "on" : "off";
     let ironSmelterCount = 0;
-    let blastFurnaceInput = "off";
+    let blastFurnaceInput = $blastFurnacesActivated ? "on" : "off";
     let blastFurnaceCount = 0;
-    $: ironSmelterInput === "on"
-        ? ironSmeltersActivated.set(true)
-        : ironSmeltersActivated.set(false);
     $: ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
-    $: blastFurnaceInput === "on"
-        ? blastFurnacesActivated.set(true)
-        : blastFurnacesActivated.set(false);
     $: blastFurnaceCount = $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
-    $: console.log(blastFurnaceInput);
     $: maxWorkers = $resources[RESOURCE_TYPES.HOMES].value;
     $: availableWorkers = $workers[WORKER_TYPES.UNASSIGNED].value;
+
+    const toggleIronSmelter = () => {
+        ironSmelterInput === "on"
+            ? ironSmeltersActivated.set(true)
+            : ironSmeltersActivated.set(false);
+    };
+    const toggleBlastFurnace = () => {
+        blastFurnaceInput === "on"
+            ? blastFurnacesActivated.set(true)
+            : blastFurnacesActivated.set(false);
+    };
 
     const handleWorkerChange = (workerType: string, operation: string) => {
         if (operation === "increment") {
@@ -113,8 +117,8 @@
         </div>
     {/if}
     {#if ironSmelterCount > 0}
-        <div class="flex flex-row items-center justify-between">
-            <div class="flex flex-row items-center">
+        <div class="flex flex-row items-center my-5">
+            <div class="flex flex-row items-center justify-between w-380px">
                 <div class="text-xl">Iron Smelters</div>
                 <div class="flex flex-col ml-5">
                     <input
@@ -123,6 +127,7 @@
                         type="radio"
                         checked
                         bind:group={ironSmelterInput}
+                        on:change={toggleIronSmelter}
                         name="ironSmelterOff"
                         value="off"
                     /><label for="ironSmelterOff"> Off </label>
@@ -131,25 +136,24 @@
                         id="ironSmelterOn"
                         type="radio"
                         bind:group={ironSmelterInput}
+                        on:change={toggleIronSmelter}
                         name="ironSmelterOn"
                         value="on"
                     /><label for="ironSmelterOn"> On </label>
                 </div>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col ml-20">
                 <p>Input:</p>
-                <p>
-                    Raw ore {ironSmelterCount * IRON_SMELTER_ORE_INPUT}/s,
-                    Coal {ironSmelterCount * IRON_SMELTER_COAL_INPUT}/s
-                </p>
-                <p>Output:</p>
+                <p>Raw ore {ironSmelterCount * IRON_SMELTER_ORE_INPUT}/s</p>
+                <p>Coal {ironSmelterCount * IRON_SMELTER_COAL_INPUT}/s</p>
+                <p class="mt-5">Output:</p>
                 <p>Iron {ironSmelterCount * IRON_SMELTER_IRON_OUTPUT}/s</p>
             </div>
         </div>
     {/if}
     {#if blastFurnaceCount > 0}
-        <div class="flex flex-row items-center justify-between">
-            <div class="flex flex-row items-center">
+        <div class="flex flex-row items-center">
+            <div class="flex flex-row items-center justify-between w-380px">
                 <div class="text-xl">Blast Furnaces</div>
                 <div class="flex flex-col ml-5">
                     <input
@@ -158,6 +162,7 @@
                         type="radio"
                         checked
                         bind:group={blastFurnaceInput}
+                        on:change={toggleBlastFurnace}
                         name="blastFurnaceOff"
                         value="off"
                     /><label for="blastFurnaceOff"> Off </label>
@@ -166,18 +171,17 @@
                         id="blastFurnaceOn"
                         type="radio"
                         bind:group={blastFurnaceInput}
+                        on:change={toggleBlastFurnace}
                         name="blastFurnaceOn"
                         value="on"
                     /><label for="blastFurnaceOn"> On </label>
                 </div>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col ml-20">
                 <p>Input:</p>
-                <p>
-                    Iron ore {blastFurnaceCount * BLAST_FURNACE_IRON_INPUT}/s,
-                    Coal {blastFurnaceCount * BLAST_FURNACE_COAL_INPUT}/s
-                </p>
-                <p>Output:</p>
+                <p>Iron ore {blastFurnaceCount * BLAST_FURNACE_IRON_INPUT}/s</p>
+                <p>Coal {blastFurnaceCount * BLAST_FURNACE_COAL_INPUT}/s</p>
+                <p class="mt-5">Output:</p>
                 <p>Steel {blastFurnaceCount * BLAST_FURNACE_STEEL_OUTPUT}/s</p>
             </div>
         </div>
@@ -187,5 +191,8 @@
 <style>
     .w-min-670px {
         min-width: 670px;
+    }
+    .w-380px {
+        width: 380px;
     }
 </style>

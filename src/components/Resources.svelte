@@ -4,6 +4,7 @@
     import {
         RESOURCE_NAMES,
         RESOURCE_TYPES,
+SPECIAL_RESOURCES,
     } from "../constants/resources/resourceTypes";
     import { RESOURCE_DISPLAY_PREREQS } from "~/constants/resources/resourcePrereqs";
     import { resourceParser } from "../utils/helpers";
@@ -18,10 +19,11 @@
     import {
         BLAST_FURNACE_COAL_INPUT,
         BLAST_FURNACE_IRON_INPUT,
+        BLAST_FURNACE_STEEL_OUTPUT,
         IRON_SMELTER_COAL_INPUT,
+        IRON_SMELTER_IRON_OUTPUT,
         IRON_SMELTER_ORE_INPUT,
     } from "~/constants/gameState";
-    // figure out how to manage resources (maybe from store?) do we use array for this or something with faster access like map?
     const displayGenerationRate = (type: string) => {
         // TODO: fix this. not sure if we even need this function when the
         // generation rates are being automatically determined by the existence of a limit
@@ -29,6 +31,9 @@
     };
 
     const resourcePrereqsMet = (type: string) => {
+        if (SPECIAL_RESOURCES.has(type) && $resources[type].value > 0) {
+            return true;
+        }
         if (!RESOURCE_DISPLAY_PREREQS[type]) return false;
         const { sciencePrereqs } = RESOURCE_DISPLAY_PREREQS[type];
         const { resourcePrereqs } = RESOURCE_DISPLAY_PREREQS[type];
@@ -52,38 +57,80 @@
         let formattedGenerationRate =
             Math.round(parseFloat(generationRate) * 100) / 100;
         formattedGenerationRate -= getResourceConsumption(type);
+        formattedGenerationRate += getAdditionalResourceGeneration(type);
         if (formattedGenerationRate >= 0) prefix = "+";
         return `${prefix}${formattedGenerationRate}/s`;
     };
 
     const getResourceConsumption = (type: string): number => {
+        const ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
+        const blastFurnaceCount =
+            $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
         switch (type) {
             case RESOURCE_TYPES.RAW_ORE:
                 return $ironSmeltersActivated
-                    ? $resources[RESOURCE_TYPES.IRON_SMELTER].value *
-                          IRON_SMELTER_ORE_INPUT
+                    ? ironSmelterCount * IRON_SMELTER_ORE_INPUT
                     : 0;
             case RESOURCE_TYPES.COAL:
-                if ($ironSmeltersActivated) {
-                    return (
-                        $resources[RESOURCE_TYPES.IRON_SMELTER].value *
-                        IRON_SMELTER_COAL_INPUT
-                    );
+                const ironSmelterConsumption = ironSmelterCount * IRON_SMELTER_COAL_INPUT;
+                const blastFurnaceConsumption = blastFurnaceCount * BLAST_FURNACE_COAL_INPUT;
+                if ($ironSmeltersActivated && $blastFurnacesActivated) {
+                    return ironSmelterConsumption + blastFurnaceConsumption
                 }
-                if ($blastFurnacesActivated) {
-                    return (
-                        $resources[RESOURCE_TYPES.BLAST_FURNACE].value *
-                        BLAST_FURNACE_COAL_INPUT
-                    );
-                }
-                return 0;
+                if ($ironSmeltersActivated) return ironSmelterConsumption;
+                if ($blastFurnacesActivated) return blastFurnaceConsumption;
+                break;
             case RESOURCE_TYPES.IRON:
-                return $blastFurnacesActivated
-                    ? $resources[RESOURCE_TYPES.BLAST_FURNACE].value *
-                          BLAST_FURNACE_IRON_INPUT
-                    : 0;
+                if ($blastFurnacesActivated) {
+                    return blastFurnaceCount * BLAST_FURNACE_IRON_INPUT;
+                }
+                break;
             default:
                 return 0;
+        }
+        return 0;
+    };
+
+    const getAdditionalResourceGeneration = (type: string) => {
+        const ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
+        const blastFurnaceCount =
+        $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
+        switch (type) {
+            case RESOURCE_TYPES.IRON:
+                if ($ironSmeltersActivated) {
+                    if (!hasEnoughInputResource(ironSmelterCount, IRON_SMELTER_ORE_INPUT, RESOURCE_TYPES.RAW_ORE)) break;
+                    if (!hasEnoughInputResource(ironSmelterCount, IRON_SMELTER_COAL_INPUT, RESOURCE_TYPES.COAL)) break;
+                    return ironSmelterCount * IRON_SMELTER_IRON_OUTPUT;
+                }
+                break;
+            case RESOURCE_TYPES.STEEL:
+                if ($blastFurnacesActivated) {
+                    if (!hasEnoughInputResource(blastFurnaceCount, BLAST_FURNACE_COAL_INPUT, RESOURCE_TYPES.COAL)) break;
+                    if (!hasEnoughInputResource(blastFurnaceCount, BLAST_FURNACE_IRON_INPUT, RESOURCE_TYPES.IRON)) break;
+                    return blastFurnaceCount * BLAST_FURNACE_STEEL_OUTPUT;
+                }
+                break;
+            default:
+                return 0;
+        }
+        return 0;
+    };
+
+    const hasEnoughInputResource = (
+        productionFacilityCount: number,
+        consumptionRate: number,
+        resourceType: string
+    ) => {
+        const resourcesRequired = productionFacilityCount * consumptionRate;
+        switch (resourceType) {
+            case RESOURCE_TYPES.RAW_ORE:
+                return $resources[RESOURCE_TYPES.RAW_ORE].value > resourcesRequired;
+            case RESOURCE_TYPES.COAL:
+                return $resources[RESOURCE_TYPES.COAL].value > resourcesRequired;
+            case RESOURCE_TYPES.IRON:
+                return $resources[RESOURCE_TYPES.IRON].value > resourcesRequired;
+            default:
+                return true;
         }
     };
 
@@ -96,7 +143,7 @@
     {#each Object.entries($resources) as [type, resource]}
         {#if resourcePrereqsMet(type)}
             {#if resource.displayGenerationRate}
-                <p class="flex flex-row flex-wrap my-1">
+                <p class="flex flex-row flex-wrap my-2">
                     {RESOURCE_NAMES[type]}: {resourceParser(
                         resource.value
                     )}/{resourceParser(resource.limit)}
@@ -107,7 +154,7 @@
                     {/if}
                 </p>
             {:else}
-                <p class="my-1">{RESOURCE_NAMES[type]}: {resource.value}</p>
+                <p class="my-2">{RESOURCE_NAMES[type]}: {resource.value}</p>
             {/if}
         {/if}
     {/each}

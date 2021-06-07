@@ -1,15 +1,13 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import {
+        ALL_CLEAR_REWARDS,
         ENEMY_PREVIEW_LIST,
         STAGE_LIST,
-        STAGE_REWARD_LIST,
     } from "~/constants/military/stageList";
-    import { RESOURCE_NAMES } from "~/constants/resources/resourceTypes";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { clearedStages } from "~/store/military";
-    import FramedSprite from "../military/FramedSprite.svelte";
-    import Sprite from "../military/Sprite.svelte";
+    import StagePreview from "./StagePreview.svelte";
 
     const ZONES = {
         ONE: 1,
@@ -18,7 +16,8 @@
     };
 
     let selectedZone = 0;
-    let selectedStage = '';
+    let selectedStage = "";
+    let zonePreviewImage = `url("zonePreviews/map${selectedZone}.png")`;
     const zone1: string[] = [];
     const zone2: string[] = [];
     const zone3: string[] = [];
@@ -28,22 +27,23 @@
     let enemySpawnPointText = "Enemy spawn point: Bottom";
     const dispatch = createEventDispatcher();
 
-    for (let a = 0; a < 3; a++) {
+    for (let a = 0; a < 5; a++) {
         zone1.push("1");
+    }
+    for (let a = 0; a < 2; a++) {
         zone2.push("2");
-        zone3.push("3");
     }
-    for (let a = 3; a > 0; a--) {
+    for (let a = zone1.length; a > 0; a--) {
         zone1[a - 1] += `-${a}`;
-        zone2[a - 1] += `-${a}`;
-        zone3[a - 1] += `-${a}`;
     }
-
+    for (let a = zone2.length; a > 0; a--) {
+        zone2[a - 1] += `-${a}`;
+    }
     $: {
-        if ($clearedStages[STAGE_LIST["1-3"]]) {
+        if ($clearedStages[STAGE_LIST["1-5"]]) {
             zone2Unlocked = true;
         } else if ($clearedStages[STAGE_LIST["2-3"]]) {
-            zone3Unlocked = true;
+            // zone3Unlocked = true;
         }
     }
 
@@ -53,17 +53,17 @@
         selectedStage = STAGE_LIST[stage];
         enemyPreviewList = ENEMY_PREVIEW_LIST[selectedStage];
     };
-
     const handleZoneSelection = (zone: number) => {
-        selectedZone = zone;
         enemyPreviewList = [];
-        console.log(enemyPreviewList);
+        selectedZone = zone;
+        selectedStage = "";
+        zonePreviewImage = `url("zonePreviews/map${selectedZone}.png")`;
         switch (zone) {
             case 1:
                 enemySpawnPointText = "Enemy spawn point: Bottom";
                 break;
             case 2:
-                enemySpawnPointText = "";
+                enemySpawnPointText = "Enemy spawn point: Left & Top";
                 break;
             case 3:
                 enemySpawnPointText = "";
@@ -160,56 +160,35 @@
         {/if}
     </div>
     {#if enemyPreviewList.length > 0}
-        <div class="w-4/6 h-5/6">
-            <p class="my-5 text-center">Enemy List</p>
-            <div class="flex flex-row flex-wrap">
-                {#each enemyPreviewList as enemy}
-                    {#if false}
-                        <p>?</p>
-                    {:else}
-                        <div class="flex py-1">
-                            <FramedSprite sprite={enemy.sprite} />
-                            <p
-                                class="flex items-center ml-5 mr-5 font-bold w-14"
-                            >
-                                x {enemy.amount}
-                            </p>
-                        </div>
-                    {/if}
-                {/each}
+        <StagePreview {enemyPreviewList} {selectedStage} {startExpedition} />
+    {:else if selectedZone > 0}
+        {#if selectedZone === 3} work in progress {/if}
+        <div
+            class="flex flex-col items-center justify-center w-4/6 mt-5 -ml-5 h-5/6"
+        >
+            <div
+                class="opacity-80"
+                style="
+                    background-image: {zonePreviewImage};
+                    background-size: cover; 
+                    border: 2px solid;
+                    width: 70%;
+                    height: 70%;
+                "
+            />
+            <div class="text-red-700" style="margin-top: 20px; margin-bottom: 20px;">
+                {enemySpawnPointText}
             </div>
-            <div class="flex">
-                <div class="absolute text-red-700 bottom-28">
-                    {enemySpawnPointText}
-                </div>
-                <div class="absolute flex justify-between w-4/6 bottom-5">
-                    <div class="w-2/3 pr-3 bottom-10">
-                        <p>Resources generated</p>
-                        <div class="flex flex-row flex-wrap justify-between">
-                            {#each STAGE_REWARD_LIST[selectedStage] as reward}
-                                <p class="flex-basis" style="flex-basis: 50%">
-                                    {RESOURCE_NAMES[reward.resource]}: {reward.amountPerSecond}/s
-                                </p>
-                            {/each}
-                        </div>
-                    </div>
-                    <button
-                        class="w-20 h-20 mr-5 rpgui-button"
-                        type="button"
-                        on:click={() => {
-                            startExpedition(selectedStage);
-                        }}
-                    >
-                        <p class="text-green">START</p>
-                    </button>
-                </div>
-            </div>
+            <p class="my-2">All clear reward:</p>
+            {#each ALL_CLEAR_REWARDS[selectedZone] as reward}
+                <p>{reward}</p>
+            {/each}
         </div>
     {/if}
 </div>
 
 <style>
     .selected {
-        background-image: url("img/button-down.png");
+        background-image: url("../img/button-down.png");
     }
 </style>

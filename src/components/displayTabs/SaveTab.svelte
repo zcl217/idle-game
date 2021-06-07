@@ -1,6 +1,7 @@
 <script lang="ts">
     import { isEmpty, size } from "lodash";
     import { get } from "svelte/store";
+    import GameLoop from "~/GameLoop.svelte";
     import * as ButtonCostsStore from "~/store/buttonCosts";
     import * as DialogueStore from "~/store/dialogue";
     import * as GameStateStore from "~/store/gameState";
@@ -11,12 +12,13 @@
     import * as WorkersStore from "~/store/workers";
 
     // TODO: refactor this file
-    const dividerCount = size(ButtonCostsStore) +
-                         size(GameStateStore) +
-                         size(InfoBoxStore) +
-                         size(MilitaryStore) +
-                         size(ResourcesStore) +
-                         size(WorkersStore);
+    const dividerCount =
+        size(ButtonCostsStore) +
+        size(GameStateStore) +
+        size(InfoBoxStore) +
+        size(MilitaryStore) +
+        size(ResourcesStore) +
+        size(WorkersStore);
     const divider = "divider";
     const hashSetStores = new Set<string>([
         "researchedSciences",
@@ -47,10 +49,13 @@
         return save;
     };
     const stringifyStore = (key: string, value: any): string => {
-        const storeValue = get(value);
+        console.log(key + "  " + get(value));
+        let storeValue = get(value);
         // can't json stringify a set directly so we need to parse it into an array
         if (hashSetStores.has(key)) {
-            value = isEmpty(storeValue) ? [] : [...(storeValue as Set<string>)];
+            storeValue = isEmpty(storeValue)
+                ? []
+                : [...(storeValue as Set<string>)];
         }
         return JSON.stringify(storeValue) + divider;
     };
@@ -62,6 +67,22 @@
         copiedSave = true;
     };
     const loadSave = () => {
+        if (loadText === "showmethemoney") {
+            const resources = get(ResourcesStore.resources);
+            for (let [name, resource] of Object.entries(resources)) {
+                if (resource.limit < Number.MAX_VALUE - 5000) {
+                    ResourcesStore.resources.updateResourceLimit(
+                        name,
+                        100000000
+                    );
+                    ResourcesStore.resources.updateResourceValue(
+                        name,
+                        resources[name].limit
+                    );
+                }
+            }
+            return;
+        }
         let stringValues = [];
         try {
             stringValues = atob(loadText).split("divider");
@@ -75,11 +96,13 @@
         }
         let storeValues = [];
         for (let val of stringValues) {
+            console.log(val);
             val === ""
                 ? storeValues.push("")
                 : storeValues.push(JSON.parse(val));
         }
         try {
+            console.log(storeValues);
             setStoreValues(ButtonCostsStore, storeValues);
             setGameStateStore(storeValues);
             setStoreValues(InfoBoxStore, storeValues);
@@ -87,6 +110,7 @@
             setStoreValues(ResourcesStore, storeValues);
             setStoreValues(WorkersStore, storeValues);
         } catch (error) {
+            console.log(error);
             loadError = true;
             return;
         }
@@ -98,20 +122,22 @@
             store.set(storeValues.shift());
         }
     };
-    // const setButtonCosts = (storeValues: any[]) => {
-    //     let empireButtonCosts = storeValues.shift() as IButtonCostList;
-    //     ButtonCostsStore.empireButtonCosts.set(empireButtonCosts);
-    // };
+    // modules are sorted in alphabetical order when building,
+    // so if you manually load modules, you have to
+    // load in alphabetical order too
     const setGameStateStore = (storeValues: any[]) => {
+        GameStateStore.blastFurnacesActivated.set(storeValues.shift());
         GameStateStore.curStoryProgress.set(storeValues.shift());
+        GameStateStore.inExpedition.set(storeValues.shift());
+        GameStateStore.insufficientFood.set(storeValues.shift());
+        GameStateStore.ironSmeltersActivated.set(storeValues.shift());
+        const obtainedResources = new Set<string>(storeValues.shift());
+        GameStateStore.obtainedResources.set(obtainedResources);
         GameStateStore.playerImage.set(storeValues.shift());
         GameStateStore.playerName.set(storeValues.shift());
-        GameStateStore.inExpedition.set(storeValues.shift());
         const researchedSciences = new Set<string>(storeValues.shift());
         GameStateStore.researchedSciences.set(researchedSciences);
         GameStateStore.resourcesFromExpeditions.set(storeValues.shift());
-        const obtainedResources = new Set<string>(storeValues.shift());
-        GameStateStore.obtainedResources.set(obtainedResources);
     };
 </script>
 

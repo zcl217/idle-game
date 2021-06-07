@@ -41,8 +41,7 @@
     }
 </script>
 
-<!-- <div class="pointer-events-none"> -->
-<div>
+<div class="pointer-events-none">
     <div
         style="
         background-image: url('${spriteSheet}'); 

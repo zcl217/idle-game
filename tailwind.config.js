@@ -7,7 +7,8 @@ module.exports = {
     'bg-none': ['important'],
     'p-0': ['important'],
     'border-4': ['important'],
-    'h-12': ['important']
+    'h-12': ['important'],
+    'ml-20': ['important']
   },
   theme: {
     extend: {

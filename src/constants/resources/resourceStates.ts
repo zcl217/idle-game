@@ -8,8 +8,43 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         displayGenerationRate: true
     },
     [RESOURCE_TYPES.WOOD]: {
-        value: 10000000,
-        limit: 10000000,
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.KNOWLEDGE]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.RAW_ORE]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.COAL]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.IRON]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.STEEL]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.GOLD]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.FURS]: {
+        value: 0,
+        limit: 100,
         displayGenerationRate: true
     },
     [RESOURCE_TYPES.FARMS]: {
@@ -64,39 +99,24 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         limit: Number.MAX_VALUE,
         displayGenerationRate: false
     },
-    [RESOURCE_TYPES.KNOWLEDGE]: {
-        value: 100000000,
-        limit: 100000000,
-        displayGenerationRate: true
-    },
-    [RESOURCE_TYPES.RAW_ORE]: {
+    [RESOURCE_TYPES.SINATRAS_SHATTERED_ARMOR]: {
         value: 0,
-        limit: 100,
-        displayGenerationRate: true
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
     },
-    [RESOURCE_TYPES.COAL]: {
+    [RESOURCE_TYPES.HALBERD_OF_ADUN]: {
         value: 0,
-        limit: 100,
-        displayGenerationRate: true
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
     },
-    [RESOURCE_TYPES.IRON]: {
+    [RESOURCE_TYPES.LUTAREZS_WARHAMMER]: {
         value: 0,
-        limit: 100,
-        displayGenerationRate: true
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
     },
-    [RESOURCE_TYPES.STEEL]: {
+    [RESOURCE_TYPES.AEDUS_TOME_OF_KNOWLEDGE]: {
         value: 0,
-        limit: 100,
-        displayGenerationRate: true
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
     },
-    [RESOURCE_TYPES.GOLD]: {
-        value: 0,
-        limit: 100,
-        displayGenerationRate: true
-    },
-    [RESOURCE_TYPES.FURS]: {
-        value: 0,
-        limit: 100,
-        displayGenerationRate: true
-    }
 }

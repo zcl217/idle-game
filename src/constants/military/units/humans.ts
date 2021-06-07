@@ -41,15 +41,15 @@ export const SPEARMAN: ISprite = {
 
 export const PIKEMAN: ISprite = {
     spriteInfo: {
-        damage: 5,
+        damage: 10,
         melee: true,
-        maxHp: 30,
+        maxHp: 100,
         name: "Pikeman",
         unitType: UNIT_TYPES.PIKEMAN,
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: false,
         animationSpeed: 2,
-        attackAnimationSpeed: 1,
+        attackAnimationSpeed: 3,
         hpBarOffsetX: defaultHpBarOffsetX,
         hpBarOffsetY: defaultHpBarOffsetY
     },
@@ -65,7 +65,7 @@ export const PIKEMAN: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 30,
+        currentHp: 100,
         currentFrameList: [],
     },
     offsetX: 0,
@@ -73,9 +73,9 @@ export const PIKEMAN: ISprite = {
 
 export const HALBERDIER: ISprite = {
     spriteInfo: {
-        damage: 5,
+        damage: 25,
         melee: true,
-        maxHp: 30,
+        maxHp: 200,
         name: "Halberdier",
         unitType: UNIT_TYPES.HALBERDIER,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -96,7 +96,7 @@ export const HALBERDIER: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 30,
+        currentHp: 200,
         currentFrameList: [],
     },
     offsetX: 0,
@@ -137,11 +137,11 @@ export const FOOTPAD: ISprite = {
 
 export const OUTLAW: ISprite = {
     spriteInfo: {
-        damage: 50,
+        damage: 5,
         attackRange: 1,
         melee: false,
-        maxHp: 100,
-        name: "Halberdier",
+        maxHp: 40,
+        name: "Outlaw",
         unitType: UNIT_TYPES.OUTLAW,
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: false,
@@ -162,7 +162,7 @@ export const OUTLAW: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 100,
+        currentHp: 40,
         currentFrameList: [],
     },
     offsetX: 0,
@@ -171,9 +171,9 @@ export const OUTLAW: ISprite = {
 
 export const HEAVY_INFANTRY: ISprite = {
     spriteInfo: {
-        damage: 100,
+        damage: 20,
         melee: true,
-        maxHp: 50,
+        maxHp: 100,
         name: "Heavy Infantry",
         unitType: UNIT_TYPES.HEAVY_INFANTRY,
         spriteSize: SPRITE_SIZES.TYPE_2,
@@ -196,7 +196,7 @@ export const HEAVY_INFANTRY: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 50,
+        currentHp: 100,
         currentFrameList: []
     },
     // this sprite happens to be wider than the others so it needs an offsetX
@@ -206,9 +206,9 @@ export const HEAVY_INFANTRY: ISprite = {
 
 export const SHOCKTROOPER: ISprite = {
     spriteInfo: {
-        damage: 100,
+        damage: 30,
         melee: true,
-        maxHp: 50,
+        maxHp: 150,
         name: "Shocktrooper",
         unitType: UNIT_TYPES.SHOCKTROOPER,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -230,19 +230,17 @@ export const SHOCKTROOPER: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 50,
+        currentHp: 150,
         currentFrameList: []
     },
-    // this sprite happens to be wider than the others so it needs an offsetX
-    offsetX: -50,
-    offsetY: -20
+    offsetX: 0
 }
 
 export const SIEGETROOPER: ISprite = {
     spriteInfo: {
-        damage: 100,
+        damage: 50,
         melee: true,
-        maxHp: 50,
+        maxHp: 500,
         name: "Siegetrooper",
         unitType: UNIT_TYPES.SIEGETROOPER,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -264,12 +262,10 @@ export const SIEGETROOPER: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 50,
+        currentHp: 500,
         currentFrameList: []
     },
-    // this sprite happens to be wider than the others so it needs an offsetX
-    offsetX: -50,
-    offsetY: -20
+    offsetX: 0
 }
 
 export const MAGE: ISprite = {
@@ -277,7 +273,7 @@ export const MAGE: ISprite = {
         damage: 5,
         attackRange: 2,
         melee: false,
-        maxHp: 50,
+        maxHp: 40,
         name: "Mage",
         unitType: UNIT_TYPES.MAGE,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -299,7 +295,7 @@ export const MAGE: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 20,
+        currentHp: 40,
         currentFrameList: [],
     },
     offsetX: 0,
@@ -307,10 +303,10 @@ export const MAGE: ISprite = {
 
 export const ARCH_MAGE: ISprite = {
     spriteInfo: {
-        damage: 5,
+        damage: 50,
         attackRange: 3,
         melee: false,
-        maxHp: 50,
+        maxHp: 60,
         name: "Arch Mage",
         unitType: UNIT_TYPES.ARCH_MAGE,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -332,7 +328,7 @@ export const ARCH_MAGE: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 20,
+        currentHp: 60,
         currentFrameList: [],
     },
     offsetX: 0,

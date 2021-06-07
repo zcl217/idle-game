@@ -57,6 +57,7 @@ interface IState {
     currentPathIndex?: number;
     currentFrameList: ICoordinates[];
     unitPath?: ICoordinates[];
+    isDead?: boolean;
 }
 
 export interface ISpriteSize {

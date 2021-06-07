@@ -17,7 +17,7 @@
     import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
     import { STORY_PROGRESS_LIST } from "~/constants/story";
     let darkBackground = true,
-        currentTab = TABS.EXPEDITION,
+        currentTab = TABS.MAIN_1,
         displayMain1 = true,
         previousTab = TABS.MAIN_1;
     const toggleTab = (payload) => {
@@ -31,7 +31,6 @@
     };
     $: {
         if ($curStoryProgress === STORY_PROGRESS_LIST["A1S5"]) {
-            console.log("kek");
             currentTab = TABS.CHARACTER_CHOICE;
         }
         if ($curStoryProgress >= STORY_PROGRESS_LIST["A2S12"]) {
@@ -41,11 +40,11 @@
     }
 </script>
 
-<div
-    class="overflow-auto rpgui-content w-min-1070px"
-    class:bg-gray-300={darkBackground === false}
+<div class="overflow-auto bg-gray-800 rpgui-content w-min-1070px">
+    <!--
+        class:bg-gray-300={darkBackground === false}
     class:bg-gray-800={darkBackground === true}
->
+-->
     <!-- <div
         class="absolute top-5 right-5 rpgui-cursor-point"
         class:text-white={darkBackground === true}

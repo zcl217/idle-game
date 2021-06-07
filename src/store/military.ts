@@ -16,14 +16,14 @@ let clearedStagesList: Record<string, boolean> = {};
 for (let stage in STAGE_LIST) clearedStagesList[STAGE_LIST[stage]] = false;
 export const clearedStages = writable(clearedStagesList);
 
-const initialMilitaryUnitList = [
-    { count: 2, type: UNIT_TYPES.SPEARMAN },
-    { count: 2, type: UNIT_TYPES.FOOTPAD },
-    { count: 2, type: UNIT_TYPES.HEAVY_INFANTRY },
-    { count: 2, type: UNIT_TYPES.MAGE },
-];
+const initialMilitaryUnitList: Record<string, {count: number, type: string}> = {
+    [UNIT_TYPES.SPEARMAN]: { count: 1, type: UNIT_TYPES.SPEARMAN },
+    [UNIT_TYPES.FOOTPAD]:{ count: 0, type: UNIT_TYPES.FOOTPAD },
+    [UNIT_TYPES.HEAVY_INFANTRY]:{ count: 0, type: UNIT_TYPES.HEAVY_INFANTRY },
+    [UNIT_TYPES.MAGE]:{ count: 0, type: UNIT_TYPES.MAGE },
+};
 
-const createNewMilitaryUnitList = (militaryUnitList: IMilitaryUnit[]) => {
+const createNewMilitaryUnitList = (militaryUnitList: Record<string, {count: number, type: string}>) => {
     const { subscribe, update, set } = writable(militaryUnitList);
     return {
         subscribe,
@@ -34,34 +34,19 @@ const createNewMilitaryUnitList = (militaryUnitList: IMilitaryUnit[]) => {
     };
     function incrementMilitaryUnitCount(type: string) {
         update((militaryUnitList) => {
-            for (let unit of militaryUnitList) {
-                if (unit.type === type) {
-                    unit.count++;
-                    break;
-                }
-            }
+            militaryUnitList[type].count++;
             return militaryUnitList;
         })
     }
     function updateMilitaryUnitCount(type: string, value: number) {
         update((militaryUnitList) => {
-            for (let unit of militaryUnitList) {
-                if (unit.type === type) {
-                    unit.count = value
-                    break;
-                }
-            }
+            militaryUnitList[type].count = value;
             return militaryUnitList;
         })
     }
-    function updateMilitaryUnitType(type: string, value: string) {
+    function updateMilitaryUnitType(unitLineType: string, newType: string) {
         update((militaryUnitList) => {
-            for (let unit of militaryUnitList) {
-                if (unit.type === type) {
-                    unit.type = value
-                    break;
-                }
-            }
+            militaryUnitList[unitLineType].type = newType;
             return militaryUnitList;
         })
     }

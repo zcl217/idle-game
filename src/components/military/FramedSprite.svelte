@@ -8,14 +8,13 @@
     export let sprite: ISprite;
     let interval = 0;
     let currentFrame = 0;
-    console.log(sprite);
     let backgroundPosition = getMenuBackgroundPosition(
         sprite,
         SPRITESHEET_MAP[sprite.spriteInfo.unitType].idleFrames,
         currentFrame
     );
-
     let isType1 = sprite.spriteInfo.spriteSize === SPRITE_SIZES.TYPE_1;
+    $: isType1 = sprite.spriteInfo.spriteSize === SPRITE_SIZES.TYPE_1;
 
     onMount(() => {
         interval = setInterval(() => {

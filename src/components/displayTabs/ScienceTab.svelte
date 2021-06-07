@@ -4,9 +4,10 @@
         BUTTON_CATEGORIES,
         BUTTON_WIDTH,
     } from "~/constants/buttons/buttons";
-    import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
+    import { SCIENCE_BUTTON_COSTS, SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
     import { researchedSciences } from "~/store/gameState";
-    import { buttonPrereqsMet } from "~/utils/helpers";
+    import { buttonPrereqsMet, hasEnoughResources, spendResources } from "~/utils/helpers";
+import { resources } from "~/store/resources";
 
     let buttonsToDisplay: Set<string> = new Set();
     $: {
@@ -21,6 +22,8 @@
     }
 
     const handleResearch = (science: string) => {
+        if (!hasEnoughResources(SCIENCE_BUTTON_COSTS, $resources, science)) return;
+        spendResources(SCIENCE_BUTTON_COSTS, resources, science);
         researchedSciences.update((list: Set<string>) => list.add(science));
         switch (science) {
             case SCIENCE_BUTTON_TYPES.BARRACKS:

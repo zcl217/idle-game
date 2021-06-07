@@ -1,4 +1,6 @@
 <script lang="ts">
+import { onMount } from "svelte";
+
     import CharacterFrame from "../components/CharacterFrame.svelte";
     import {
         displayDialogueBox,
@@ -23,9 +25,10 @@
                 characterName={$characterName}
             />
         </div>
+        <!-- not sure why mt pt not working here -->
         <div
             class="text-sm dialogueText"
-            class:mt-10={$characterImage !== ""}
+            style="margin-top: {$characterImage !== "" ? 40 : 0}px"
             class:text-center={$characterImage === ""}
         >
             {@html $mainText}

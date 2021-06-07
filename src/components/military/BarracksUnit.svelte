@@ -1,61 +1,159 @@
 <script lang="ts">
+import { initial } from "lodash";
+
+import { onMount } from "svelte";
+
     import InfoBoxButton from "~/components/InfoBoxButton.svelte";
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
-    import { MILITARY_BUTTON_TYPES } from "~/constants/buttons/militaryButtons";
+    import {
+        MILITARY_BUTTON_COSTS,
+        MILITARY_BUTTON_TYPES,
+    } from "~/constants/buttons/militaryButtons";
     import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { militaryUnitList } from "~/store/military";
     import { resources } from "~/store/resources";
+    import { hasEnoughResources, spendResources } from "~/utils/helpers";
     import FramedSprite from "./FramedSprite.svelte";
 
-    export let sprite: ISprite,
-        unitCount = 0;
-
     const BUTTON_WIDTH = 145;
-
-    // these will get long so either need a map
-    // or put the huge switch cases in a separate utils file
-    // need to think about how we're going to design the data structures for our
-    // deployable units
-    const trainUnit = () => {
-        militaryUnitList.incrementMilitaryUnitCount(sprite.spriteInfo.unitType);
-    };
-
+    export let sprite: ISprite;
+    let unitCount = 0;
+    let unitType = sprite.spriteInfo.unitType;
     $: {
-        // loop through resource and see if we have met prereq
-        for (let resource in $resources) {
+        unitCount = $militaryUnitList[getUnitLineType()].count;
+    }
+    const getUnitLineType = () => {
+        switch (unitType) {
+            case UNIT_TYPES.SPEARMAN:
+            case UNIT_TYPES.PIKEMAN:
+            case UNIT_TYPES.HALBERDIER:
+                return UNIT_TYPES.SPEARMAN;
+            case UNIT_TYPES.FOOTPAD:
+            case UNIT_TYPES.OUTLAW:
+                return UNIT_TYPES.FOOTPAD;
+            case UNIT_TYPES.HEAVY_INFANTRY:
+            case UNIT_TYPES.SHOCKTROOPER:
+            case UNIT_TYPES.SIEGETROOPER:
+                return UNIT_TYPES.HEAVY_INFANTRY;
+            case UNIT_TYPES.MAGE:
+            case UNIT_TYPES.ARCH_MAGE:
+                return UNIT_TYPES.MAGE;
+            default:
+                break;
         }
     }
-    // TODO: use object as key instead of just array? otherwise we have to loo pth
-  //  $: unitCount = $militaryUnitList[sprite.spriteInfo.unitType].c
+
+    const trainUnit = () => {
+        const buttonType = getTrainButtonType();
+        if (!hasEnoughResources(MILITARY_BUTTON_COSTS, $resources, buttonType))
+            return;
+        militaryUnitList.incrementMilitaryUnitCount(getUnitLineType());
+        spendResources(MILITARY_BUTTON_COSTS, resources, buttonType);
+    };
 
     const upgradeUnit = () => {
-        switch (sprite.spriteInfo.unitType) {
+        const buttonType = getUpgradeButtonType();
+        switch (unitType) {
             case UNIT_TYPES.SPEARMAN:
-                militaryUnitList.updateMilitaryUnitType(UNIT_TYPES.SPEARMAN, UNIT_TYPES.PIKEMAN);
+                if (
+                    !hasEnoughResources(
+                        MILITARY_BUTTON_COSTS,
+                        $resources,
+                        buttonType
+                    )
+                )
+                    return;
+                militaryUnitList.updateMilitaryUnitType(
+                    UNIT_TYPES.SPEARMAN,
+                    UNIT_TYPES.PIKEMAN
+                );
+                unitType = UNIT_TYPES.PIKEMAN;
                 break;
             case UNIT_TYPES.PIKEMAN:
-                militaryUnitList.updateMilitaryUnitType(UNIT_TYPES.PIKEMAN, UNIT_TYPES.HALBERDIER);
+                if (
+                    !hasEnoughResources(
+                        MILITARY_BUTTON_COSTS,
+                        $resources,
+                        buttonType
+                    )
+                )
+                    return;
+                militaryUnitList.updateMilitaryUnitType(
+                    UNIT_TYPES.SPEARMAN,
+                    UNIT_TYPES.HALBERDIER
+                );
+                unitType = UNIT_TYPES.HALBERDIER;
                 break;
             case UNIT_TYPES.FOOTPAD:
-                militaryUnitList.updateMilitaryUnitType(UNIT_TYPES.FOOTPAD, UNIT_TYPES.OUTLAW);
+                if (
+                    !hasEnoughResources(
+                        MILITARY_BUTTON_COSTS,
+                        $resources,
+                        buttonType
+                    )
+                )
+                    return;
+                militaryUnitList.updateMilitaryUnitType(
+                    UNIT_TYPES.FOOTPAD,
+                    UNIT_TYPES.OUTLAW
+                );
+                unitType = UNIT_TYPES.OUTLAW;
                 break;
             case UNIT_TYPES.HEAVY_INFANTRY:
-                militaryUnitList.updateMilitaryUnitType(UNIT_TYPES.HEAVY_INFANTRY, UNIT_TYPES.SHOCKTROOPER);
+                if (
+                    !hasEnoughResources(
+                        MILITARY_BUTTON_COSTS,
+                        $resources,
+                        buttonType
+                    )
+                )
+                    return;
+                militaryUnitList.updateMilitaryUnitType(
+                    UNIT_TYPES.HEAVY_INFANTRY,
+                    UNIT_TYPES.SHOCKTROOPER
+                );
+                unitType = UNIT_TYPES.SHOCKTROOPER;
                 break;
             case UNIT_TYPES.SHOCKTROOPER:
-                militaryUnitList.updateMilitaryUnitType(UNIT_TYPES.SHOCKTROOPER, UNIT_TYPES.SIEGETROOPER);
+                if (
+                    !hasEnoughResources(
+                        MILITARY_BUTTON_COSTS,
+                        $resources,
+                        buttonType
+                    )
+                )
+                    return;
+                militaryUnitList.updateMilitaryUnitType(
+                    UNIT_TYPES.HEAVY_INFANTRY,
+                    UNIT_TYPES.SIEGETROOPER
+                );
+                unitType = UNIT_TYPES.SIEGETROOPER;
                 break;
             case UNIT_TYPES.MAGE:
-                militaryUnitList.updateMilitaryUnitType(UNIT_TYPES.MAGE, UNIT_TYPES.ARCH_MAGE);
+                if (
+                    !hasEnoughResources(
+                        MILITARY_BUTTON_COSTS,
+                        $resources,
+                        buttonType
+                    )
+                )
+                    return;
+                militaryUnitList.updateMilitaryUnitType(
+                    UNIT_TYPES.MAGE,
+                    UNIT_TYPES.ARCH_MAGE
+                );
+                unitType = UNIT_TYPES.ARCH_MAGE;
                 break;
             default:
                 return;
         }
+        spendResources(MILITARY_BUTTON_COSTS, resources, buttonType);
+        curUpgradeButtonType = getUpgradeButtonType();
     };
 
     const getTrainButtonType = () => {
-        switch (sprite.spriteInfo.unitType) {
+        switch (unitType) {
             case UNIT_TYPES.SPEARMAN:
             case UNIT_TYPES.PIKEMAN:
             case UNIT_TYPES.HALBERDIER:
@@ -76,7 +174,7 @@
     };
 
     const getUpgradeButtonType = () => {
-        switch (sprite.spriteInfo.unitType) {
+        switch (unitType) {
             case UNIT_TYPES.SPEARMAN:
                 return MILITARY_BUTTON_TYPES.UPGRADE_SPEARMAN;
             case UNIT_TYPES.PIKEMAN:
@@ -93,6 +191,8 @@
                 return MILITARY_BUTTON_TYPES.DISABLED_UPGRADE;
         }
     };
+    
+    let curUpgradeButtonType = getUpgradeButtonType();
 </script>
 
 <div>
@@ -120,7 +220,7 @@
     <InfoBoxButton
         handler={upgradeUnit}
         width={BUTTON_WIDTH}
-        curButtonType={getUpgradeButtonType()}
+        curButtonType={curUpgradeButtonType}
         curButtonCategory={BUTTON_CATEGORIES.MILITARY}
         {unitCount}
     />

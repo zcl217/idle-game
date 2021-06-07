@@ -6,7 +6,7 @@ import {
     researchedSciences as researchedSciencesFromStore, resourcesFromExpeditions
 } from '~/store/gameState';
 import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
-import { WORKER_FOOD_CONSUMPTION } from "~/constants/gameState";
+import { GRANARY_BONUS, SAWMILL_BONUS, WORKER_FOOD_CONSUMPTION } from "~/constants/gameState";
 import type { IResourceList } from "~/interfaces/resource";
 
 export const calculateGenerationRate = (type: string, resources: any, workers: any, insufficientFood: boolean): string => {
@@ -46,9 +46,9 @@ const calculateResourceMultiplier = (type: string, resources: any): number => {
     let researchedSciences = get(researchedSciencesFromStore);
     switch (type) {
         case RESOURCE_TYPES.FOOD:
-            return calculateFoodMulitplier(researchedSciences);
+            return calculateFoodMulitplier(researchedSciences, resources);
         case RESOURCE_TYPES.WOOD:
-            return calculateWoodMulitplier(researchedSciences);
+            return calculateWoodMulitplier(researchedSciences, resources);
         case RESOURCE_TYPES.KNOWLEDGE:
             return calculateKnowledgeMulitplier(resources);
         case RESOURCE_TYPES.RAW_ORE:
@@ -56,7 +56,7 @@ const calculateResourceMultiplier = (type: string, resources: any): number => {
         case RESOURCE_TYPES.COAL:
             return calculateMiningMultiplier(researchedSciences) * 0.2;
         case RESOURCE_TYPES.GOLD:
-            return calculateMiningMultiplier(researchedSciences) * 0.01;
+            return calculateMiningMultiplier(researchedSciences) * 0.005;
         case RESOURCE_TYPES.FURS:
             return calculateFurMultiplier(researchedSciences);
         default:
@@ -64,19 +64,21 @@ const calculateResourceMultiplier = (type: string, resources: any): number => {
     }
 }
 
-const calculateFoodMulitplier = (researchedSciences: Set<string>): number => {
+const calculateFoodMulitplier = (researchedSciences: Set<string>, resources: IResourceList): number => {
     let multiplier = 1;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.HORSE_COLLAR)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.HEAVY_PLOW)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.CROP_ROTATION)) multiplier += 0.5;
+    multiplier += resources[RESOURCE_TYPES.GRANARY].value * GRANARY_BONUS;
     return multiplier;
 }
 
-const calculateWoodMulitplier = (researchedSciences: Set<string>): number => {
+const calculateWoodMulitplier = (researchedSciences: Set<string>, resources: any): number => {
     let multiplier = 1;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.DOUBLE_BIT_AXE)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.BOW_SAW)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.TWO_MAN_SAW)) multiplier += 0.5;
+    multiplier += resources[RESOURCE_TYPES.SAWMILL].value * SAWMILL_BONUS;
     return multiplier;
 }
 

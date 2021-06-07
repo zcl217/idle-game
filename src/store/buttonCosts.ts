@@ -4,13 +4,11 @@ import type { IButtonCostList } from '~/interfaces/buttons';
 
 const createNewEmpireButtonCosts = (empireButtonCosts: IButtonCostList) => {
     const { subscribe, update, set } = writable(empireButtonCosts);
-
     return {
         subscribe,
         updateButtonCosts,
         set
     };
-
     function updateButtonCosts(type: string, multiplier: Function) {
         update((empireButtonCosts) => {
             const resources = empireButtonCosts[type]
@@ -21,6 +19,5 @@ const createNewEmpireButtonCosts = (empireButtonCosts: IButtonCostList) => {
         })
     }
 }
-
 
 export const empireButtonCosts = createNewEmpireButtonCosts(INITIAL_EMPIRE_BUTTON_COSTS);

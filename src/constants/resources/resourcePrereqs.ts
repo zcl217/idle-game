@@ -31,10 +31,6 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
         sciencePrereqs: [],
         resourcePrereqs: [RESOURCE_TYPES.LIBRARIES]
     },
-    [RESOURCE_TYPES.BLAST_FURNACE]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
-        resourcePrereqs: []
-    },
     [RESOURCE_TYPES.KNOWLEDGE]: {
         sciencePrereqs: [],
         resourcePrereqs: [RESOURCE_TYPES.LIBRARIES]
@@ -47,20 +43,44 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.ORE_MINING],
         resourcePrereqs: []
     },
+    [RESOURCE_TYPES.IRON]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.IRON_SMELTING],
+        resourcePrereqs: []
+    },
     [RESOURCE_TYPES.GOLD]: {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.ORE_MINING],
         resourcePrereqs: []
     },
-    [RESOURCE_TYPES.IRON]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.IRON_SMELTING],
+    [RESOURCE_TYPES.FURS]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.BARRACKS],
         resourcePrereqs: []
     },
     [RESOURCE_TYPES.STEEL]: {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
         resourcePrereqs: []
     },
-    [RESOURCE_TYPES.FURS]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.BARRACKS],
+    [RESOURCE_TYPES.WAREHOUSE]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
+        resourcePrereqs: []
+    },
+    [RESOURCE_TYPES.GRANARY]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
+        resourcePrereqs: []
+    },
+    [RESOURCE_TYPES.SAWMILL]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
+        resourcePrereqs: []
+    },
+    [RESOURCE_TYPES.BLAST_FURNACE]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
+        resourcePrereqs: []
+    },
+    [RESOURCE_TYPES.IRON_SMELTER]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.IRON_SMELTING],
+        resourcePrereqs: []
+    },
+    [RESOURCE_TYPES.BLAST_FURNACE]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
         resourcePrereqs: []
     },
 }

@@ -19,7 +19,6 @@
     }
 
     const handleDeployClick = () => {
-        console.log("kek");
         unitToDeploy.set(sprite);
         highlightMapCells();
         deploymentMode = true;

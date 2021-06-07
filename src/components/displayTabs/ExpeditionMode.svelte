@@ -57,7 +57,7 @@
     let interval = 0;
 
     onMount(() => {
-      //  handleVictory();
+        //  handleVictory();
         grid = initializeGrid(mapType);
         setGridPath(grid, mapType);
         setLifeCount(level, lifeCount);
@@ -119,9 +119,11 @@
     });
 
     $: {
-        if ($lifeCount === 0) {
+        if ($lifeCount <= 0) {
             setTimeout(() => {
                 handleDefeat();
+                removedEnemyUnitCount.reset();
+                enemiesRemaining = 1;
             }, 500);
         }
     }
@@ -129,7 +131,7 @@
     $: {
         enemiesRemaining -= $removedEnemyUnitCount;
         removedEnemyUnitCount.reset();
-        if (enemiesRemaining === 0) {
+        if (enemiesRemaining <= 0) {
             setTimeout(() => {
                 handleVictory();
             }, 1000);
@@ -183,7 +185,7 @@
         if ($highlightRangedCells) {
             for (let row of grid) {
                 for (let cell of row) {
-                    if (!cell.isPath && !cell.playerUnit) {
+                    if (!cell.isPath && !cell.playerUnit && !cell.undeployableTerrain) {
                         cell.isDeployable = true;
                     } else {
                         cell.isDeployable = false;

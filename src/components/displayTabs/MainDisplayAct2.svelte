@@ -13,21 +13,31 @@
         playerImage,
         playerName,
         obtainedResources,
-researchedSciences,
+        researchedSciences,
     } from "~/store/gameState";
     import {
+        BUTTON_RESOURCE_MAPPING,
         EMPIRE_BUTTON_TYPES,
         EMPIRE_COST_MULTIPLIERS,
+        INITIAL_EMPIRE_BUTTON_COSTS,
     } from "~/constants/buttons/empireButtons";
     import { empireButtonCosts } from "~/store/buttonCosts";
-    import { buttonPrereqsMet } from "~/utils/helpers";
-import { workers } from "~/store/workers";
-import { WORKER_TYPES } from "~/constants/workers/workerTypes";
+    import {
+        buttonPrereqsMet,
+        hasEnoughResources,
+        spendResources,
+    } from "~/utils/helpers";
+    import { workers } from "~/store/workers";
+    import { WORKER_TYPES } from "~/constants/workers/workerTypes";
+    import {
+GRANARY_CAPACITY,
+        STORAGE_CAPACITY,
+        WAREHOUSE_CAPACITY,
+    } from "~/constants/gameState";
 
     let buttonsToDisplay: Set<string> = new Set();
     let hiddenButtons: Set<string> = new Set();
     hiddenButtons.add(EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE);
-
     $: {
         $obtainedResources;
         $researchedSciences;
@@ -44,128 +54,71 @@ import { WORKER_TYPES } from "~/constants/workers/workerTypes";
     }
 
     const handleResource = (buttonType: string) => {
+        const resourceType = BUTTON_RESOURCE_MAPPING[buttonType];
+        if (
+            buttonType === EMPIRE_BUTTON_TYPES.GATHER_FOOD ||
+            buttonType === EMPIRE_BUTTON_TYPES.GATHER_WOOD
+        ) {
+            gatherResource(resourceType);
+            return;
+        }
+        if (!createBuilding(buttonType, resourceType)) return;
         switch (buttonType) {
-            case EMPIRE_BUTTON_TYPES.GATHER_FOOD:
-                gatherFoodHandler();
-                break;
-            case EMPIRE_BUTTON_TYPES.GATHER_WOOD:
-                gatherWoodHandler();
-                break;
-            case EMPIRE_BUTTON_TYPES.CREATE_FARM:
-                createFarmHandler(buttonType);
-                break;
-            case EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM:
-                createTreeFarmHandler(buttonType);
+            case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
+                workers.increment(WORKER_TYPES.UNASSIGNED);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_STORAGE:
-                buildStorageHandler(buttonType);
+                incrementResourceLimits(STORAGE_CAPACITY);
                 break;
-            case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
-                buildHouseHandler(buttonType);
+            case EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE:
+                incrementResourceLimits(WAREHOUSE_CAPACITY);
                 break;
-            case EMPIRE_BUTTON_TYPES.BUILD_LIBRARY:
-                buildLibraryHandler(buttonType);
+            case EMPIRE_BUTTON_TYPES.BUILD_GRANARY:
+                resources.updateResourceLimit(
+                    RESOURCE_TYPES.FOOD,
+                    $resources[RESOURCE_TYPES.FOOD].limit + GRANARY_CAPACITY
+                );
+                break;
+            case EMPIRE_BUTTON_TYPES.BUILD_SAWMILL:
+                resources.updateResourceLimit(
+                    RESOURCE_TYPES.WOOD,
+                    $resources[RESOURCE_TYPES.WOOD].limit + GRANARY_CAPACITY
+                );
                 break;
             default:
                 break;
         }
     };
-
-    const gatherFoodHandler = () => {
-        const food = RESOURCE_TYPES.FOOD;
-        resources.updateResourceValue(food, $resources[food].value + 10);
-        obtainedResources.add(RESOURCE_TYPES.FOOD);
+    const gatherResource = (type: string) => {
+        resources.updateResourceValue(type, $resources[type].value + 100);
+        obtainedResources.add(type);
     };
-
-    const createFarmHandler = (buttonType: string) => {
-        const farms = RESOURCE_TYPES.FARMS;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
-        resources.updateResourceValue(farms, $resources[farms].value + 1);
+    const createBuilding = (
+        buttonType: string,
+        resourceType: string
+    ): boolean => {
+        if (!hasEnoughResources($empireButtonCosts, $resources, buttonType))
+            return false;
+        spendResources($empireButtonCosts, resources, buttonType);
+        resources.updateResourceValue(
+            resourceType,
+            $resources[resourceType].value + 1
+        );
         empireButtonCosts.updateButtonCosts(
             buttonType,
             EMPIRE_COST_MULTIPLIERS[buttonType]
         );
-        obtainedResources.add(RESOURCE_TYPES.FARMS);
-    };
-
-    const gatherWoodHandler = () => {
-        const wood = RESOURCE_TYPES.WOOD;
-        resources.updateResourceValue(wood, $resources[wood].value + 100);
-        obtainedResources.add(RESOURCE_TYPES.WOOD);
-    };
-
-    const buildStorageHandler = (buttonType: string) => {
-        const storage = RESOURCE_TYPES.STORAGE;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
-        resources.updateResourceValue(storage, $resources[storage].value + 1);
-        const food = RESOURCE_TYPES.FOOD;
-        resources.updateResourceLimit(food, $resources[food].limit + 100);
-        const wood = RESOURCE_TYPES.WOOD;
-        resources.updateResourceLimit(wood, $resources[wood].limit + 100);
-        empireButtonCosts.updateButtonCosts(
-            buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
-        );
-        obtainedResources.add(RESOURCE_TYPES.STORAGE);
-    };
-
-    const createTreeFarmHandler = (buttonType: string) => {
-        const treeFarm = RESOURCE_TYPES.TREE_FARM;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
-        resources.updateResourceValue(treeFarm, $resources[treeFarm].value + 1);
-        empireButtonCosts.updateButtonCosts(
-            buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
-        );
-        obtainedResources.add(RESOURCE_TYPES.TREE_FARM);
-    };
-
-    const buildHouseHandler = (buttonType: string) => {
-        const homes = RESOURCE_TYPES.HOMES;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
-        resources.updateResourceValue(homes, $resources[homes].value + 1);
-        empireButtonCosts.updateButtonCosts(
-            buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
-        );
-        obtainedResources.add(RESOURCE_TYPES.HOMES);
-        workers.increment(WORKER_TYPES.UNASSIGNED);
-    };
-
-    const buildLibraryHandler = (buttonType: string) => {
-        const library = RESOURCE_TYPES.LIBRARIES;
-        if (!hasEnoughResources(buttonType)) return;
-        spendResources(buttonType);
-        resources.updateResourceValue(library, $resources[library].value + 1);
-        empireButtonCosts.updateButtonCosts(
-            buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
-        );
-        obtainedResources.add(RESOURCE_TYPES.LIBRARIES);
-    };
-
-    const hasEnoughResources = (buttonType: string) => {
-        console.log(buttonType);
-        console.log($empireButtonCosts);
-        for (let resource of $empireButtonCosts[buttonType]) {
-            const curResourceAmount = $resources[resource.type].value;
-            console.log(curResourceAmount + " " + resource.cost);
-            if (curResourceAmount < resource.cost) return false;
-        }
+        obtainedResources.add(resourceType);
         return true;
     };
-
-    const spendResources = (buttonType: string) => {
-        for (let resource of $empireButtonCosts[buttonType]) {
-            const curResourceAmount = $resources[resource.type].value;
-            resources.updateResourceValue(
-                resource.type,
-                curResourceAmount - resource.cost
-            );
+    const incrementResourceLimits = (payload: number) => {
+        for (let [name, resource] of Object.entries($resources)) {
+            if (resource.limit < Number.MAX_VALUE - 5000) {
+                resources.updateResourceLimit(
+                    name,
+                    $resources[name].limit + payload
+                );
+            }
         }
     };
 </script>
@@ -185,7 +138,7 @@ import { WORKER_TYPES } from "~/constants/workers/workerTypes";
         </div>
     {/each}
     {#if buttonsToDisplay.size % 2 !== 0}
-        <div/>
+        <div />
     {/if}
 </div>
 

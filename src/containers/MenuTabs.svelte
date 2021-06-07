@@ -120,6 +120,6 @@
         width: 140px;
     }
     .selected {
-        background-image: url("img/button-down.png");
+        background-image: url("../img/button-down.png");
     }
 </style>

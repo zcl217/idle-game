@@ -6,13 +6,13 @@ export const WOLF1: ISprite = {
     spriteInfo: {
         damage: 1,
         melee: true,
-        maxHp: 15,
+        maxHp: 10,
         name: "Wolf",
         unitType: UNIT_TYPES.WOLF1,
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: true,
         animationSpeed: 1,
-        movementAnimationSpeed: 3,
+        movementAnimationSpeed: 1,
         attackAnimationSpeed: 2,
         hpBarOffsetX: 11,
         hpBarOffsetY: -10
@@ -30,7 +30,7 @@ export const WOLF1: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 15,
+        currentHp: 10,
         currentPathIndex: 0,
         currentFrameList: [],
     },
@@ -39,15 +39,16 @@ export const WOLF1: ISprite = {
 
 export const WOLF2: ISprite = {
     spriteInfo: {
-        damage: 15,
+        damage: 5,
         melee: true,
-        maxHp: 150,
+        maxHp: 50,
         name: "Wolf",
         unitType: UNIT_TYPES.WOLF2,
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: true,
         animationSpeed: 1,
-        movementAnimationSpeed: 4,
+        movementAnimationSpeed: 3,
+        attackAnimationSpeed: 2,
         hpBarOffsetX: 0,
     },
     position: {
@@ -63,7 +64,7 @@ export const WOLF2: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 150,
+        currentHp: 50,
         currentPathIndex: 0,
         currentFrameList: [],
     },
@@ -72,7 +73,7 @@ export const WOLF2: ISprite = {
 
 export const WOLF3: ISprite = {
     spriteInfo: {
-        damage: 55,
+        damage: 20,
         melee: true,
         maxHp: 300,
         name: "Wolf",
@@ -80,6 +81,8 @@ export const WOLF3: ISprite = {
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: true,
         animationSpeed: 1,
+        movementAnimationSpeed: 3,
+        attackAnimationSpeed: 2,
         hpBarOffsetX: 0,
     },
     position: {
@@ -103,9 +106,9 @@ export const WOLF3: ISprite = {
 
 export const SKELETON: ISprite = {
     spriteInfo: {
-        damage: 5,
+        damage: 15,
         melee: true,
-        maxHp: 30,
+        maxHp: 200,
         name: "Skeleton",
         unitType: UNIT_TYPES.SKELETON,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -126,7 +129,7 @@ export const SKELETON: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 30,
+        currentHp: 200,
         currentPathIndex: 0,
         currentFrameList: [],
     },
@@ -135,7 +138,7 @@ export const SKELETON: ISprite = {
 
 export const SKELETON_ARCHER: ISprite = {
     spriteInfo: {
-        damage: 1,
+        damage: 5,
         attackRange: 1,
         melee: false,
         maxHp: 20,
@@ -168,10 +171,10 @@ export const SKELETON_ARCHER: ISprite = {
 
 export const BAT: ISprite = {
     spriteInfo: {
-        damage: 2,
+        damage: 10,
         attackRange: 1,
         melee: false,
-        maxHp: 20,
+        maxHp: 100,
         name: "Bat",
         unitType: UNIT_TYPES.BAT,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -187,12 +190,12 @@ export const BAT: ISprite = {
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
         facingRight: true,
-        tweenedDelay: 2000
+        tweenedDelay: 500
     },
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 20,
+        currentHp: 100,
         currentPathIndex: 0,
         currentFrameList: [],
     },
@@ -204,7 +207,7 @@ export const GHOST: ISprite = {
         damage: 5,
         attackRange: 1,
         melee: false,
-        maxHp: 20,
+        maxHp: 100,
         name: "Ghost",
         unitType: UNIT_TYPES.GHOST,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -220,12 +223,12 @@ export const GHOST: ISprite = {
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
         facingRight: true,
-        tweenedDelay: 2000
+        tweenedDelay: 1000
     },
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 20,
+        currentHp: 100,
         currentPathIndex: 0,
         currentFrameList: [],
     },
