@@ -47,7 +47,7 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         limit: 100,
         displayGenerationRate: true
     },
-    [RESOURCE_TYPES.FARMS]: {
+    [RESOURCE_TYPES.FARM]: {
         value: 0,
         generationValue: 1,
         limit: Number.MAX_VALUE,
@@ -74,12 +74,12 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         limit: Number.MAX_VALUE,
         displayGenerationRate: false
     },
-    [RESOURCE_TYPES.HOMES]: {
+    [RESOURCE_TYPES.HOUSE]: {
         value: 1,
         limit: Number.MAX_VALUE,
         displayGenerationRate: false
     },
-    [RESOURCE_TYPES.LIBRARIES]: {
+    [RESOURCE_TYPES.LIBRARY]: {
         value: 0,
         limit: Number.MAX_VALUE,
         displayGenerationRate: false

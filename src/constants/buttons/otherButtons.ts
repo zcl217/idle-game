@@ -1,8 +1,6 @@
-import { uniqueId } from "lodash"
-
 export const OTHER_BUTTON_TYPES = {
-    LORD_1: uniqueId(),
-    LORD_2: uniqueId(),
+    LORD_1: 'lord1',
+    LORD_2: 'lord2',
 }
 
 export const OTHER_BUTTON_TEXTS = {

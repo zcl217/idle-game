@@ -1,20 +1,19 @@
-import { uniqueId } from "lodash";
 import type { ISprite } from "~/interfaces/military/sprite";
 import { RESOURCE_TYPES } from "../resources/resourceTypes";
 import { BAT, GHOST, SKELETON, SKELETON_ARCHER, WOLF1, WOLF2, WOLF3 } from "./units/monsters";
 
 export const STAGE_LIST: Record<string, string> = {
-    '1-1': uniqueId(),
-    '1-2': uniqueId(),
-    '1-3': uniqueId(),
-    '1-4': uniqueId(),
-    '1-5': uniqueId(),
-    '2-1': uniqueId(),
-    '2-2': uniqueId(),
-    '2-3': uniqueId(),
-    '3-1': uniqueId(),
-    '3-2': uniqueId(),
-    '3-3': uniqueId(),
+    '1-1': '1-1',
+    '1-2': '1-2',
+    '1-3': '1-3',
+    '1-4': '1-4',
+    '1-5': '1-5',
+    '2-1': '2-1',
+    '2-2': '2-2',
+    '2-3': '2-3',
+    '3-1': '3-1',
+    '3-2': '3-2',
+    '3-3': '3-3',
 }
 
 export const ENEMY_PREVIEW_LIST: Record<string, { sprite: ISprite, amount: number }[]> = {

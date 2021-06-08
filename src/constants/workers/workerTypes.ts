@@ -1,12 +1,11 @@
-import { uniqueId } from 'lodash';
 import { RESOURCE_TYPES } from '../resources/resourceTypes';
 
 export const WORKER_TYPES = {
-    UNASSIGNED: uniqueId(),
-    FARMER: uniqueId(),
-    WOODCUTTER: uniqueId(),
-    SCHOLAR: uniqueId(),
-    MINER: uniqueId()
+    UNASSIGNED: 'unassigned',
+    FARMER: 'farmer',
+    WOODCUTTER: 'woodcutter',
+    SCHOLAR: 'scholar',
+    MINER: 'miner'
 }
 
 export const WORKER_GENERATOR_MAP = {

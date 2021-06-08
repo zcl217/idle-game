@@ -1,40 +1,38 @@
-import { uniqueId } from "lodash"
-
 export const RESOURCE_TYPES: Record<string, string> = {
-    FOOD: uniqueId(),
-    WOOD: uniqueId(),
-    KNOWLEDGE: uniqueId(),
-    RAW_ORE: uniqueId(),
-    COAL: uniqueId(),
-    IRON: uniqueId(),
-    GOLD: uniqueId(),
-    FURS: uniqueId(),
-    STEEL: uniqueId(),
-    FARMS: uniqueId(),
-    TREE_FARM: uniqueId(),
-    HOMES: uniqueId(),
-    LIBRARIES: uniqueId(),
-    STORAGE: uniqueId(),
-    WAREHOUSE: uniqueId(),
-    GRANARY: uniqueId(),
-    SAWMILL: uniqueId(),
-    IRON_SMELTER: uniqueId(),
-    BLAST_FURNACE: uniqueId(),
-    ATTRACTIVE_HOUSE: uniqueId(),
-    SINATRAS_SHATTERED_ARMOR: uniqueId(),
-    HALBERD_OF_ADUN: uniqueId(),
-    LUTAREZS_WARHAMMER: uniqueId(),
-    AEDUS_TOME_OF_KNOWLEDGE: uniqueId()
+    FOOD: 'food',
+    WOOD: 'wood',
+    KNOWLEDGE: 'knowledge',
+    RAW_ORE: 'rawOre',
+    COAL: 'coal',
+    IRON: 'iron',
+    GOLD: 'gold',
+    FURS: 'furs',
+    STEEL: 'steel',
+    FARM: 'farm',
+    TREE_FARM: 'treeFarm',
+    HOUSE: 'home',
+    LIBRARY: 'librarY',
+    STORAGE: 'storage',
+    WAREHOUSE: 'warehouse',
+    GRANARY: 'granary',
+    SAWMILL: 'sawmill',
+    IRON_SMELTER: 'ironSmelter',
+    BLAST_FURNACE: 'blastFurnace',
+    ATTRACTIVE_HOUSE: 'attractiveHouse',
+    SINATRAS_SHATTERED_ARMOR: 'sinatraShatteredArmor',
+    HALBERD_OF_ADUN: 'halberdOfAdun',
+    LUTAREZS_WARHAMMER: 'lutarezWarhammer',
+    AEDUS_TOME_OF_KNOWLEDGE: 'aedusTomeOfKnowledge'
 }
 
 export const RESOURCE_NAMES: Record<string, string> = {
     [RESOURCE_TYPES.FOOD]: 'food',
-    [RESOURCE_TYPES.FARMS]: 'farms',
+    [RESOURCE_TYPES.FARM]: 'farms',
     [RESOURCE_TYPES.WOOD]: 'wood',
     [RESOURCE_TYPES.TREE_FARM]: 'tree farms',
     [RESOURCE_TYPES.STORAGE]: 'storages',
-    [RESOURCE_TYPES.HOMES]: 'homes',
-    [RESOURCE_TYPES.LIBRARIES]: 'libraries',
+    [RESOURCE_TYPES.HOUSE]: 'homes',
+    [RESOURCE_TYPES.LIBRARY]: 'libraries',
     [RESOURCE_TYPES.KNOWLEDGE]: 'knowledge',
     [RESOURCE_TYPES.RAW_ORE]: 'raw ore',
     [RESOURCE_TYPES.COAL]: 'coal',
@@ -74,7 +72,7 @@ export const GENERATABLE_RESOURCES = [
 ]
 
 export const RESOURCE_GENERATOR_MAP = {
-    [RESOURCE_TYPES.FOOD]: RESOURCE_TYPES.FARMS,
+    [RESOURCE_TYPES.FOOD]: RESOURCE_TYPES.FARM,
     [RESOURCE_TYPES.WOOD]: RESOURCE_TYPES.TREE_FARM,
 
 }

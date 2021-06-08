@@ -1,5 +1,3 @@
-
-import { uniqueId } from 'lodash'
 import { RESOURCE_TYPES } from '../resources/resourceTypes';
 import type { IButtonCostList } from '~/interfaces/buttons';
 import type { IPrereqsList } from '~/interfaces/common';
@@ -8,19 +6,19 @@ import { SCIENCE_BUTTON_TYPES } from './scienceButtons';
 import { STORAGE_CAPACITY } from '../gameState';
 
 export const EMPIRE_BUTTON_TYPES: Record<string, string> = {
-    GATHER_FOOD: uniqueId(),
-    CREATE_FARM: uniqueId(),
-    GATHER_WOOD: uniqueId(),
-    CREATE_TREE_FARM: uniqueId(),
-    BUILD_STORAGE: uniqueId(),
-    BUILD_WAREHOUSE: uniqueId(),
-    BUILD_ATTRACTIVE_HOUSE: uniqueId(),
-    BUILD_HOUSE: uniqueId(),
-    BUILD_LIBRARY: uniqueId(),
-    BUILD_GRANARY: uniqueId(),
-    BUILD_SAWMILL: uniqueId(),
-    BUILD_IRON_SMELTER: uniqueId(),
-    BUILD_BLAST_FURNACE: uniqueId(),
+    GATHER_FOOD: 'gatherFood',
+    CREATE_FARM: 'createFarm',
+    GATHER_WOOD: 'gatherWood',
+    CREATE_TREE_FARM: 'createTreeFarm',
+    BUILD_STORAGE: 'buildStorage',
+    BUILD_WAREHOUSE: 'buildWarehouse',
+    BUILD_ATTRACTIVE_HOUSE: 'buildAttractiveHouse',
+    BUILD_HOUSE: 'buildHouse',
+    BUILD_LIBRARY: 'buildLibrary',
+    BUILD_GRANARY: 'buildGranary',
+    BUILD_SAWMILL: 'buildSawmill',
+    BUILD_IRON_SMELTER: 'buildIronSmelter',
+    BUILD_BLAST_FURNACE: 'buildBlastFurnace',
 }
 
 export const EMPIRE_BUTTON_TEXTS = {
@@ -42,13 +40,13 @@ export const EMPIRE_BUTTON_TEXTS = {
 
 export const BUTTON_RESOURCE_MAPPING = {
     [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: RESOURCE_TYPES.FOOD,
-    [EMPIRE_BUTTON_TYPES.CREATE_FARM]: RESOURCE_TYPES.FARMS,
+    [EMPIRE_BUTTON_TYPES.CREATE_FARM]: RESOURCE_TYPES.FARM,
     [EMPIRE_BUTTON_TYPES.GATHER_WOOD]: RESOURCE_TYPES.WOOD,
     [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: RESOURCE_TYPES.STORAGE,
     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: RESOURCE_TYPES.TREE_FARM,
     [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: RESOURCE_TYPES.ATTRACTIVE_HOUSE,
-    [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: RESOURCE_TYPES.HOMES,
-    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: RESOURCE_TYPES.LIBRARIES,
+    [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: RESOURCE_TYPES.HOUSE,
+    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: RESOURCE_TYPES.LIBRARY,
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: RESOURCE_TYPES.WAREHOUSE,
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: RESOURCE_TYPES.GRANARY,
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: RESOURCE_TYPES.SAWMILL,
@@ -71,7 +69,7 @@ export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
     },
     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: {
         sciencePrereqs: [],
-        resourcePrereqs: [RESOURCE_TYPES.FARMS]
+        resourcePrereqs: [RESOURCE_TYPES.FARM]
     },
     [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: {
         sciencePrereqs: [],

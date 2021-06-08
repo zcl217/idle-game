@@ -1,28 +1,27 @@
 
-import { uniqueId } from 'lodash'
 import { RESOURCE_TYPES } from '../resources/resourceTypes';
 import type { IButtonCostList } from '~/interfaces/buttons';
 
 export const MILITARY_BUTTON_TYPES = {
-    TRAIN_SPEARMAN: uniqueId(),
-    UPGRADE_SPEARMAN: uniqueId(),
-    TRAIN_PIKEMAN: uniqueId(),
-    UPGRADE_PIKEMAN: uniqueId(),
-    TRAIN_FOOTPAD: uniqueId(),
-    UPGRADE_FOOTPAD: uniqueId(),
-    TRAIN_OUTLAW: uniqueId(),
-    TRAIN_HALBERDIER: uniqueId(),
-    TRAIN_HEAVY_INFANTRY: uniqueId(),
-    UPGRADE_HEAVY_INFANTRY: uniqueId(),
-    TRAIN_SHOCKTROOPER: uniqueId(),
-    UPGRADE_SHOCKTROOPER: uniqueId(),
-    TRAIN_SIEGETROOPER: uniqueId(),
-    TRAIN_MAGE: uniqueId(),
-    UPGRADE_MAGE: uniqueId(),
-    TRAIN_GREAT_MAGE: uniqueId(),
-    TRAIN_ARCH_MAGE: uniqueId(),
-    DISABLED_TRAIN: uniqueId(),
-    DISABLED_UPGRADE: uniqueId(),
+    TRAIN_SPEARMAN: 'trainSpearman',
+    UPGRADE_SPEARMAN: 'upgradeSpearman',
+    TRAIN_PIKEMAN: 'trainPikeman',
+    UPGRADE_PIKEMAN: 'upgradePikeman',
+    TRAIN_FOOTPAD: 'trainFootpad',
+    UPGRADE_FOOTPAD: 'upgradeFootpad',
+    TRAIN_OUTLAW: 'trainOutlaw',
+    TRAIN_HALBERDIER: 'trainHalberdier',
+    TRAIN_HEAVY_INFANTRY: 'trainHeavyInfantry',
+    UPGRADE_HEAVY_INFANTRY: 'upgradeHeavyInfantry',
+    TRAIN_SHOCKTROOPER: 'trainShocktrooper',
+    UPGRADE_SHOCKTROOPER: 'upgradeShocktrooper',
+    TRAIN_SIEGETROOPER: 'trainSiegetrooper',
+    TRAIN_MAGE: 'trainMage',
+    UPGRADE_MAGE: 'upgradeMage',
+    TRAIN_GREAT_MAGE: 'trainGreatMage',
+    TRAIN_ARCH_MAGE: 'trainArchMage',
+    DISABLED_TRAIN: 'disabledTrain',
+    DISABLED_UPGRADE: 'disabledUpgrade',
 }
 
 export const MILITARY_BUTTON_TEXTS = {

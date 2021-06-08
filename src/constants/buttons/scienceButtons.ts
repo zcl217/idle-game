@@ -1,32 +1,31 @@
 
-import { uniqueId } from 'lodash'
 import type { IButtonCostList } from '~/interfaces/buttons';
 import type { IPrereqsList } from '~/interfaces/common';
 import { RESOURCE_TYPES } from '../resources/resourceTypes';
 
 export const SCIENCE_BUTTON_TYPES = {
-    MATHEMATICS: uniqueId(),
-    CRANE: uniqueId(),
-    LAWS_OF_NATURE: uniqueId(),
-    ART_OF_WAR: uniqueId(),
-    CONSCRIPTION: uniqueId(),
-    BLOCK_PRINTING: uniqueId(),
-    DOUBLE_BIT_AXE: uniqueId(),
-    BOW_SAW: uniqueId(),
-    TWO_MAN_SAW: uniqueId(),
-    HORSE_COLLAR: uniqueId(),
-    HEAVY_PLOW: uniqueId(),
-    CROP_ROTATION: uniqueId(),
-    WOODEN_PICKAXE: uniqueId(),
-    IRON_PICKAXE: uniqueId(),
-    SHAFT_MINING: uniqueId(),
-    ORE_MINING: uniqueId(),
-    IRON_SMELTING: uniqueId(),
-    STEELMAKING: uniqueId(),
-    BARRACKS: uniqueId(),
-    SLINGSHOTS: uniqueId(),
-    HEAVY_INFANTRY: uniqueId(),
-    MAGIC: uniqueId(),
+    MATHEMATICS: 'mathematics',
+    CRANE: 'crane',
+    LAWS_OF_NATURE: 'lawsOfNature',
+    ART_OF_WAR: 'artOfWar',
+    CONSCRIPTION: 'conscription',
+    BLOCK_PRINTING: 'blockPrinting',
+    DOUBLE_BIT_AXE: 'doubleBitAxe',
+    BOW_SAW: 'bowSaw',
+    TWO_MAN_SAW: 'twoManSaw',
+    HORSE_COLLAR: 'horseCollar',
+    HEAVY_PLOW: 'heavyPlow',
+    CROP_ROTATION: 'cropRotation',
+    WOODEN_PICKAXE: 'woodenPickaxe',
+    IRON_PICKAXE: 'ironPickaxe',
+    SHAFT_MINING: 'shaftMining',
+    ORE_MINING: 'oreMining',
+    IRON_SMELTING: 'ironSmelting',
+    STEELMAKING: 'steelMaking',
+    BARRACKS: 'barracks',
+    SLINGSHOTS: 'slingshots',
+    HEAVY_INFANTRY: 'heavyInfantry',
+    MAGIC: 'magic',
 }
 
 export const SCIENCE_BUTTON_TEXTS = {

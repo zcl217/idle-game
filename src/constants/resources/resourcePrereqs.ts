@@ -11,29 +11,29 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [RESOURCE_TYPES.FARMS]: {
+    [RESOURCE_TYPES.FARM]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
     [RESOURCE_TYPES.TREE_FARM]: {
         sciencePrereqs: [],
-        resourcePrereqs: [RESOURCE_TYPES.FARMS]
+        resourcePrereqs: [RESOURCE_TYPES.FARM]
     },
     [RESOURCE_TYPES.STORAGE]: {
         sciencePrereqs: [],
         resourcePrereqs: [RESOURCE_TYPES.TREE_FARM]
     },
-    [RESOURCE_TYPES.HOMES]: {
+    [RESOURCE_TYPES.HOUSE]: {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [RESOURCE_TYPES.LIBRARIES]: {
+    [RESOURCE_TYPES.LIBRARY]: {
         sciencePrereqs: [],
-        resourcePrereqs: [RESOURCE_TYPES.LIBRARIES]
+        resourcePrereqs: [RESOURCE_TYPES.LIBRARY]
     },
     [RESOURCE_TYPES.KNOWLEDGE]: {
         sciencePrereqs: [],
-        resourcePrereqs: [RESOURCE_TYPES.LIBRARIES]
+        resourcePrereqs: [RESOURCE_TYPES.LIBRARY]
     },
     [RESOURCE_TYPES.RAW_ORE]: {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.ORE_MINING],
