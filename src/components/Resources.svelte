@@ -41,18 +41,16 @@
     };
 
     const formatGenerationRate = (type: string): string => {
-        let prefix = "";
         let generationRate = calculateGenerationRate(
             type,
             $resources,
             $workers,
             $insufficientFood
         );
-        let formattedGenerationRate =
-            Math.round(parseFloat(generationRate) * 100) / 100;
-        formattedGenerationRate -= getResourceConsumption(type);
-        formattedGenerationRate += getAdditionalResourceGeneration(type);
-        if (formattedGenerationRate >= 0) prefix = "+";
+        generationRate -= getResourceConsumption(type);
+        generationRate += getAdditionalResourceGeneration(type);
+        const prefix = generationRate >= 0 ? "+" : "";
+        const formattedGenerationRate = resourceParser(generationRate);
         return `${prefix}${formattedGenerationRate}/s`;
     };
 

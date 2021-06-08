@@ -1,14 +1,6 @@
 <script lang="ts">
-    import { HEAVY_INFANTRY } from "~/constants/military/units/humans";
     import Sprite from "~/components/military/Sprite.svelte";
-    import { tweened } from "svelte/motion";
-    import {
-        SPRITE_SIZES,
-        UNIT_STATES,
-        SPRITE_TYPE,
-    } from "~/constants/military/sprites";
     import type { ISprite } from "~/interfaces/military/sprite";
-    import { MAP_1, UNIT_PATHS } from "~/constants/military/maps";
     import {
         highlightAttackRange,
         highlightMeleeCells,
@@ -19,10 +11,8 @@
         unitToDeploy,
     } from "~/store/military";
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
-    import type { IMap } from "~/interfaces/military/map";
     import type { IExpeditionCell } from "~/interfaces/military/expeditionGrid";
     import ExpeditionCell from "../military/ExpeditionCell.svelte";
-    import { getExpeditionBackgroundPosition } from "~/utils/helpers";
     import {
         setLifeCount,
         handleDamageCalculations,
@@ -32,11 +22,9 @@
         initializeGrid,
         initializeUnitPosition,
         handleProjectiles,
-        processDamageCalculation,
         setGridPath,
     } from "~/utils/expeditionMode";
     import type { ICoordinates } from "~/interfaces/common";
-    import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
     import { cloneDeep, uniqueId } from "lodash";
     import type { IProjectile } from "~/interfaces/military/projectile";
     import Projectile from "../military/Projectile.svelte";

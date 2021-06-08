@@ -49,16 +49,13 @@
         if (type === RESOURCE_TYPES.FOOD) {
             const hasFoodShortage =
                 $resources[type].value === 0 &&
-                generationRate.substring(0, 1) === "-";
+                generationRate < 0;
             insufficientFood.set(hasFoodShortage);
         }
-
-        let formattedGenerationRate =
-            Math.round(parseFloat(generationRate) * 100) / 100;
-        if (formattedGenerationRate < 0 && $resources[type].value === 0) return;
+        if (generationRate < 0 && $resources[type].value === 0) return;
         //nsole.log($resources[type])
         const newValue =
-            $resources[type].value + formattedGenerationRate * secondsElapsed;
+            $resources[type].value + generationRate * secondsElapsed;
         resources.updateResourceValue(type, newValue);
     };
 

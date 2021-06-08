@@ -13,7 +13,7 @@
     let displayMilitaryTabs = false;
     $: {
         if (!displayScienceTab) {
-            displayScienceTab = $resources[RESOURCE_TYPES.LIBRARIES].value > 0;
+            displayScienceTab = $resources[RESOURCE_TYPES.LIBRARY].value > 0;
         }
     }
     $: {

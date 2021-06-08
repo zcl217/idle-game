@@ -18,7 +18,7 @@ const createResourcesFromExpeditions = (expeditionResourceRate: Record<string, n
     };
 }
 
-const initialResourceSet = new Set([RESOURCE_TYPES.FOOD, RESOURCE_TYPES.WOOD, RESOURCE_TYPES.FARMS]);
+const initialResourceSet = new Set([RESOURCE_TYPES.FOOD, RESOURCE_TYPES.WOOD, RESOURCE_TYPES.FARM]);
 const createNewObtainedResources = (initialResourceSet: Set<string>) => {
     const { subscribe, update, set } = writable(initialResourceSet);
     return {

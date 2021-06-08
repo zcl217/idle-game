@@ -6,7 +6,6 @@
     import { WORKER_TYPES } from "~/constants/workers/workerTypes";
     import {
         blastFurnacesActivated,
-        insufficientFood,
         ironSmeltersActivated,
         researchedSciences,
     } from "~/store/gameState";
@@ -20,8 +19,6 @@
         IRON_SMELTER_ORE_INPUT,
         WORKER_FOOD_CONSUMPTION,
     } from "~/constants/gameState";
-    import { FOOTPAD } from "~/constants/military/units/humans";
-    import { set } from "lodash";
 
     let ironSmelterInput = $ironSmeltersActivated ? "on" : "off";
     let ironSmelterCount = 0;
@@ -29,7 +26,7 @@
     let blastFurnaceCount = 0;
     $: ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
     $: blastFurnaceCount = $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
-    $: maxWorkers = $resources[RESOURCE_TYPES.HOMES].value;
+    $: maxWorkers = $resources[RESOURCE_TYPES.HOUSE].value;
     $: availableWorkers = $workers[WORKER_TYPES.UNASSIGNED].value;
 
     const toggleIronSmelter = () => {
@@ -90,7 +87,7 @@
             }}
         />
     </div>
-    {#if $resources[RESOURCE_TYPES.LIBRARIES].value > 0}
+    {#if $resources[RESOURCE_TYPES.LIBRARY].value > 0}
         <div class="flex justify-between w-11/12 my-2 text-xl">
             <span> Scholars: {$workers[WORKER_TYPES.SCHOLAR].value} </span>
             <WorkerCountButtons

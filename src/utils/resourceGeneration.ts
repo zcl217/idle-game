@@ -1,7 +1,6 @@
 import { get } from "svelte/store";
 import { RESOURCE_GENERATOR_MAP, RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
 import { WORKER_GENERATOR_MAP, WORKER_TYPES } from "~/constants/workers/workerTypes";
-import { resourceParser } from "./helpers";
 import {
     researchedSciences as researchedSciencesFromStore, resourcesFromExpeditions
 } from '~/store/gameState';
@@ -9,7 +8,7 @@ import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
 import { GRANARY_BONUS, SAWMILL_BONUS, WORKER_FOOD_CONSUMPTION } from "~/constants/gameState";
 import type { IResourceList } from "~/interfaces/resource";
 
-export const calculateGenerationRate = (type: string, resources: any, workers: any, insufficientFood: boolean): string => {
+export const calculateGenerationRate = (type: string, resources: any, workers: any, insufficientFood: boolean): number => {
     const generator = RESOURCE_GENERATOR_MAP[type];
     let resourcesFromBuildings = 0;
     if (resources && generator) {
@@ -30,13 +29,13 @@ export const calculateGenerationRate = (type: string, resources: any, workers: a
     // we don't want to include negative bonuses into the multiplier
     resourcesGenerated -= resourceConsumption;
     resourcesGenerated += get(resourcesFromExpeditions)[type];
-    return resourceParser(resourcesGenerated);
+    return resourcesGenerated;
 }
 
 const getResourceConsumption = (type: string, resources: any, workers: any): number => {
     switch(type) {
         case RESOURCE_TYPES.FOOD: {
-            const maxWorkers = resources[RESOURCE_TYPES.HOMES].value;
+            const maxWorkers = resources[RESOURCE_TYPES.HOUSE].value;
             const assignedWorkers = maxWorkers - workers[WORKER_TYPES.UNASSIGNED].value;
             return assignedWorkers * WORKER_FOOD_CONSUMPTION;
         }
@@ -87,7 +86,7 @@ const calculateWoodMulitplier = (researchedSciences: Set<string>, resources: any
 
 const calculateKnowledgeMulitplier = (researchedSciences: Set<string>, resources: IResourceList): number => {
     let multiplier = 1;
-    multiplier += resources[RESOURCE_TYPES.LIBRARIES].value * 0.05;
+    multiplier += resources[RESOURCE_TYPES.LIBRARY].value * 0.05;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.BLOCK_PRINTING)) multiplier += 0.5;
     return multiplier;
 }
