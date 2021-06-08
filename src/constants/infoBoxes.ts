@@ -8,7 +8,7 @@ import { BLAST_FURNACE_STEEL_OUTPUT, GRANARY_CAPACITY, IRON_SMELTER_IRON_OUTPUT,
 export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: {
         title: 'Gather Food',
-        text: 'Collect 1 food'
+        text: 'Collect 10 food'
     },
     [EMPIRE_BUTTON_TYPES.CREATE_FARM]: {
         title: 'Create Farm',
@@ -16,7 +16,7 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.GATHER_WOOD]: {
         title: 'Create Farm',
-        text: 'Collect 1 wood'
+        text: 'Collect 10 wood'
     },
     [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: {
         title: 'Build Storage',
