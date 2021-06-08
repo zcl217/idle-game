@@ -65,7 +65,7 @@ import { STORAGE_CAPACITY } from "~/constants/gameState";
         }
     };
     const gatherResource = (type: string) => {
-        resources.updateResourceValue(type, $resources[type].value + 100);
+        resources.updateResourceValue(type, $resources[type].value + 300);
         obtainedResources.add(type);
     };
     const createBuilding = (

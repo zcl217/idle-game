@@ -166,6 +166,9 @@
         <div
             class="flex flex-col items-center justify-center w-4/6 mt-5 -ml-5 h-5/6"
         >
+            {#if selectedZone === 2}
+                stages 2-3, 2-4, 2-5 are work in progress
+            {/if}
             <div
                 class="opacity-80"
                 style="
@@ -176,7 +179,10 @@
                     height: 70%;
                 "
             />
-            <div class="text-red-700" style="margin-top: 20px; margin-bottom: 20px;">
+            <div
+                class="text-red-700"
+                style="margin-top: 20px; margin-bottom: 20px;"
+            >
                 {enemySpawnPointText}
             </div>
             <p class="my-2">All clear reward:</p>

@@ -60,7 +60,7 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
         resourcePrereqs: []
     },
     [RESOURCE_TYPES.WAREHOUSE]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
         resourcePrereqs: []
     },
     [RESOURCE_TYPES.GRANARY]: {

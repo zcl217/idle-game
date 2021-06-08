@@ -3,9 +3,7 @@
     import { get } from "svelte/store";
     import GameLoop from "~/GameLoop.svelte";
     import * as ButtonCostsStore from "~/store/buttonCosts";
-    import * as DialogueStore from "~/store/dialogue";
     import * as GameStateStore from "~/store/gameState";
-    import * as InfoBoxStore from "~/store/infoBox";
     import * as MilitaryStore from "~/store/military";
     import * as ResourcesStore from "~/store/resources";
     //  import * as ScienceStore from "~/store/science";
@@ -15,7 +13,6 @@
     const dividerCount =
         size(ButtonCostsStore) +
         size(GameStateStore) +
-        size(InfoBoxStore) +
         size(MilitaryStore) +
         size(ResourcesStore) +
         size(WorkersStore);
@@ -32,7 +29,6 @@
     const generateSave = () => {
         saveText += generateStoreSave(ButtonCostsStore);
         saveText += generateStoreSave(GameStateStore);
-        saveText += generateStoreSave(InfoBoxStore);
         saveText += generateStoreSave(MilitaryStore);
         saveText += generateStoreSave(ResourcesStore);
         saveText += generateStoreSave(WorkersStore);
@@ -96,16 +92,13 @@
         }
         let storeValues = [];
         for (let val of stringValues) {
-            console.log(val);
             val === ""
                 ? storeValues.push("")
                 : storeValues.push(JSON.parse(val));
         }
         try {
-            console.log(storeValues);
             setStoreValues(ButtonCostsStore, storeValues);
             setGameStateStore(storeValues);
-            setStoreValues(InfoBoxStore, storeValues);
             setStoreValues(MilitaryStore, storeValues);
             setStoreValues(ResourcesStore, storeValues);
             setStoreValues(WorkersStore, storeValues);

@@ -21,7 +21,7 @@
     };
 </script>
 
-<div class="flex flex-row flex-wrap justify-between">
+<div class="flex flex-row flex-wrap justify-around">
     {#each Object.entries($militaryUnitList) as [key, unit]}
         {#if displayUnit(unit.type)}
             <BarracksUnit

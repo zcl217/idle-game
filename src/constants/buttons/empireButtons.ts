@@ -138,7 +138,7 @@ export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: [
         { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 500, },
-        { type: RESOURCE_TYPES.IRON, text: 'Iron', cost: 10, },
+        { type: RESOURCE_TYPES.IRON, text: 'Iron', cost: 5, },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: [
         { type: RESOURCE_TYPES.FOOD, text: 'Food', cost: 400, },
@@ -168,25 +168,25 @@ export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
 
 export const EMPIRE_COST_MULTIPLIERS = {
     [EMPIRE_BUTTON_TYPES.CREATE_FARM]: (val: number) => {
-        return val * 1.3 + 5
+        return val * 1.05 + 5
     },
     [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: (val: number) => {
-        return val + (STORAGE_CAPACITY * 0.9)
+        return val + (STORAGE_CAPACITY * 0.5)
     },
     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: (val: number) => {
-        return val * 1.2
+        return val * 1.05
     },
     [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: (val: number) => {
         return Math.min(val * 1.3 + 33, 1000);
     },
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: (val: number) => {
-        return val * 1.2 + 200
+        return val * 1.2
     },
     [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: (val: number) => {
         return val * 1.2 + 300
     },
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: (val: number) => {
-        return val * 1.2 + 10
+        return val * 1.1 + 10
     },
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: (val: number) => {
         return val * 1.2 + 30

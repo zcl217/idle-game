@@ -40,7 +40,7 @@
     }
 </script>
 
-<div class="overflow-auto bg-gray-800 rpgui-content w-min-1070px">
+<div class="overflow-auto bg-gray-800 rpgui-content w-min-1250px">
     <!--
         class:bg-gray-300={darkBackground === false}
     class:bg-gray-800={darkBackground === true}
@@ -98,8 +98,8 @@
 </div>
 
 <style>
-    .w-min-1070px {
-        min-width: 1070px;
+    .w-min-1250px {
+        min-width: 1250px;
     }
 
     .w-min-840px {

@@ -7,24 +7,23 @@
     export let enemyPreviewList: { sprite: ISprite; amount: number }[] = [],
         selectedStage = "",
         startExpedition: Function;
-
 </script>
 
 <div class="w-4/6 h-5/6">
     <p class="my-5 text-center">Enemy List</p>
     <div class="flex flex-row flex-wrap">
-        {#each enemyPreviewList as enemy}
-            {#if false}
-                <p>?</p>
-            {:else}
-                <div class="flex py-1">
-                    <FramedSprite sprite={enemy.sprite} />
-                    <p class="flex items-center ml-5 mr-5 font-bold w-14">
-                        x {enemy.amount}
-                    </p>
-                </div>
-            {/if}
-        {/each}
+            {#each enemyPreviewList as enemy}
+                {#if false}
+                    <p>?</p>
+                {:else}
+                    <div class="flex py-1">
+                        <FramedSprite sprite={enemy.sprite} />
+                        <p class="flex items-center ml-5 mr-5 font-bold w-14">
+                            x {enemy.amount}
+                        </p>
+                    </div>
+                {/if}
+            {/each}
     </div>
     <div class="flex">
         <div class="absolute flex justify-between w-4/6 bottom-5">

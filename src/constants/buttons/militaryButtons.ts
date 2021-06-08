@@ -91,7 +91,7 @@ export const MILITARY_BUTTON_COSTS: IButtonCostList = {
     ],
     [MILITARY_BUTTON_TYPES.UPGRADE_SHOCKTROOPER]: [
         { type: RESOURCE_TYPES.FOOD, text: 'Food', cost: 50000, },
-        { type: RESOURCE_TYPES.STEEL, text: 'Steel', cost: 10000, },
+        { type: RESOURCE_TYPES.STEEL, text: 'Steel', cost: 2000, },
         { type: RESOURCE_TYPES.GOLD, text: 'Gold', cost: 2500, },
         { type: RESOURCE_TYPES.LUTAREZS_WARHAMMER, text: `Lutarez's Warhammer`, cost: 1 }
     ],
