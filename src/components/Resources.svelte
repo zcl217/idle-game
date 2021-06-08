@@ -210,7 +210,7 @@
         margin-left: -55px;
     }
     td {
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: Arial, Helvetica, sans-serif !important;
         font-size: 17px;
     }
 </style>
