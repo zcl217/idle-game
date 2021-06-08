@@ -6,3 +6,4 @@ yarn.lock
 roadmap.md
 key points.md
 .eslintrc.js
+public/build/
