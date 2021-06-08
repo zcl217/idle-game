@@ -2,7 +2,6 @@
 import { uniqueId } from 'lodash'
 import { RESOURCE_TYPES } from '../resources/resourceTypes';
 import type { IButtonCostList } from '~/interfaces/buttons';
-import type { IPrereqsList } from '~/interfaces/common';
 
 export const MILITARY_BUTTON_TYPES = {
     TRAIN_SPEARMAN: uniqueId(),

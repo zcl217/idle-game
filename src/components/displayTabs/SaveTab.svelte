@@ -45,7 +45,6 @@
         return save;
     };
     const stringifyStore = (key: string, value: any): string => {
-        console.log(key + "  " + get(value));
         let storeValue = get(value);
         // can't json stringify a set directly so we need to parse it into an array
         if (hashSetStores.has(key)) {

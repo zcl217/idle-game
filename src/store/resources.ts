@@ -1,7 +1,6 @@
 import { writable } from 'svelte/store';
 import type { IResourceList } from '~/interfaces/resource';
 import { INITIAL_RESOURCE_STATE } from '../constants/resources/resourceStates';
-import { RESOURCE_GENERATOR_MAP } from '../constants/resources/resourceTypes';
 
 const createNewResources = (resources: IResourceList) => {
     const { subscribe, update, set } = writable(resources);

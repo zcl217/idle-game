@@ -10,7 +10,7 @@ export const noText = writable('');
 export const yesHandler = writable(new Function)
 export const noHandler = writable(new Function)
 
-export const updateDialogue = (newDialogue: IDialogue) => {
+export const updateDialogue = (newDialogue: IDialogue): void => {
     if (!newDialogue) return;
     characterImage.set(newDialogue.characterImage);
     characterName.set(newDialogue.characterName);

@@ -1,5 +1,4 @@
 import type { IPrereqsList } from "~/interfaces/common";
-import { RESOURCE_TYPES } from "../resources/resourceTypes";
 import { WORKER_TYPES } from "./workerTypes";
 
 export const WORKER_PREREQS: IPrereqsList = {

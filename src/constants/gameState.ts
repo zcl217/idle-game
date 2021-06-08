@@ -7,8 +7,8 @@ export const BLAST_FURNACE_IRON_INPUT = 10;
 export const BLAST_FURNACE_COAL_INPUT = 5;
 export const BLAST_FURNACE_STEEL_OUTPUT = 1;
 
-export const STORAGE_CAPACITY = 200;
-export const WAREHOUSE_CAPACITY = 1000;
+export const STORAGE_CAPACITY = 300;
+export const WAREHOUSE_CAPACITY = 1500;
 export const SAWMILL_CAPACITY = 500;
 export const SAWMILL_BONUS = 0.05;
 export const GRANARY_CAPACITY = 500;

@@ -36,7 +36,6 @@ import { researchedSciences } from "~/store/gameState";
         }
     };
     const unlockedUnit = (type: string) => {
-        return true;
         switch(type) {
             case UNIT_TYPES.FOOTPAD:
                 return $researchedSciences.has(SCIENCE_BUTTON_TYPES.SLINGSHOTS);

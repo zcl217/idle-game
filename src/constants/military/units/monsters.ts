@@ -1,5 +1,5 @@
 import type { ISprite } from "~/interfaces/military/sprite"
-import { SPRITE_SIZES, UNIT_STATES, SPRITE_TYPE } from "../sprites"
+import { SPRITE_SIZES, UNIT_STATES } from "../sprites"
 import { UNIT_TYPES } from "./unitTypes"
 
 export const WOLF1: ISprite = {

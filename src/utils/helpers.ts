@@ -12,11 +12,10 @@ import {
 import { BUTTON_CATEGORIES } from '~/constants/buttons/buttons';
 import * as humanUnits from '~/constants/military/units/humans'
 import { UNIT_TYPES } from '~/constants/military/units/unitTypes'
-import { SPRITESHEET_MAP } from '~/constants/military/spriteSheetMap';
 import type { ICoordinates, IPrereqsList } from '~/interfaces/common';
 import type { ISprite } from '~/interfaces/military/sprite';
-import { SPRITE_SIZES } from '~/constants/military/sprites';
 import type { IResourceList } from '~/interfaces/resource';
+import { RESOURCE_TYPES } from '~/constants/resources/resourceTypes';
 
 export const resourceParser = (value: number): string => {
     const million = 1000000;
@@ -34,20 +33,20 @@ export const resourceParser = (value: number): string => {
     return parsedValue;
 }
 
-const parseDecimals = (input: number) => {
+const parseDecimals = (input: number): number => {
     return Math.round(input * 100) / 100;
 }
 
-export const hasEnoughResources = (buttonCostList: any, resources: IResourceList, buttonType: string) => {
-    for (let resource of buttonCostList[buttonType]) {
+export const hasEnoughResources = (buttonCostList: any, resources: IResourceList, buttonType: string): boolean => {
+    for (const resource of buttonCostList[buttonType]) {
         const curResourceAmount = resources[resource.type].value;
         if (curResourceAmount < resource.cost) return false;
     }
     return true;
 };
 
-export const spendResources = (buttonCostList: any, resources: any, buttonType: string) => {
-    for (let resource of buttonCostList[buttonType]) {
+export const spendResources = (buttonCostList: any, resources: any, buttonType: string): void => {
+    for (const resource of buttonCostList[buttonType]) {
         const curResourceAmount = (get(resources) as any)[resource.type].value;
         resources.updateResourceValue(
             resource.type,
@@ -56,7 +55,7 @@ export const spendResources = (buttonCostList: any, resources: any, buttonType: 
     }
 };
 
-export const buttonPrereqsMet = (type: string, buttonCategory: string) => {
+export const buttonPrereqsMet = (type: string, buttonCategory: string): boolean => {
     let prereqList = {} as IPrereqsList;
     switch (buttonCategory) {
         case BUTTON_CATEGORIES.EMPIRE:
@@ -66,17 +65,17 @@ export const buttonPrereqsMet = (type: string, buttonCategory: string) => {
             prereqList = SCIENCE_BUTTON_PREREQS;
             break;
         default:
-            return;
+            return false;
     }
     if (!prereqList[type]) return false;
     const { sciencePrereqs } = prereqList[type]
     const { resourcePrereqs } = prereqList[type]
     const researchedSciences = get(researchedSciencesFromStore);
     const obtainedResources = get(obtainedResourcesFromStore)
-    for (let science of sciencePrereqs) {
+    for (const science of sciencePrereqs) {
         if (!researchedSciences.has(science)) return false;
     }
-    for (let resource of resourcePrereqs) {
+    for (const resource of resourcePrereqs) {
         if (!obtainedResources.has(resource)) return false;
     }
     if (prereqList[type].storyPrereq) {
@@ -112,16 +111,16 @@ export const getSprite = (input: string): ISprite => {
     }
 }
 
-export const getExpeditionBackgroundPosition = (sprite: ISprite) => {
+export const getExpeditionBackgroundPosition = (sprite: ISprite): string => {
     return `${sprite.position.spriteSheetPositionX}px ${sprite.position.spriteSheetPositionY}px`;
 };
 
-export const getMenuBackgroundPosition = (sprite: ISprite, idleFrames: ICoordinates[], currentFrame: number) => {
+export const getMenuBackgroundPosition = (sprite: ISprite, idleFrames: ICoordinates[], currentFrame: number): string => {
     const spriteSheetPosition = idleFrames[currentFrame];
-    let spriteSheetPositionX =
+    const spriteSheetPositionX =
         spriteSheetPosition.col * -sprite.spriteInfo.spriteSize.x +
         (sprite.position.spriteSheetOffsetX || 0) / 1.5;
-    let spriteSheetPositionY =
+    const spriteSheetPositionY =
         spriteSheetPosition.row * -sprite.spriteInfo.spriteSize.y;
     return `${spriteSheetPositionX}px ${spriteSheetPositionY}px`;
 }

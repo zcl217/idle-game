@@ -21,36 +21,39 @@ export const calculateGenerationRate = (type: string, resources: any, workers: a
         resourcesFromWorkers = workers[workerType].value * workers[workerType].generationValue;
         if (insufficientFood) resourcesFromWorkers *= 0.5;
     }
-    let resourceConsumption = getResourceConsumption(type, resources, workers);
+    const resourceConsumption = getResourceConsumption(type, resources, workers);
     // if 0 food && resource generated from workers and buildings is less than worker consumption
     // decrease generated value
-    let resourcesGenerated = resourcesFromBuildings + resourcesFromWorkers - resourceConsumption;
-    let multiplier = calculateResourceMultiplier(type, resources);
+    let resourcesGenerated = resourcesFromBuildings + resourcesFromWorkers;
+    const multiplier = calculateResourceMultiplier(type, resources);
     resourcesGenerated *= multiplier;
+    // we don't want to include negative bonuses into the multiplier
+    resourcesGenerated -= resourceConsumption;
     resourcesGenerated += get(resourcesFromExpeditions)[type];
     return resourceParser(resourcesGenerated);
 }
 
 const getResourceConsumption = (type: string, resources: any, workers: any): number => {
     switch(type) {
-        case RESOURCE_TYPES.FOOD:
-            let maxWorkers = resources[RESOURCE_TYPES.HOMES].value;
+        case RESOURCE_TYPES.FOOD: {
+            const maxWorkers = resources[RESOURCE_TYPES.HOMES].value;
             const assignedWorkers = maxWorkers - workers[WORKER_TYPES.UNASSIGNED].value;
             return assignedWorkers * WORKER_FOOD_CONSUMPTION;
+        }
         default:
             return 0;
     }
 }
 
 const calculateResourceMultiplier = (type: string, resources: any): number => {
-    let researchedSciences = get(researchedSciencesFromStore);
+    const researchedSciences = get(researchedSciencesFromStore);
     switch (type) {
         case RESOURCE_TYPES.FOOD:
             return calculateFoodMulitplier(researchedSciences, resources);
         case RESOURCE_TYPES.WOOD:
             return calculateWoodMulitplier(researchedSciences, resources);
         case RESOURCE_TYPES.KNOWLEDGE:
-            return calculateKnowledgeMulitplier(resources);
+            return calculateKnowledgeMulitplier(researchedSciences, resources);
         case RESOURCE_TYPES.RAW_ORE:
             return calculateMiningMultiplier(researchedSciences);
         case RESOURCE_TYPES.COAL:
@@ -82,9 +85,10 @@ const calculateWoodMulitplier = (researchedSciences: Set<string>, resources: any
     return multiplier;
 }
 
-const calculateKnowledgeMulitplier = (resources: IResourceList): number => {
+const calculateKnowledgeMulitplier = (researchedSciences: Set<string>, resources: IResourceList): number => {
     let multiplier = 1;
     multiplier += resources[RESOURCE_TYPES.LIBRARIES].value * 0.05;
+    if (researchedSciences.has(SCIENCE_BUTTON_TYPES.BLOCK_PRINTING)) multiplier += 0.5;
     return multiplier;
 }
 
@@ -97,8 +101,7 @@ const calculateMiningMultiplier = (researchedSciences: Set<string>): number => {
 }
 
 const calculateFurMultiplier = (researchedSciences: Set<string>): number => {
-    let multiplier = 1;
-
+    const multiplier = 1;
     return multiplier;
 }
 

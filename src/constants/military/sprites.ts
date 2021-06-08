@@ -1,4 +1,3 @@
-import type { ICoordinates } from "~/interfaces/common"
 import { CELL_HEIGHT, CELL_WIDTH } from "./maps"
 
 export const SPRITE_SIZES = {

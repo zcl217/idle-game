@@ -3,11 +3,9 @@ import { STAGE_LIST } from '~/constants/military/stageList';
 import { UNIT_TYPES } from '~/constants/military/units/unitTypes'
 import type { ICoordinates } from '~/interfaces/common';
 import type { ISprite } from '~/interfaces/military/sprite';
-import type { IMilitaryUnit } from '~/interfaces/military/units';
 
-
-let clearedStagesList: Record<string, boolean> = {};
-for (let stage in STAGE_LIST) clearedStagesList[STAGE_LIST[stage]] = false;
+const clearedStagesList: Record<string, boolean> = {};
+for (const stage in STAGE_LIST) clearedStagesList[STAGE_LIST[stage]] = false;
 
 const initialMilitaryUnitList: Record<string, {count: number, type: string}> = {
     [UNIT_TYPES.SPEARMAN]: { count: 1, type: UNIT_TYPES.SPEARMAN },

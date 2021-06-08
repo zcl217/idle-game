@@ -50,12 +50,12 @@
             case MILITARY_BUTTON_TYPES.TRAIN_SIEGETROOPER:
             case MILITARY_BUTTON_TYPES.TRAIN_SPEARMAN:
             case MILITARY_BUTTON_TYPES.TRAIN_MAGE:
+                disabled = unitCount >= 3;
                 if (
                     !$researchedSciences.has(SCIENCE_BUTTON_TYPES.CONSCRIPTION)
                 ) {
                     disabled = true;
                 }
-                disabled = unitCount >= 3;
                 break;
             case MILITARY_BUTTON_TYPES.UPGRADE_SPEARMAN:
             case MILITARY_BUTTON_TYPES.UPGRADE_PIKEMAN:

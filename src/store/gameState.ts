@@ -1,4 +1,4 @@
-import { writable, get } from 'svelte/store';
+import { writable } from 'svelte/store';
 import { RESOURCE_TYPES } from '~/constants/resources/resourceTypes';
 
 const initialExpeditionResourceRate = {} as Record<string, number>;

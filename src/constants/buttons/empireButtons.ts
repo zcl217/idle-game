@@ -5,8 +5,6 @@ import type { IButtonCostList } from '~/interfaces/buttons';
 import type { IPrereqsList } from '~/interfaces/common';
 import { STORY_PROGRESS_LIST } from '~/constants/story';
 import { SCIENCE_BUTTON_TYPES } from './scienceButtons';
-import { resources } from '~/store/resources';
-import { get } from 'svelte/store';
 import { STORAGE_CAPACITY } from '../gameState';
 
 export const EMPIRE_BUTTON_TYPES: Record<string, string> = {
@@ -167,37 +165,37 @@ export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
 }
 
 export const EMPIRE_COST_MULTIPLIERS = {
-    [EMPIRE_BUTTON_TYPES.CREATE_FARM]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.CREATE_FARM]: (val: number): number => {
         return val * 1.05 + 5
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: (val: number): number => {
         return val + (STORAGE_CAPACITY * 0.5)
     },
-    [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: (val: number): number => {
         return val * 1.05
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: (val: number): number => {
         return Math.min(val * 1.3 + 33, 1000);
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: (val: number): number => {
         return val * 1.2
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: (val: number): number => {
         return val * 1.2 + 300
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: (val: number): number => {
         return val * 1.1 + 10
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: (val: number): number => {
         return val * 1.2 + 30
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: (val: number): number => {
         return val * 1.2 + 30
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: (val: number): number => {
         return val * 1.2
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: (val: number) => {
+    [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: (val: number): number => {
         return val * 1.2
     },
 }

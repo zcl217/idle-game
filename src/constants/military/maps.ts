@@ -1,4 +1,3 @@
-import type { ICoordinates } from "~/interfaces/common"
 import type { IMap } from "~/interfaces/military/map"
 
 export const CELL_WIDTH = 72;

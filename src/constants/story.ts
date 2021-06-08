@@ -1,7 +1,6 @@
 import { displayDialogueBox, updateDialogue } from "../store/dialogue";
 import { curStoryProgress } from "../store/gameState";
 import type { IDialogueList } from "~/interfaces/dialogue"
-import { get } from "svelte/store";
 
 /*
     Act - Scene
@@ -61,7 +60,9 @@ export const DIALOGUES: IDialogueList = {
             updateDialogue(DIALOGUES[nextScene]);
             displayDialogueBox.set(false);
         },
-        noHandler: () => { }
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A1S3']]: {
         characterImage: '../sprites/sage.png',
@@ -90,7 +91,9 @@ export const DIALOGUES: IDialogueList = {
             updateDialogue(DIALOGUES[nextScene]);
             displayDialogueBox.set(false);
         },
-        noHandler: () => { }
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A2S1']]: {
         characterImage: '../sprites/peasant.png',
@@ -103,7 +106,9 @@ export const DIALOGUES: IDialogueList = {
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
         },
-        noHandler: () => { }
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A2S2']]: {
         characterImage: '../sprites/grand-knight.png',
@@ -116,7 +121,9 @@ export const DIALOGUES: IDialogueList = {
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
         },
-        noHandler: () => { }
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A2S3']]: {
         characterImage: '../sprites/grand-knight.png',
@@ -129,7 +136,9 @@ export const DIALOGUES: IDialogueList = {
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
         },
-        noHandler: () => { }
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A2S4']]: {
         characterImage: '../sprites/grand-knight.png',
@@ -142,7 +151,9 @@ export const DIALOGUES: IDialogueList = {
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
         },
-        noHandler: () => { }
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A2S5']]: {
         characterImage: '../sprites/grand-knight.png',
@@ -155,7 +166,9 @@ export const DIALOGUES: IDialogueList = {
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
         },
-        noHandler: () => { }
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A2S6']]: {
         characterImage: '../sprites/grand-knight.png',
@@ -168,7 +181,9 @@ export const DIALOGUES: IDialogueList = {
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
         },
-        noHandler: () => { }
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A2S7']]: {
         characterImage: '../sprites/peasant.png',
@@ -181,7 +196,9 @@ export const DIALOGUES: IDialogueList = {
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
         },
-        noHandler: () => { }
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A2S8']]: {
         characterImage: '../sprites/sage.png',
@@ -194,7 +211,9 @@ export const DIALOGUES: IDialogueList = {
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
         },
-        noHandler: () => {}
+        noHandler: () => {
+            // no second option
+        }
     },
     [STORY_PROGRESS_LIST['A2S9']]: {
         characterImage: '../sprites/grand-knight.png',
@@ -208,6 +227,7 @@ export const DIALOGUES: IDialogueList = {
             updateDialogue(DIALOGUES[nextScene]);
         },
         noHandler: () => {
+            // no second option
         }
     },
     [STORY_PROGRESS_LIST['A2S10']]: {
@@ -241,6 +261,7 @@ export const DIALOGUES: IDialogueList = {
             displayDialogueBox.set(false);
         },
         noHandler: () => {
+            // no second option
         }
     }
 }

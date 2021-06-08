@@ -21,7 +21,6 @@
                 return true;
         }
     };
-    $: console.log($militaryUnitList);
 
 </script>
 
