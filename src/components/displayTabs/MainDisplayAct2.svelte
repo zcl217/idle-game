@@ -90,7 +90,7 @@ GRANARY_CAPACITY,
         }
     };
     const gatherResource = (type: string) => {
-        resources.updateResourceValue(type, $resources[type].value + 300);
+        resources.updateResourceValue(type, $resources[type].value + 10);
         obtainedResources.add(type);
     };
     const createBuilding = (
