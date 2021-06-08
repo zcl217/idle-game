@@ -19,23 +19,20 @@
     let darkBackground = true,
         currentTab = TABS.MAIN_1,
         displayMain1 = true,
-        previousTab = TABS.MAIN_1;
+        inCharacterChoice = false;
     const toggleTab = (payload) => {
-        let newTab = payload.detail;
-        if (previousTab === TABS.CHARACTER_CHOICE && newTab === TABS.MAIN_1) {
-            currentTab = previousTab;
-            return;
-        }
-        previousTab = currentTab;
-        currentTab = newTab;
+        currentTab = payload.detail
     };
     $: {
         if ($curStoryProgress === STORY_PROGRESS_LIST["A1S5"]) {
             currentTab = TABS.CHARACTER_CHOICE;
+            inCharacterChoice = true;
+            console.log(inCharacterChoice);
         }
         if ($curStoryProgress >= STORY_PROGRESS_LIST["A2S12"]) {
             currentTab = TABS.MAIN_2;
             displayMain1 = false;
+            inCharacterChoice = false;
         }
     }
 </script>
@@ -61,7 +58,7 @@
             {/if}
         </div>
         <div class="ml-5">
-            {#if !$inExpedition}
+            {#if !$inExpedition && !inCharacterChoice}
                 <MenuTabs
                     {currentTab}
                     {displayMain1}

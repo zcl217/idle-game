@@ -22,8 +22,7 @@
     };
 </script>
 
-<CharacterFrame characterImage={$playerImage} characterName={$playerName} />
-<div class="flex flex-col justify-around h-1/2">
+<div class="flex flex-col justify-around h-full">
     <div class="m-auto">
         <InfoBoxButton
             width={BUTTON_WIDTH}
