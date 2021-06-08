@@ -126,36 +126,40 @@
             {/each}
         {:else if selectedZone === ZONES.TWO}
             {#each zone2 as stage}
-                <button
-                    class="w-10 rpgui-button {selectedStage ===
-                    STAGE_LIST[stage]
-                        ? 'selected'
-                        : ''}"
-                    type="button"
-                    on:click={() => handleStageSelection(stage)}
-                >
-                    {stage}
-                </button>
-                {#if $clearedStages[stage]}
-                    <div class="text-green-600">Clear!</div>
-                {/if}
+                <div class="flex flex-row items-center">
+                    <button
+                        class="w-10 rpgui-button {selectedStage ===
+                        STAGE_LIST[stage]
+                            ? 'selected'
+                            : ''}"
+                        type="button"
+                        on:click={() => handleStageSelection(stage)}
+                    >
+                        {stage}
+                    </button>
+                    {#if $clearedStages[STAGE_LIST[stage]]}
+                        <div class="w-5 h-5 ml-2 bg-greenCheckmark" />
+                    {/if}
+                </div>
             {/each}
         {:else if selectedZone === ZONES.THREE}
             {#each zone3 as stage}
-                <button
-                    class="w-10 rpgui-button {selectedStage ===
-                    STAGE_LIST[stage]
-                        ? 'selected'
-                        : ''}"
-                    style=""
-                    type="button"
-                    on:click={() => handleStageSelection(stage)}
-                >
-                    {stage}
-                </button>
-                {#if $clearedStages[stage]}
-                    <div class="text-green-600">Clear!</div>
-                {/if}
+                <div class="flex flex-row items-center">
+                    <button
+                        class="w-10 rpgui-button {selectedStage ===
+                        STAGE_LIST[stage]
+                            ? 'selected'
+                            : ''}"
+                        style=""
+                        type="button"
+                        on:click={() => handleStageSelection(stage)}
+                    >
+                        {stage}
+                    </button>
+                    {#if $clearedStages[STAGE_LIST[stage]]}
+                        <div class="w-5 h-5 ml-2 bg-greenCheckmark" />
+                    {/if}
+                </div>
             {/each}
         {/if}
     </div>
