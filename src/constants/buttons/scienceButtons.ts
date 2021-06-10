@@ -170,7 +170,7 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
     ],
     [SCIENCE_BUTTON_TYPES.CROP_ROTATION]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, text: 'Knowledge', cost: 17000 },
-        { type: RESOURCE_TYPES.STEEL, text: 'Food', cost: 5000 }
+        { type: RESOURCE_TYPES.STEEL, text: 'Steel', cost: 150 }
     ],
     [SCIENCE_BUTTON_TYPES.WOODEN_PICKAXE]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, text: 'Knowledge', cost: 300 },
