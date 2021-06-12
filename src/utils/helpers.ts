@@ -1,6 +1,3 @@
-// displays m if over a million
-// displays k if over a thousand
-// parses numbers to two decimal places
 import { SCIENCE_BUTTON_PREREQS } from '~/constants/buttons/scienceButtons';
 import { EMPIRE_BUTTON_PREREQS } from '~/constants/buttons/empireButtons';
 import { get } from 'svelte/store';
@@ -14,46 +11,6 @@ import * as humanUnits from '~/constants/military/units/humans'
 import { UNIT_TYPES } from '~/constants/military/units/unitTypes'
 import type { ICoordinates, IPrereqsList } from '~/interfaces/common';
 import type { ISprite } from '~/interfaces/military/sprite';
-import type { IResourceList } from '~/interfaces/resource';
-import { RESOURCE_TYPES } from '~/constants/resources/resourceTypes';
-
-export const resourceParser = (value: number): string => {
-    const million = 1000000;
-    const thousand = 1000;
-    let parsedValue = '';
-    if (value >= million) {
-        parsedValue = parseDecimals(value / million).toString();
-        parsedValue += 'm';
-    } else if (value >= thousand) {
-        parsedValue = parseDecimals(value / thousand).toString();
-        parsedValue += 'k';
-    } else {
-        parsedValue = parseDecimals(value).toString();
-    }
-    return parsedValue;
-}
-
-const parseDecimals = (input: number): number => {
-    return Math.round(input * 100) / 100;
-}
-
-export const hasEnoughResources = (buttonCostList: any, resources: IResourceList, buttonType: string): boolean => {
-    for (const resource of buttonCostList[buttonType]) {
-        const curResourceAmount = resources[resource.type].value;
-        if (curResourceAmount < resource.cost) return false;
-    }
-    return true;
-};
-
-export const spendResources = (buttonCostList: any, resources: any, buttonType: string): void => {
-    for (const resource of buttonCostList[buttonType]) {
-        const curResourceAmount = (get(resources) as any)[resource.type].value;
-        resources.updateResourceValue(
-            resource.type,
-            curResourceAmount - resource.cost
-        );
-    }
-};
 
 export const buttonPrereqsMet = (type: string, buttonCategory: string): boolean => {
     let prereqList = {} as IPrereqsList;

@@ -111,7 +111,6 @@
             setTimeout(() => {
                 handleDefeat();
                 removedEnemyUnitCount.reset();
-                enemiesRemaining = 1;
             }, 500);
         }
     }
@@ -129,6 +128,7 @@
     const handleVictory = () => {
         clearInterval(interval);
         dispatch("VICTORY");
+        enemiesRemaining = 1;
     };
 
     const handleDefeat = () => {
@@ -138,6 +138,7 @@
         lifeCount.set(1);
         //emit to emit defeat to parent
         dispatch("DEFEAT");
+        enemiesRemaining = 1;
     };
 
     $: {
@@ -173,7 +174,11 @@
         if ($highlightRangedCells) {
             for (let row of grid) {
                 for (let cell of row) {
-                    if (!cell.isPath && !cell.playerUnit && !cell.undeployableTerrain) {
+                    if (
+                        !cell.isPath &&
+                        !cell.playerUnit &&
+                        !cell.undeployableTerrain
+                    ) {
                         cell.isDeployable = true;
                     } else {
                         cell.isDeployable = false;

@@ -66,11 +66,11 @@
             const resources = get(ResourcesStore.resources);
             for (let [name, resource] of Object.entries(resources)) {
                 if (resource.limit < Number.MAX_VALUE - 5000) {
-                    ResourcesStore.resources.updateResourceLimit(
+                    ResourcesStore.resources.setResourceLimit(
                         name,
                         100000000
                     );
-                    ResourcesStore.resources.updateResourceValue(
+                    ResourcesStore.resources.setResourceValue(
                         name,
                         resources[name].limit
                     );

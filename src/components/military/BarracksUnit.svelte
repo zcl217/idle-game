@@ -13,7 +13,7 @@ import { onMount } from "svelte";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { militaryUnitList } from "~/store/military";
     import { resources } from "~/store/resources";
-    import { hasEnoughResources, spendResources } from "~/utils/helpers";
+    import { hasEnoughResources, spendResources } from "~/utils/resourceHelpers";
     import FramedSprite from "./FramedSprite.svelte";
 
     const BUTTON_WIDTH = 145;

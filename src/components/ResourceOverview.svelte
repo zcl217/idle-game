@@ -7,7 +7,7 @@
         SPECIAL_RESOURCES,
     } from "../constants/resources/resourceTypes";
     import { RESOURCE_DISPLAY_PREREQS } from "~/constants/resources/resourcePrereqs";
-    import { resourceParser } from "../utils/helpers";
+    import { resourceParser } from "../utils/resourceHelpers";
     import {
         obtainedResources,
         researchedSciences,
@@ -23,7 +23,7 @@
         IRON_SMELTER_COAL_INPUT,
         IRON_SMELTER_IRON_OUTPUT,
         IRON_SMELTER_ORE_INPUT,
-    } from "~/constants/gameState";
+    } from "~/constants/resources/industry";
     const resourcePrereqsMet = (type: string) => {
         if (SPECIAL_RESOURCES.has(type) && $resources[type].value > 0) {
             return true;
@@ -171,25 +171,25 @@
     <table>
         {#each Object.entries($resources) as [type, resource]}
             {#if resourcePrereqsMet(type) && !SPECIAL_RESOURCES.has(type)}
-                <tr class="py-2">
-                    <td class="font-serif">
+                <tr class="">
+                    <td class="font-resource">
                         {RESOURCE_NAMES[type]}
                     </td>
                     {#if resource.displayGenerationRate}
-                        <td class="font-serif">
+                        <td class="font-resource">
                             {resourceParser(resource.value)}/{resourceParser(
                                 resource.limit
                             )}
                         </td>
                         <td
-                            class="font-serif {redText(type)
+                            class="font-resource {redText(type)
                                 ? 'text-red-500'
                                 : ''}"
                         >
                             {formatGenerationRate(type)}
                         </td>
                     {:else}
-                        <td>
+                        <td class="font-resource">
                             {resource.value}
                         </td>
                     {/if}
@@ -203,12 +203,11 @@
     table {
         margin-left: 0;
         border-collapse: separate;
-        border-spacing: 45px 7px;
+        border-spacing: 40px 3px;
         color: white;
         margin-left: -55px;
     }
     td {
-        font-family: Arial, Helvetica, sans-serif !important;
         font-size: 17px;
     }
 </style>

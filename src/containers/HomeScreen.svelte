@@ -1,9 +1,9 @@
 <script>
     import MenuTabs from "./MenuTabs.svelte";
-    import Resources from "../components/Resources.svelte";
+    import ResourceOverview from "../components/ResourceOverview.svelte";
     import MainDisplay from "../components/displayTabs/MainDisplay.svelte";
     import MainDisplayAct2 from "../components/displayTabs/MainDisplayAct2.svelte";
-    import WorkersTab from "../components/displayTabs/WorkersTab.svelte";
+    import ResourcesTab from "../components/displayTabs/ResourcesTab.svelte";
     import ScienceTab from "../components/displayTabs/ScienceTab.svelte";
     import BarracksTab from "../components/displayTabs/BarracksTab.svelte";
     import ExpeditionTab from "~/components/displayTabs/ExpeditionTab.svelte";
@@ -23,6 +23,8 @@
     const toggleTab = (payload) => {
         currentTab = payload.detail
     };
+    // TODO: if you're currently in main2 and you load a main1 save,
+    // the worker tab isn't toggled off
     $: {
         if ($curStoryProgress === STORY_PROGRESS_LIST["A1S5"]) {
             currentTab = TABS.CHARACTER_CHOICE;
@@ -37,7 +39,7 @@
     }
 </script>
 
-<div class="overflow-auto bg-gray-800 rpgui-content w-min-1250px">
+<div class="overflow-auto bg-gray-800 rpgui-content w-min-1300px">
     <!--
         class:bg-gray-300={darkBackground === false}
     class:bg-gray-800={darkBackground === true}
@@ -54,7 +56,7 @@
             {#if $inExpedition}
                 <UnitDeploymentTab />
             {:else}
-                <Resources />
+                <ResourceOverview />
             {/if}
         </div>
         <div class="ml-5">
@@ -73,7 +75,7 @@
                 {#if currentTab === TABS.MAIN_2}
                     <MainDisplayAct2 />
                 {:else if currentTab === TABS.WORKERS}
-                    <WorkersTab />
+                    <ResourcesTab />
                 {:else if currentTab === TABS.SCIENCE}
                     <ScienceTab />
                 {:else if currentTab === TABS.BARRACKS}
@@ -95,8 +97,8 @@
 </div>
 
 <style>
-    .w-min-1250px {
-        min-width: 1250px;
+    .w-min-1300px {
+        min-width: 1300px;
     }
 
     .w-min-840px {

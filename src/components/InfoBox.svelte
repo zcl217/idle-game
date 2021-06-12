@@ -13,13 +13,12 @@
         OTHER_INFO_BOXES,
         SCIENCE_INFO_BOXES,
     } from "../constants/infoBoxes";
-    import { resourceParser } from "../utils/helpers";
+    import { resourceParser } from "../utils/resourceHelpers";
     import { empireButtonCosts } from "~/store/buttonCosts";
     import type { IButtonCost } from "~/interfaces/buttons";
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
-import { SCIENCE_BUTTON_COSTS, SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
-import { MILITARY_BUTTON_COSTS } from "~/constants/buttons/militaryButtons";
-import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
+    import { SCIENCE_BUTTON_COSTS } from "~/constants/buttons/scienceButtons";
+    import { MILITARY_BUTTON_COSTS } from "~/constants/buttons/militaryButtons";
 
     let infoBox: any,
         costs: IButtonCost[] = [],

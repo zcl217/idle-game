@@ -29,6 +29,7 @@ export const calculateGenerationRate = (type: string, resources: any, workers: a
     // we don't want to include negative bonuses into the multiplier
     resourcesGenerated -= resourceConsumption;
     resourcesGenerated += get(resourcesFromExpeditions)[type];
+//    resourcesGenerated += 10000;
     return resourcesGenerated;
 }
 
@@ -58,7 +59,7 @@ const calculateResourceMultiplier = (type: string, resources: any): number => {
         case RESOURCE_TYPES.COAL:
             return calculateMiningMultiplier(researchedSciences) * 0.2;
         case RESOURCE_TYPES.GOLD:
-            return calculateMiningMultiplier(researchedSciences) * 0.005;
+            return calculateMiningMultiplier(researchedSciences) * 0.001;
         case RESOURCE_TYPES.FURS:
             return calculateFurMultiplier(researchedSciences);
         default:

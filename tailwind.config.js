@@ -22,6 +22,9 @@ module.exports = {
         'save': "url('/icons/save.png')",
         'greenCheckmark': "url('/icons/greenCheckmark.png')"
       })
+    },
+    fontFamily: {
+      'resource': 'Arial, Helvetica, sans-serif'
     }
   },
   plugins: [

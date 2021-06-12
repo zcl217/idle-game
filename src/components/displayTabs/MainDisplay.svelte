@@ -17,17 +17,17 @@
         obtainedResources,
         curStoryProgress,
     } from "~/store/gameState";
-    import {
-        buttonPrereqsMet,
-        hasEnoughResources,
-        spendResources,
-    } from "~/utils/helpers";
+    import { buttonPrereqsMet } from "~/utils/helpers";
     import {
         BUTTON_RESOURCE_MAPPING,
         EMPIRE_BUTTON_TYPES,
         EMPIRE_COST_MULTIPLIERS,
     } from "~/constants/buttons/empireButtons";
-import { STORAGE_CAPACITY } from "~/constants/gameState";
+    import { STORAGE_CAPACITY } from "~/constants/gameState";
+    import {
+        hasEnoughResources,
+        spendResources,
+    } from "~/utils/resourceHelpers";
 
     let buttonsToDisplay: Set<string> = new Set();
 
@@ -65,7 +65,7 @@ import { STORAGE_CAPACITY } from "~/constants/gameState";
         }
     };
     const gatherResource = (type: string) => {
-        resources.updateResourceValue(type, $resources[type].value + 10);
+        resources.incrementResourceValue(type, 10);
         obtainedResources.add(type);
     };
     const createBuilding = (
@@ -75,10 +75,7 @@ import { STORAGE_CAPACITY } from "~/constants/gameState";
         if (!hasEnoughResources($empireButtonCosts, $resources, buttonType))
             return false;
         spendResources($empireButtonCosts, resources, buttonType);
-        resources.updateResourceValue(
-            resourceType,
-            $resources[resourceType].value + 1
-        );
+        resources.incrementResourceValue(resourceType, 1);
         empireButtonCosts.updateButtonCosts(
             buttonType,
             EMPIRE_COST_MULTIPLIERS[buttonType]
@@ -89,7 +86,10 @@ import { STORAGE_CAPACITY } from "~/constants/gameState";
     const incrementResourceLimits = (payload: number) => {
         for (let [name, resource] of Object.entries($resources)) {
             if (resource.limit < Number.MAX_VALUE - 5000) {
-                resources.updateResourceLimit(name, $resources[name].limit + payload);
+                resources.setResourceLimit(
+                    name,
+                    $resources[name].limit + payload
+                );
             }
         }
     };

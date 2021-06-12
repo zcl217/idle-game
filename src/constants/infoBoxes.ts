@@ -3,7 +3,8 @@ import { EMPIRE_BUTTON_TYPES } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
 import { MILITARY_BUTTON_TYPES } from './buttons/militaryButtons';
 import { SCIENCE_BUTTON_TYPES } from './buttons/scienceButtons';
-import { BLAST_FURNACE_STEEL_OUTPUT, GRANARY_CAPACITY, IRON_SMELTER_IRON_OUTPUT, SAWMILL_CAPACITY, STORAGE_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
+import { GRANARY_CAPACITY, SAWMILL_CAPACITY, STORAGE_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
+import { BLAST_FURNACE_STEEL_OUTPUT, IRON_SMELTER_IRON_OUTPUT } from './resources/industry';
 
 export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: {
@@ -56,7 +57,7 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: {
         title: 'Build Blast Furnace',
-        text: `Converts iron into steel. Each furnace can generat ${BLAST_FURNACE_STEEL_OUTPUT}/s`
+        text: `Converts iron into steel. Each furnace can generate ${BLAST_FURNACE_STEEL_OUTPUT}/s`
     },
 }
 
