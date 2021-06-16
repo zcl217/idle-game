@@ -2,10 +2,10 @@ import { RESOURCE_TYPES } from '../resources/resourceTypes';
 
 export const WORKER_TYPES = {
     UNASSIGNED: 'unassigned',
-    FARMER: 'farmer',
-    WOODCUTTER: 'woodcutter',
-    SCHOLAR: 'scholar',
-    MINER: 'miner'
+    FARMER: 'farmers',
+    WOODCUTTER: 'woodcutters',
+    SCHOLAR: 'scholars',
+    MINER: 'miners'
 }
 
 export const WORKER_GENERATOR_MAP = {

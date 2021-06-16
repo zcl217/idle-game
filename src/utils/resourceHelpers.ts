@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { BLAST_FURNACE_INPUTS, BLAST_FURNACE_OUTPUTS, IRON_SMELTER_INPUTS, IRON_SMELTER_OUTPUTS } from "~/constants/resources/industry";
+import { BLAST_FURNACE_INPUTS, BLAST_FURNACE_OUTPUTS, IRON_SMELTER_INPUTS, IRON_SMELTER_OUTPUTS, WORKSHOP_INPUTS, WORKSHOP_OUTPUTS } from "~/constants/resources/industry";
 import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
 import type { IResourceList } from "~/interfaces/resource";
 
@@ -32,17 +32,18 @@ export const hasEnoughResources = (buttonCostList: any, resources: IResourceList
 };
 
 export const spendResources = (buttonCostList: any, resources: any, buttonType: string): void => {
-    for (const resource of buttonCostList[buttonType]) {
-        const curResourceAmount = (get(resources) as any)[resource.type].value;
-        resources.setResourceValue(
-            resource.type,
-            curResourceAmount - resource.cost
+    for (const button of buttonCostList[buttonType]) {
+        resources.decrementResourceValue(
+            button.type,
+            button.cost
         );
     }
 };
 
 export const getIndustryInputList = (industryBuilding: string): Record<string, number> => {
     switch (industryBuilding) {
+        case RESOURCE_TYPES.WORKSHOP:
+            return WORKSHOP_INPUTS;
         case RESOURCE_TYPES.IRON_SMELTER:
             return IRON_SMELTER_INPUTS;
         case RESOURCE_TYPES.BLAST_FURNACE:
@@ -54,6 +55,8 @@ export const getIndustryInputList = (industryBuilding: string): Record<string, n
 
 export const getIndustryOutputList = (industryBuilding: string): Record<string, number> => {
     switch (industryBuilding) {
+        case RESOURCE_TYPES.WORKSHOP:
+            return WORKSHOP_OUTPUTS;
         case RESOURCE_TYPES.IRON_SMELTER:
             return IRON_SMELTER_OUTPUTS;
         case RESOURCE_TYPES.BLAST_FURNACE:

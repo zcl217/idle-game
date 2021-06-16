@@ -43,18 +43,18 @@
     // if enemies remaining is initialized as 0, we instantly win
     let enemiesRemaining: number = 1;
     let interval = 0;
+    let expeditionLevelStarted = false;
 
     onMount(() => {
         //  handleVictory();
         grid = initializeGrid(mapType);
         setGridPath(grid, mapType);
         setLifeCount(level, lifeCount);
-        setTimeout(() => {
-            startExpeditionLevel();
-        }, 0);
+        enemiesRemaining = initializeEnemies(stage, enemyUnits, grid);
     });
 
     const startExpeditionLevel = () => {
+        expeditionLevelStarted = true;
         /*
             current problem:
             if unit's movement delay is same as this delay, the game loop
@@ -96,9 +96,6 @@
             playerUnits = playerUnits;
             grid = grid;
             projectiles = projectiles;
-        }, delay);
-        setTimeout(() => {
-            enemiesRemaining = initializeEnemies(stage, enemyUnits, grid);
         }, delay);
     };
 
@@ -249,30 +246,36 @@
 </script>
 
 <div class="text-center" />
-<div class="flex justify-between px-10 mb-3">
-    <div class="flex flex-col">
-        <p class="my-1">Enemies Remaining: {enemiesRemaining}</p>
-        <p>Lives: {$lifeCount}</p>
-    </div>
-    <button
-        class="flex items-center h-12 rpgui-button golden"
-        type="button"
-        on:click={handleDefeat}
-    >
-        <p class="p-4">RETREAT</p>
-    </button>
+<div
+    class="flex px-10
+    {expeditionLevelStarted ? 'justify-between mb-9px' : 'justify-center mb-3'}"
+>
+    {#if !expeditionLevelStarted}
+        <button
+            class="flex items-center h-12 mb-1 rpgui-button golden"
+            type="button"
+            on:click={startExpeditionLevel}
+        >
+            <p class="p-5">BEGIN</p>
+        </button>
+    {:else}
+        <div class="flex flex-col">
+            <p class="my-1">Enemies Remaining: {enemiesRemaining}</p>
+            <p>Lives: {$lifeCount}</p>
+        </div>
+        <button
+            class="flex items-center h-12 rpgui-button golden"
+            type="button"
+            on:click={handleDefeat}
+        >
+            <p class="p-4">RETREAT</p>
+        </button>
+    {/if}
 </div>
 <div class="mx-auto border-4 border-black w-656px h-512px">
     <div class="relative flex flex-row flex-wrap w-648px h-504px">
-        <!--    {#key $highlightMeleeCells} -->
-        <!--   {#key test} -->
         {#each grid as row, y}
             {#each row as cell, x}
-                <!-- this is where we look at the properties of the cell
-                to determine how to style it. 
-                i think we also need a bunch of handlers to handle 
-                events like mouse hover/unit placement/placed unit etc
-            -->
                 <ExpeditionCell
                     handleCellClick={() => {
                         handleCellClick(cell);
@@ -298,7 +301,6 @@
                 homing={projectile.homing}
             />
         {/each}
-        <!-- {/key} -->
     </div>
 </div>
 
@@ -314,5 +316,14 @@
     }
     .h-504px {
         height: 504px;
+    }
+    .p-5 {
+        padding: 20px;
+    }
+    .mb-9px {
+        margin-bottom: 9px;
+    }
+    .mb-3 {
+        margin-bottom: 0.75rem;
     }
 </style>

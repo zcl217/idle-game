@@ -27,10 +27,6 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
-    [RESOURCE_TYPES.LIBRARY]: {
-        sciencePrereqs: [],
-        resourcePrereqs: [RESOURCE_TYPES.LIBRARY]
-    },
     [RESOURCE_TYPES.KNOWLEDGE]: {
         sciencePrereqs: [],
         resourcePrereqs: [RESOURCE_TYPES.LIBRARY]
@@ -43,9 +39,13 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.ORE_MINING],
         resourcePrereqs: []
     },
+    [RESOURCE_TYPES.WOOD_PLANK]: {
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.WORKSHOP]
+    },
     [RESOURCE_TYPES.IRON]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.IRON_SMELTING],
-        resourcePrereqs: []
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.IRON_SMELTER]
     },
     [RESOURCE_TYPES.GOLD]: {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.ORE_MINING],
@@ -56,31 +56,35 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
         resourcePrereqs: []
     },
     [RESOURCE_TYPES.STEEL]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
-        resourcePrereqs: []
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.BLAST_FURNACE]
     },
     [RESOURCE_TYPES.WAREHOUSE]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
-        resourcePrereqs: []
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.WAREHOUSE]
     },
     [RESOURCE_TYPES.GRANARY]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
-        resourcePrereqs: []
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.GRANARY]
     },
     [RESOURCE_TYPES.SAWMILL]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
-        resourcePrereqs: []
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.SAWMILL]
     },
-    [RESOURCE_TYPES.BLAST_FURNACE]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
-        resourcePrereqs: []
+    [RESOURCE_TYPES.UNIVERSITY]: {
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.UNIVERSITY]
+    },
+    [RESOURCE_TYPES.WORKSHOP]: {
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.WORKSHOP]
     },
     [RESOURCE_TYPES.IRON_SMELTER]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.IRON_SMELTING],
-        resourcePrereqs: []
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.IRON_SMELTER]
     },
     [RESOURCE_TYPES.BLAST_FURNACE]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
-        resourcePrereqs: []
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.BLAST_FURNACE]
     },
 }

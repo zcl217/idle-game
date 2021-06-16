@@ -19,7 +19,6 @@ export const initializeGrid = (mapType: number): IExpeditionCell[][] => {
     const backgroundImage = `url("sprites/map${mapType}/tile`;
     for (let y = 0; y < 7; y++) {
         const row: IExpeditionCell[] = [];
-        // siwtch statement for the map, check MAP_X constant
         for (let x = 0; x < 9; x++) {
             const cell: IExpeditionCell = {
                 isPath: false,

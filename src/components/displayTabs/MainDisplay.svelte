@@ -8,13 +8,12 @@
     } from "~/constants/buttons/buttons";
     import { DIALOGUES, STORY_PROGRESS_LIST } from "~/constants/story";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
-    import { resources } from "~/store/resources";
+    import { obtainedResources, resources } from "~/store/resources";
     import { empireButtonCosts } from "~/store/buttonCosts";
     import {
         playerImage,
         playerName,
         researchedSciences,
-        obtainedResources,
         curStoryProgress,
     } from "~/store/gameState";
     import { buttonPrereqsMet } from "~/utils/helpers";
@@ -95,11 +94,6 @@
     };
     const buildAttractiveHouseHandler = (buttonType: string) => {
         setTimeout(() => {
-            //trigger dialogue
-            // bug right now:
-            /* 1. loop running several times if we spam click buttons
-            not sure how we fixed this last time
-            */
             if ($curStoryProgress !== STORY_PROGRESS_LIST["A1S3"]) {
                 const nextScene = STORY_PROGRESS_LIST["A1S1"];
                 curStoryProgress.set(nextScene);
@@ -113,20 +107,6 @@
 
 <!-- <CharacterFrame characterImage={$playerImage} characterName={$playerName} /> -->
 <div class="container flex flex-wrap justify-around">
-    <!-- {#key $obtainedResources}
-        {#each Object.entries(EMPIRE_BUTTON_TYPES) as [key, id]}
-            {#if buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)}
-                <InfoBoxButton
-                    width={BUTTON_WIDTH}
-                    curButtonType={id}
-                    curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
-                    handler={() => {
-                        handleResource(id);
-                    }}
-                />
-            {/if}
-        {/each}
-    {/key} -->
     {#each [...buttonsToDisplay] as id}
         <div class="flex justify-center">
             <InfoBoxButton

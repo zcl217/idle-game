@@ -17,6 +17,8 @@ export const EMPIRE_BUTTON_TYPES: Record<string, string> = {
     BUILD_LIBRARY: 'buildLibrary',
     BUILD_GRANARY: 'buildGranary',
     BUILD_SAWMILL: 'buildSawmill',
+    BUILD_UNIVERSITY: 'buildUniversity',
+    BUILD_WORKSHOP: 'buildWorkshop',
     BUILD_IRON_SMELTER: 'buildIronSmelter',
     BUILD_BLAST_FURNACE: 'buildBlastFurnace',
 }
@@ -33,6 +35,8 @@ export const EMPIRE_BUTTON_TEXTS = {
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: 'Build Warehouse',
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: 'Build Granary',
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: 'Build Sawmill',
+    [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: 'Build University',
+    [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: 'Build Workshop',
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: 'Build Iron Smelter',
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: 'Build Blast Furnace',
 }
@@ -50,6 +54,8 @@ export const BUTTON_RESOURCE_MAPPING = {
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: RESOURCE_TYPES.WAREHOUSE,
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: RESOURCE_TYPES.GRANARY,
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: RESOURCE_TYPES.SAWMILL,
+    [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: RESOURCE_TYPES.UNIVERSITY,
+    [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: RESOURCE_TYPES.WORKSHOP,
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: RESOURCE_TYPES.IRON_SMELTER,
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: RESOURCE_TYPES.BLAST_FURNACE,
 }
@@ -101,8 +107,16 @@ export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
         resourcePrereqs: [],
     },
+    [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
+        resourcePrereqs: [],
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.INDUSTRY],
+        resourcePrereqs: [],
+    },
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.IRON_SMELTING],
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.INDUSTRY, SCIENCE_BUTTON_TYPES.IRON_SMELTING],
         resourcePrereqs: [],
     },
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: {
@@ -113,52 +127,60 @@ export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
 
 export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
     [EMPIRE_BUTTON_TYPES.CREATE_FARM]: [
-        { type: RESOURCE_TYPES.FOOD, text: 'Food', cost: 20, },
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 10, },
+        { type: RESOURCE_TYPES.FOOD, cost: 20 },
+        { type: RESOURCE_TYPES.WOOD, cost: 10 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: [
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 50, },
+        { type: RESOURCE_TYPES.WOOD, cost: 50 },
     ],
     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: [
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 50, },
+        { type: RESOURCE_TYPES.WOOD, cost: 50 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: [
-        { type: RESOURCE_TYPES.FOOD, text: 'Food', cost: 700, },
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 700, },
+        { type: RESOURCE_TYPES.FOOD, cost: 700 },
+        { type: RESOURCE_TYPES.WOOD, cost: 700 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: [
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 100, },
+        { type: RESOURCE_TYPES.WOOD, cost: 100 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: [
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 500, },
+        { type: RESOURCE_TYPES.WOOD, cost: 500 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: [
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 500, },
-        { type: RESOURCE_TYPES.IRON, text: 'Iron', cost: 5, },
+        { type: RESOURCE_TYPES.WOOD, cost: 500 },
+        { type: RESOURCE_TYPES.IRON, cost: 5 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: [
-        { type: RESOURCE_TYPES.FOOD, text: 'Food', cost: 400, },
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 50, },
-        { type: RESOURCE_TYPES.FURS, text: 'Furs', cost: 1, },
-        { type: RESOURCE_TYPES.IRON, text: 'Iron', cost: 10, },
+        { type: RESOURCE_TYPES.FOOD, cost: 400 },
+        { type: RESOURCE_TYPES.WOOD, cost: 50 },
+        { type: RESOURCE_TYPES.IRON, cost: 10 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: [
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 500, },
-        { type: RESOURCE_TYPES.FURS, text: 'Furs', cost: 1, },
-        { type: RESOURCE_TYPES.IRON, text: 'Iron', cost: 10, },
+        { type: RESOURCE_TYPES.WOOD, cost: 500 },
+        { type: RESOURCE_TYPES.IRON, cost: 10 },
+    ],
+    [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: [
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 500 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 500 },
+        { type: RESOURCE_TYPES.FURS, cost: 100 },
+        { type: RESOURCE_TYPES.IRON, cost: 10 },
+    ],
+    [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: [
+        { type: RESOURCE_TYPES.WOOD, cost: 3000 },
+        { type: RESOURCE_TYPES.GOLD, cost: 1 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: [
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 5000, },
-        { type: RESOURCE_TYPES.RAW_ORE, text: 'Raw Ore', cost: 5000, },
-        { type: RESOURCE_TYPES.COAL, text: 'Coal', cost: 500, },
-        { type: RESOURCE_TYPES.GOLD, text: 'Gold', cost: 5, },
+        { type: RESOURCE_TYPES.WOOD, cost: 5000 },
+        { type: RESOURCE_TYPES.RAW_ORE, cost: 5000 },
+        { type: RESOURCE_TYPES.COAL, cost: 500 },
+        { type: RESOURCE_TYPES.GOLD, cost: 5 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: [
-        { type: RESOURCE_TYPES.WOOD, text: 'Wood', cost: 10000, },
-        { type: RESOURCE_TYPES.RAW_ORE, text: 'Raw Ore', cost: 10000, },
-        { type: RESOURCE_TYPES.COAL, text: 'Coal', cost: 1000, },
-        { type: RESOURCE_TYPES.IRON, text: 'Iron', cost: 100, },
-        { type: RESOURCE_TYPES.GOLD, text: 'Gold', cost: 10, },
+        { type: RESOURCE_TYPES.WOOD, cost: 10000 },
+        { type: RESOURCE_TYPES.RAW_ORE, cost: 10000 },
+        { type: RESOURCE_TYPES.COAL, cost: 1000 },
+        { type: RESOURCE_TYPES.IRON, cost: 100 },
+        { type: RESOURCE_TYPES.GOLD, cost: 10 },
     ],
 }
 
@@ -189,6 +211,12 @@ export const EMPIRE_COST_MULTIPLIERS = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: (val: number): number => {
         return val * 1.2 + 30
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: (val: number): number => {
+        return val * 1.2 + 30
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: (val: number): number => {
+        return val * 1.2
     },
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: (val: number): number => {
         return val * 1.2

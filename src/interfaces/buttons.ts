@@ -1,6 +1,5 @@
 export interface IButtonCost {
     type: string;
-    text: string;
     cost: number;
 }
 

@@ -1,12 +1,11 @@
 import { get } from "svelte/store";
 import { RESOURCE_GENERATOR_MAP, RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
 import { WORKER_GENERATOR_MAP, WORKER_TYPES } from "~/constants/workers/workerTypes";
-import {
-    researchedSciences as researchedSciencesFromStore, resourcesFromExpeditions
-} from '~/store/gameState';
+import { researchedSciences as researchedSciencesFromStore } from '~/store/gameState';
 import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
-import { GRANARY_BONUS, SAWMILL_BONUS, WORKER_FOOD_CONSUMPTION } from "~/constants/gameState";
+import { GRANARY_BONUS, SAWMILL_BONUS, UNIVERSITY_BONUS, WORKER_FOOD_CONSUMPTION } from "~/constants/gameState";
 import type { IResourceList } from "~/interfaces/resource";
+import { resourcesFromExpeditions } from "~/store/resources";
 
 export const calculateGenerationRate = (type: string, resources: any, workers: any, insufficientFood: boolean): number => {
     const generator = RESOURCE_GENERATOR_MAP[type];
@@ -29,12 +28,12 @@ export const calculateGenerationRate = (type: string, resources: any, workers: a
     // we don't want to include negative bonuses into the multiplier
     resourcesGenerated -= resourceConsumption;
     resourcesGenerated += get(resourcesFromExpeditions)[type];
-//    resourcesGenerated += 10000;
+    resourcesGenerated += 10000;
     return resourcesGenerated;
 }
 
-const getResourceConsumption = (type: string, resources: any, workers: any): number => {
-    switch(type) {
+export const getResourceConsumption = (type: string, resources: any, workers: any): number => {
+    switch (type) {
         case RESOURCE_TYPES.FOOD: {
             const maxWorkers = resources[RESOURCE_TYPES.HOUSE].value;
             const assignedWorkers = maxWorkers - workers[WORKER_TYPES.UNASSIGNED].value;
@@ -45,7 +44,7 @@ const getResourceConsumption = (type: string, resources: any, workers: any): num
     }
 }
 
-const calculateResourceMultiplier = (type: string, resources: any): number => {
+export const calculateResourceMultiplier = (type: string, resources: any): number => {
     const researchedSciences = get(researchedSciencesFromStore);
     switch (type) {
         case RESOURCE_TYPES.FOOD:
@@ -87,7 +86,7 @@ const calculateWoodMulitplier = (researchedSciences: Set<string>, resources: any
 
 const calculateKnowledgeMulitplier = (researchedSciences: Set<string>, resources: IResourceList): number => {
     let multiplier = 1;
-    multiplier += resources[RESOURCE_TYPES.LIBRARY].value * 0.05;
+    multiplier += resources[RESOURCE_TYPES.UNIVERSITY].value * UNIVERSITY_BONUS;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.BLOCK_PRINTING)) multiplier += 0.5;
     return multiplier;
 }

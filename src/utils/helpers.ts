@@ -3,9 +3,9 @@ import { EMPIRE_BUTTON_PREREQS } from '~/constants/buttons/empireButtons';
 import { get } from 'svelte/store';
 import {
     researchedSciences as researchedSciencesFromStore,
-    obtainedResources as obtainedResourcesFromStore,
     curStoryProgress,
 } from '~/store/gameState';
+import { obtainedResources as obtainedResourcesFromStore } from '~/store/resources';
 import { BUTTON_CATEGORIES } from '~/constants/buttons/buttons';
 import * as humanUnits from '~/constants/military/units/humans'
 import { UNIT_TYPES } from '~/constants/military/units/unitTypes'

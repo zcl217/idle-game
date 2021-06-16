@@ -1,13 +1,13 @@
 <script lang="ts">
     import MapSelection from "./MapSelection.svelte";
     import ExpeditionMode from "../military/ExpeditionMode.svelte";
-    import { inExpedition, resourcesFromExpeditions } from "~/store/gameState";
+    import { inExpedition } from "~/store/gameState";
     import {
         STAGE_LIST,
         STAGE_REWARD_LIST,
     } from "~/constants/military/stageList";
     import { clearedStages } from "~/store/military";
-    import { resources } from "~/store/resources";
+    import { resources, resourcesFromExpeditions } from "~/store/resources";
 
     const MAP_TYPES = {
         [STAGE_LIST["1-1"]]: 1,

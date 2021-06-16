@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { resources } from "./store/resources";
+    import { resources, workshopsActivated } from "./store/resources";
     import { workers } from "./store/workers";
     import {
         RESOURCE_TYPES,
@@ -10,11 +10,17 @@
         blastFurnacesActivated,
         insufficientFood,
         ironSmeltersActivated,
-    } from "./store/gameState";
+    } from "./store/resources";
     import {
         getIndustryInputList,
         getIndustryOutputList,
     } from "./utils/resourceHelpers";
+    import {
+        INDUSTRY_BUILDINGS,
+        INDUSTRY_BUILDING_STORE_MAP,
+    } from "./constants/resources/industry";
+    import Industry from "./components/resources/Industry.svelte";
+    import { get } from "svelte/store";
 
     let previousTime = new Date();
 
@@ -29,16 +35,7 @@
     };
 
     const processResources = (secondsElapsed: number) => {
-        if ($ironSmeltersActivated)
-            handleIndustryGeneration(
-                RESOURCE_TYPES.IRON_SMELTER,
-                secondsElapsed
-            );
-        if ($blastFurnacesActivated)
-            handleIndustryGeneration(
-                RESOURCE_TYPES.BLAST_FURNACE,
-                secondsElapsed
-            );
+        handleIndustryBuildings(secondsElapsed);
         for (let resource of GENERATABLE_RESOURCES)
             handleResourceGeneration(secondsElapsed, resource);
     };
@@ -60,6 +57,16 @@
         resources.incrementResourceValue(type, generationRate * secondsElapsed);
     };
 
+    const handleIndustryBuildings = (secondsElapsed: number) => {
+        for (const industryBuilding of INDUSTRY_BUILDINGS) {
+            const buildingActivated =
+                INDUSTRY_BUILDING_STORE_MAP[industryBuilding];
+            if (get(buildingActivated)) {
+                handleIndustryGeneration(industryBuilding, secondsElapsed);
+            }
+        }
+    };
+
     const handleIndustryGeneration = (
         industryBuilding: string,
         secondsElapsed: number
@@ -76,11 +83,9 @@
         }
         for (let [resourceType, value] of Object.entries(inputList)) {
             const inputRequired = buildingCount * value * secondsElapsed;
-            let newResourceValue =
-                $resources[resourceType].value - inputRequired;
-            resources.setResourceValue(resourceType, newResourceValue);
+            resources.decrementResourceValue(resourceType, inputRequired);
         }
-        for (let [resourceType, value] of Object.entries(inputList)) {
+        for (let [resourceType, value] of Object.entries(outputList)) {
             resources.incrementResourceValue(
                 resourceType,
                 buildingCount * value * secondsElapsed

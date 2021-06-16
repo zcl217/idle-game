@@ -1,10 +1,10 @@
 <script lang="ts">
     import { TABS } from "../constants/buttons/buttons";
     import { createEventDispatcher } from "svelte";
-    import { resources } from "~/store/resources";
     import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
     import { researchedSciences } from "~/store/gameState";
     import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
+    import { obtainedResources } from "~/store/resources";
 
     export let currentTab: string = TABS.MAIN_2,
         displayMain1: boolean = true;
@@ -13,7 +13,7 @@
     let displayMilitaryTabs = false;
     $: {
         if (!displayScienceTab) {
-            displayScienceTab = $resources[RESOURCE_TYPES.LIBRARY].value > 0;
+            displayScienceTab = $obtainedResources.has(RESOURCE_TYPES.LIBRARY);
         }
     }
     $: {

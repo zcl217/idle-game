@@ -1,29 +1,10 @@
 <script lang="ts">
     import { resources } from "../store/resources";
-    import { workers } from "../store/workers";
-    import {
-        RESOURCE_NAMES,
-        RESOURCE_TYPES,
-        SPECIAL_RESOURCES,
-    } from "../constants/resources/resourceTypes";
+    import { SPECIAL_RESOURCES } from "../constants/resources/resourceTypes";
     import { RESOURCE_DISPLAY_PREREQS } from "~/constants/resources/resourcePrereqs";
-    import { resourceParser } from "../utils/resourceHelpers";
-    import {
-        obtainedResources,
-        researchedSciences,
-        insufficientFood,
-        ironSmeltersActivated,
-        blastFurnacesActivated,
-    } from "~/store/gameState";
-    import { calculateGenerationRate } from "~/utils/resourceGeneration";
-    import {
-        BLAST_FURNACE_COAL_INPUT,
-        BLAST_FURNACE_IRON_INPUT,
-        BLAST_FURNACE_STEEL_OUTPUT,
-        IRON_SMELTER_COAL_INPUT,
-        IRON_SMELTER_IRON_OUTPUT,
-        IRON_SMELTER_ORE_INPUT,
-    } from "~/constants/resources/industry";
+    import { obtainedResources } from "~/store/resources";
+    import { researchedSciences } from "~/store/gameState";
+    import ResourceTableRow from "./ResourceTableRow.svelte";
     const resourcePrereqsMet = (type: string) => {
         if (SPECIAL_RESOURCES.has(type) && $resources[type].value > 0) {
             return true;
@@ -39,161 +20,13 @@
         }
         return true;
     };
-
-    const formatGenerationRate = (type: string): string => {
-        let generationRate = calculateGenerationRate(
-            type,
-            $resources,
-            $workers,
-            $insufficientFood
-        );
-        generationRate -= getResourceConsumption(type);
-        generationRate += getAdditionalResourceGeneration(type);
-        const prefix = generationRate >= 0 ? "+" : "";
-        const formattedGenerationRate = resourceParser(generationRate);
-        return `${prefix}${formattedGenerationRate}/s`;
-    };
-
-    const getResourceConsumption = (type: string): number => {
-        const ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
-        const blastFurnaceCount =
-            $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
-        switch (type) {
-            case RESOURCE_TYPES.RAW_ORE:
-                return $ironSmeltersActivated
-                    ? ironSmelterCount * IRON_SMELTER_ORE_INPUT
-                    : 0;
-            case RESOURCE_TYPES.COAL:
-                const ironSmelterConsumption =
-                    ironSmelterCount * IRON_SMELTER_COAL_INPUT;
-                const blastFurnaceConsumption =
-                    blastFurnaceCount * BLAST_FURNACE_COAL_INPUT;
-                if ($ironSmeltersActivated && $blastFurnacesActivated) {
-                    return ironSmelterConsumption + blastFurnaceConsumption;
-                }
-                if ($ironSmeltersActivated) return ironSmelterConsumption;
-                if ($blastFurnacesActivated) return blastFurnaceConsumption;
-                break;
-            case RESOURCE_TYPES.IRON:
-                if ($blastFurnacesActivated) {
-                    return blastFurnaceCount * BLAST_FURNACE_IRON_INPUT;
-                }
-                break;
-            default:
-                return 0;
-        }
-        return 0;
-    };
-
-    const getAdditionalResourceGeneration = (type: string) => {
-        const ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
-        const blastFurnaceCount =
-            $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
-        switch (type) {
-            case RESOURCE_TYPES.IRON:
-                if ($ironSmeltersActivated) {
-                    if (
-                        !hasEnoughInputResource(
-                            ironSmelterCount,
-                            IRON_SMELTER_ORE_INPUT,
-                            RESOURCE_TYPES.RAW_ORE
-                        )
-                    )
-                        break;
-                    if (
-                        !hasEnoughInputResource(
-                            ironSmelterCount,
-                            IRON_SMELTER_COAL_INPUT,
-                            RESOURCE_TYPES.COAL
-                        )
-                    )
-                        break;
-                    return ironSmelterCount * IRON_SMELTER_IRON_OUTPUT;
-                }
-                break;
-            case RESOURCE_TYPES.STEEL:
-                if ($blastFurnacesActivated) {
-                    if (
-                        !hasEnoughInputResource(
-                            blastFurnaceCount,
-                            BLAST_FURNACE_COAL_INPUT,
-                            RESOURCE_TYPES.COAL
-                        )
-                    )
-                        break;
-                    if (
-                        !hasEnoughInputResource(
-                            blastFurnaceCount,
-                            BLAST_FURNACE_IRON_INPUT,
-                            RESOURCE_TYPES.IRON
-                        )
-                    )
-                        break;
-                    return blastFurnaceCount * BLAST_FURNACE_STEEL_OUTPUT;
-                }
-                break;
-            default:
-                return 0;
-        }
-        return 0;
-    };
-
-    const hasEnoughInputResource = (
-        productionFacilityCount: number,
-        consumptionRate: number,
-        resourceType: string
-    ) => {
-        const resourcesRequired = productionFacilityCount * consumptionRate;
-        switch (resourceType) {
-            case RESOURCE_TYPES.RAW_ORE:
-                return (
-                    $resources[RESOURCE_TYPES.RAW_ORE].value > resourcesRequired
-                );
-            case RESOURCE_TYPES.COAL:
-                return (
-                    $resources[RESOURCE_TYPES.COAL].value > resourcesRequired
-                );
-            case RESOURCE_TYPES.IRON:
-                return (
-                    $resources[RESOURCE_TYPES.IRON].value > resourcesRequired
-                );
-            default:
-                return true;
-        }
-    };
-
-    const redText = (type: string) => {
-        return type === RESOURCE_TYPES.FOOD && $insufficientFood;
-    };
 </script>
 
 <div class="mt-5">
     <table>
         {#each Object.entries($resources) as [type, resource]}
             {#if resourcePrereqsMet(type) && !SPECIAL_RESOURCES.has(type)}
-                <tr class="">
-                    <td class="font-resource">
-                        {RESOURCE_NAMES[type]}
-                    </td>
-                    {#if resource.displayGenerationRate}
-                        <td class="font-resource">
-                            {resourceParser(resource.value)}/{resourceParser(
-                                resource.limit
-                            )}
-                        </td>
-                        <td
-                            class="font-resource {redText(type)
-                                ? 'text-red-500'
-                                : ''}"
-                        >
-                            {formatGenerationRate(type)}
-                        </td>
-                    {:else}
-                        <td class="font-resource">
-                            {resource.value}
-                        </td>
-                    {/if}
-                </tr>
+                <ResourceTableRow {resource} {type} />
             {/if}
         {/each}
     </table>
@@ -206,8 +39,5 @@
         border-spacing: 40px 3px;
         color: white;
         margin-left: -55px;
-    }
-    td {
-        font-size: 17px;
     }
 </style>

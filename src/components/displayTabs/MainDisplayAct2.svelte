@@ -8,12 +8,12 @@
     } from "~/constants/buttons/buttons";
     import { DIALOGUES } from "~/constants/story";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
-    import { resources } from "~/store/resources";
+    import { obtainedResources, resources } from "~/store/resources";
     import {
         playerImage,
         playerName,
-        obtainedResources,
         researchedSciences,
+        hiddenButtons,
     } from "~/store/gameState";
     import {
         BUTTON_RESOURCE_MAPPING,
@@ -27,27 +27,26 @@
     import { WORKER_TYPES } from "~/constants/workers/workerTypes";
     import {
         GRANARY_CAPACITY,
+        SAWMILL_CAPACITY,
         STORAGE_CAPACITY,
+        UNIVERSITY_CAPACITY,
         WAREHOUSE_CAPACITY,
     } from "~/constants/gameState";
     import {
         hasEnoughResources,
         spendResources,
     } from "~/utils/resourceHelpers";
+    import { INITIAL_RESOURCE_STATE } from "~/constants/resources/resourceStates";
 
     let buttonsToDisplay: Set<string> = new Set();
-    let hiddenButtons: Set<string> = new Set([
-        EMPIRE_BUTTON_TYPES.GATHER_FOOD,
-        EMPIRE_BUTTON_TYPES.GATHER_WOOD,
-        EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE,
-    ]);
     $: {
         //have to use multiple lists
         $obtainedResources;
         $researchedSciences;
         let oldLength = buttonsToDisplay.size;
+        buttonsToDisplay.clear();
         for (let [key, id] of Object.entries(EMPIRE_BUTTON_TYPES)) {
-            if (hiddenButtons.has(id)) continue;
+            if ($hiddenButtons.has(id)) continue;
             if (buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)) {
                 buttonsToDisplay.add(id);
             }
@@ -68,6 +67,9 @@
         }
         if (!createBuilding(buttonType, resourceType)) return;
         switch (buttonType) {
+            case EMPIRE_BUTTON_TYPES.BUILD_LIBRARY:
+                $hiddenButtons.add(EMPIRE_BUTTON_TYPES.BUILD_LIBRARY);
+                break;
             case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
                 workers.increment(WORKER_TYPES.UNASSIGNED, 1);
                 break;
@@ -78,15 +80,21 @@
                 incrementResourceLimits(WAREHOUSE_CAPACITY);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_GRANARY:
-                resources.setResourceLimit(
+                resources.incrementResourceLimit(
                     RESOURCE_TYPES.FOOD,
-                    $resources[RESOURCE_TYPES.FOOD].limit + GRANARY_CAPACITY
+                    GRANARY_CAPACITY
                 );
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_SAWMILL:
-                resources.setResourceLimit(
+                resources.incrementResourceLimit(
                     RESOURCE_TYPES.WOOD,
-                    $resources[RESOURCE_TYPES.WOOD].limit + GRANARY_CAPACITY
+                    SAWMILL_CAPACITY
+                );
+                break;
+            case EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY:
+                resources.incrementResourceLimit(
+                    RESOURCE_TYPES.KNOWLEDGE,
+                    UNIVERSITY_CAPACITY
                 );
                 break;
             default:
@@ -115,10 +123,7 @@
     const incrementResourceLimits = (payload: number) => {
         for (let [name, resource] of Object.entries($resources)) {
             if (resource.limit < Number.MAX_VALUE - 5000) {
-                resources.setResourceLimit(
-                    name,
-                    $resources[name].limit + payload
-                );
+                resources.incrementResourceLimit(name, payload);
             }
         }
     };

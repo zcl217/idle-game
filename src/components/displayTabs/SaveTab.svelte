@@ -10,6 +10,7 @@
     import * as WorkersStore from "~/store/workers";
 
     // TODO: refactor this file
+    // KEY POINT: Don't forget to add every hashset store into the hashSetStores constant!
     const dividerCount =
         size(ButtonCostsStore) +
         size(GameStateStore) +
@@ -18,6 +19,7 @@
         size(WorkersStore);
     const divider = "divider";
     const hashSetStores = new Set<string>([
+        "hiddenButtons",
         "researchedSciences",
         "obtainedResources",
     ]);
@@ -99,7 +101,7 @@
             setStoreValues(ButtonCostsStore, storeValues);
             setGameStateStore(storeValues);
             setStoreValues(MilitaryStore, storeValues);
-            setStoreValues(ResourcesStore, storeValues);
+            setResourcesStore(storeValues);
             setStoreValues(WorkersStore, storeValues);
         } catch (error) {
             console.log(error);
@@ -118,19 +120,25 @@
     // so if you manually load modules, you have to
     // load in alphabetical order too
     const setGameStateStore = (storeValues: any[]) => {
-        GameStateStore.blastFurnacesActivated.set(storeValues.shift());
         GameStateStore.curStoryProgress.set(storeValues.shift());
+        const hiddenButtons = new Set<string>(storeValues.shift());
+        GameStateStore.hiddenButtons.set(hiddenButtons);
         GameStateStore.inExpedition.set(storeValues.shift());
-        GameStateStore.insufficientFood.set(storeValues.shift());
-        GameStateStore.ironSmeltersActivated.set(storeValues.shift());
-        const obtainedResources = new Set<string>(storeValues.shift());
-        GameStateStore.obtainedResources.set(obtainedResources);
         GameStateStore.playerImage.set(storeValues.shift());
         GameStateStore.playerName.set(storeValues.shift());
         const researchedSciences = new Set<string>(storeValues.shift());
         GameStateStore.researchedSciences.set(researchedSciences);
-        GameStateStore.resourcesFromExpeditions.set(storeValues.shift());
     };
+    const setResourcesStore = (storeValues: any[]) => {
+        ResourcesStore.blastFurnacesActivated.set(storeValues.shift());
+        ResourcesStore.insufficientFood.set(storeValues.shift());
+        ResourcesStore.ironSmeltersActivated.set(storeValues.shift());
+        const obtainedResources = new Set<string>(storeValues.shift());
+        ResourcesStore.obtainedResources.set(obtainedResources);
+        ResourcesStore.resources.set(storeValues.shift());
+        ResourcesStore.resourcesFromExpeditions.set(storeValues.shift());
+        ResourcesStore.workshopsActivated.set(storeValues.shift());
+    }
 </script>
 
 <div class="w-3/5 w-min-670px h-min-620px rpgui-container">

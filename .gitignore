@@ -7,3 +7,5 @@ roadmap.md
 key points.md
 .eslintrc.js
 public/build/
+.VSCodeCounter
+.gitignore

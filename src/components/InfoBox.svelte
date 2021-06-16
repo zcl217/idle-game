@@ -19,6 +19,7 @@
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
     import { SCIENCE_BUTTON_COSTS } from "~/constants/buttons/scienceButtons";
     import { MILITARY_BUTTON_COSTS } from "~/constants/buttons/militaryButtons";
+import { RESOURCE_NAMES } from "~/constants/resources/resourceTypes";
 
     let infoBox: any,
         costs: IButtonCost[] = [],
@@ -80,7 +81,7 @@
             {#key $resources}
                 {#each costs as obj}
                     <p class="text-left">
-                        {obj.text}:
+                        {RESOURCE_NAMES[obj.type]}:
                         <span
                             class:text-red={!hasEnoughResources(
                                 obj.type,

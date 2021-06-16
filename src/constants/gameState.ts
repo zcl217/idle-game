@@ -7,4 +7,5 @@ export const SAWMILL_CAPACITY = 500;
 export const SAWMILL_BONUS = 0.05;
 export const GRANARY_CAPACITY = 500;
 export const GRANARY_BONUS = 0.05;
-export const LIBRARY_BONUS = 0.05;
+export const UNIVERSITY_BONUS = 0.05;
+export const UNIVERSITY_CAPACITY = 500;

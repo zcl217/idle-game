@@ -16,6 +16,7 @@
     import { curStoryProgress, inExpedition } from "~/store/gameState";
     import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
     import { STORY_PROGRESS_LIST } from "~/constants/story";
+import ResourceInfoBox from "~/components/ResourceInfoBox.svelte";
     let darkBackground = true,
         currentTab = TABS.MAIN_1,
         displayMain1 = true,
@@ -94,6 +95,7 @@
     </div>
     <DialogueBox />
     <InfoBox />
+    <ResourceInfoBox />
 </div>
 
 <style>

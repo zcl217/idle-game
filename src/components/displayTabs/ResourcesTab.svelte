@@ -3,16 +3,16 @@
     import Industry from "../resources/Industry.svelte";
     import { researchedSciences } from "~/store/gameState";
     import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
+    import { has } from "lodash";
+    import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
+    import { obtainedResources } from "~/store/resources";
     enum TABS {
         WORKERS,
         INDUSTRY,
         MARKET,
     }
     let selectedTab = TABS.WORKERS;
-    $: industryUnlocked = $researchedSciences.has(
-        SCIENCE_BUTTON_TYPES.IRON_SMELTING
-    );
-
+    $: industryUnlocked = $obtainedResources.has(RESOURCE_TYPES.WAREHOUSE);
 </script>
 
 {#if industryUnlocked}

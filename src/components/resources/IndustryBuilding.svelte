@@ -1,4 +1,6 @@
 <script lang="ts">
+import { INDUSTRY_BUILDING_TITLES } from "~/constants/resources/industry";
+
     import {
         RESOURCE_NAMES,
         RESOURCE_TYPES,
@@ -13,18 +15,10 @@
 
     const offName = industryBuilding + "off";
     const onName = industryBuilding + "on";
-    let title = "";
+    let title = INDUSTRY_BUILDING_TITLES[industryBuilding];
     let radioInput = activated ? "on" : "off";
     let inputList = getIndustryInputList(industryBuilding);
     let outputList = getIndustryOutputList(industryBuilding);
-    switch (industryBuilding) {
-        case RESOURCE_TYPES.IRON_SMELTER:
-            title = "Iron Smelter";
-            break;
-        case RESOURCE_TYPES.BLAST_FURNACE:
-            title = "Blast Furnace";
-            break;
-    }
     $: buildingCount = $resources[industryBuilding].value;
 </script>
 

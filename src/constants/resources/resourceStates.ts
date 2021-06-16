@@ -27,6 +27,11 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         limit: 100,
         displayGenerationRate: true
     },
+    [RESOURCE_TYPES.WOOD_PLANK]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
     [RESOURCE_TYPES.IRON]: {
         value: 0,
         limit: 100,
@@ -90,6 +95,16 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         displayGenerationRate: false
     },
     [RESOURCE_TYPES.SAWMILL]: {
+        value: 0,
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
+    },
+    [RESOURCE_TYPES.UNIVERSITY]: {
+        value: 0,
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
+    },
+    [RESOURCE_TYPES.WORKSHOP]: {
         value: 0,
         limit: Number.MAX_VALUE,
         displayGenerationRate: false
