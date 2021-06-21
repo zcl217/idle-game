@@ -57,15 +57,15 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: {
         title: 'Build Workshop',
-        text: `Converts wood into wood planks. Each workshop can generate ${WORKSHOP_WOOD_PLANK_OUTPUT}/s`
+        text: `Converts wood into wood planks`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: {
         title: 'Build Iron Smelter',
-        text: `Converts raw ore into iron. Each smelter can generate ${IRON_SMELTER_IRON_OUTPUT}/s`
+        text: `Converts raw ore into iron`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: {
         title: 'Build Blast Furnace',
-        text: `Converts iron into steel. Each furnace can generate ${BLAST_FURNACE_STEEL_OUTPUT}/s`
+        text: `Converts iron into steel`
     },
 }
 

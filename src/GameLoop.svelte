@@ -1,16 +1,12 @@
 <script lang="ts">
-    import { resources, workshopsActivated } from "./store/resources";
+    import { resources } from "./store/resources";
     import { workers } from "./store/workers";
     import {
         RESOURCE_TYPES,
         GENERATABLE_RESOURCES,
     } from "./constants/resources/resourceTypes";
     import { calculateGenerationRate } from "./utils/resourceGeneration";
-    import {
-        blastFurnacesActivated,
-        insufficientFood,
-        ironSmeltersActivated,
-    } from "./store/resources";
+    import { insufficientFood } from "./store/resources";
     import {
         getIndustryInputList,
         getIndustryOutputList,
@@ -19,7 +15,6 @@
         INDUSTRY_BUILDINGS,
         INDUSTRY_BUILDING_STORE_MAP,
     } from "./constants/resources/industry";
-    import Industry from "./components/resources/Industry.svelte";
     import { get } from "svelte/store";
 
     let previousTime = new Date();
@@ -41,11 +36,12 @@
     };
 
     const handleResourceGeneration = (secondsElapsed: number, type: string) => {
-        const generationRate = calculateGenerationRate(
+        let generationRate = calculateGenerationRate(
             type,
             $resources,
             $workers,
-            $insufficientFood
+            $insufficientFood,
+            process.env.isDev
         );
         if (type === RESOURCE_TYPES.FOOD) {
             const hasFoodShortage =
@@ -53,15 +49,14 @@
             insufficientFood.set(hasFoodShortage);
         }
         if (generationRate < 0 && $resources[type].value === 0) return;
-        //nsole.log($resources[type])
         resources.incrementResourceValue(type, generationRate * secondsElapsed);
     };
 
     const handleIndustryBuildings = (secondsElapsed: number) => {
         for (const industryBuilding of INDUSTRY_BUILDINGS) {
-            const buildingActivated =
+            const industryBuildingActivated =
                 INDUSTRY_BUILDING_STORE_MAP[industryBuilding];
-            if (get(buildingActivated)) {
+            if (get(industryBuildingActivated)) {
                 handleIndustryGeneration(industryBuilding, secondsElapsed);
             }
         }

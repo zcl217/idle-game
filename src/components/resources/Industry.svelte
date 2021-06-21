@@ -3,6 +3,7 @@
     import {
         INDUSTRY_BUILDINGS,
         INDUSTRY_BUILDING_STORE_MAP,
+        INDUSTRY_BUILDING_TITLES,
     } from "~/constants/resources/industry";
     import { obtainedResources } from "~/store/resources";
     import IndustryBuilding from "./IndustryBuilding.svelte";
@@ -11,6 +12,9 @@
         const store = INDUSTRY_BUILDING_STORE_MAP[industryBuilding];
         store.set(state);
     };
+    $: unlockedIndustries = INDUSTRY_BUILDINGS.filter((industry) =>
+        $obtainedResources.has(industry)
+    ).length;
 </script>
 
 <div class="flex flex-row flex-wrap justify-around">
@@ -23,4 +27,7 @@
             />
         {/if}
     {/each}
+    {#if unlockedIndustries % 2 !== 0}
+        <div class="flex-grow" />
+    {/if}
 </div>

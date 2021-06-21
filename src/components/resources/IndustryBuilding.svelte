@@ -1,5 +1,5 @@
 <script lang="ts">
-import { INDUSTRY_BUILDING_TITLES } from "~/constants/resources/industry";
+    import { INDUSTRY_BUILDING_TITLES } from "~/constants/resources/industry";
 
     import {
         RESOURCE_NAMES,
@@ -24,7 +24,7 @@ import { INDUSTRY_BUILDING_TITLES } from "~/constants/resources/industry";
 
 <div class="flex flex-col w-1/2 mb-10">
     <div class="text-xl text-center">{title}</div>
-    <div class="flex flex-row justify-center my-5">
+    <div class="flex flex-row justify-center flex-grow my-4">
         <div class="flex flex-col mr-10">
             <p>Input:</p>
             {#each Object.entries(inputList) as [key, value]}
@@ -62,6 +62,10 @@ import { INDUSTRY_BUILDING_TITLES } from "~/constants/resources/industry";
 <style>
     .mr-10 {
         margin-right: 2.5rem;
+    }
+    .my-4 {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
     .w-1\/2 {
         width: 50%;

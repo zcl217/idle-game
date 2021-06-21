@@ -12,7 +12,7 @@
         MARKET,
     }
     let selectedTab = TABS.WORKERS;
-    $: industryUnlocked = $obtainedResources.has(RESOURCE_TYPES.WAREHOUSE);
+    $: industryUnlocked = $obtainedResources.has(RESOURCE_TYPES.WORKSHOP);
 </script>
 
 {#if industryUnlocked}

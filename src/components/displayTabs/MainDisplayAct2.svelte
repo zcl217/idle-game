@@ -1,5 +1,5 @@
 <script lang="ts">
-    import InfoBoxButton from "../InfoBoxButton.svelte";
+    import InfoBoxButton from "~/components/infoBoxes/InfoBoxButton.svelte";
     import CharacterFrame from "../CharacterFrame.svelte";
     import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
     import {
@@ -71,6 +71,7 @@
                 $hiddenButtons.add(EMPIRE_BUTTON_TYPES.BUILD_LIBRARY);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
+                resources.setResourceValue(RESOURCE_TYPES.WOOD_PLANK, 0);
                 workers.increment(WORKER_TYPES.UNASSIGNED, 1);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_STORAGE:

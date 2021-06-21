@@ -1,29 +1,32 @@
 <script>
     import MenuTabs from "./MenuTabs.svelte";
-    import ResourceOverview from "../components/ResourceOverview.svelte";
-    import MainDisplay from "../components/displayTabs/MainDisplay.svelte";
-    import MainDisplayAct2 from "../components/displayTabs/MainDisplayAct2.svelte";
-    import ResourcesTab from "../components/displayTabs/ResourcesTab.svelte";
-    import ScienceTab from "../components/displayTabs/ScienceTab.svelte";
-    import BarracksTab from "../components/displayTabs/BarracksTab.svelte";
+    import ResourceOverview from "~/components/ResourceOverview.svelte";
+    import MainDisplay from "~/components/displayTabs/MainDisplay.svelte";
+    import MainDisplayAct2 from "~/components/displayTabs/MainDisplayAct2.svelte";
+    import ResourcesTab from "~/components/displayTabs/ResourcesTab.svelte";
+    import ScienceTab from "~/components/displayTabs/ScienceTab.svelte";
+    import BarracksTab from "~/components/displayTabs/BarracksTab.svelte";
     import ExpeditionTab from "~/components/displayTabs/ExpeditionTab.svelte";
     import SaveTab from "~/components/displayTabs/SaveTab.svelte";
-    import MessageLog from "../components/MessageLog.svelte";
-    import DialogueBox from "../components/DialogueBox.svelte";
-    import InfoBox from "../components/InfoBox.svelte";
-    import { TABS } from "../constants/buttons/buttons";
+    import MessageLog from "~/components/MessageLog.svelte";
+    import DialogueBox from "~/components/DialogueBox.svelte";
+    import InfoBox from "~/components/InfoBoxes/InfoBox.svelte";
+    import { TABS } from "~/constants/buttons/buttons";
     import CharacterChoice from "~/components/displayTabs/CharacterChoice.svelte";
     import { curStoryProgress, inExpedition } from "~/store/gameState";
     import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
     import { STORY_PROGRESS_LIST } from "~/constants/story";
-import ResourceInfoBox from "~/components/ResourceInfoBox.svelte";
+    import ResourceInfoBox from "~/components/infoBoxes/ResourceInfoBox.svelte";
     let darkBackground = true,
         currentTab = TABS.MAIN_1,
         displayMain1 = true,
         inCharacterChoice = false;
     const toggleTab = (payload) => {
-        currentTab = payload.detail
+        currentTab = payload.detail;
     };
+    
+    if (process.env.isDev) curStoryProgress.set(STORY_PROGRESS_LIST['A2S12']);
+
     // TODO: if you're currently in main2 and you load a main1 save,
     // the worker tab isn't toggled off
     $: {

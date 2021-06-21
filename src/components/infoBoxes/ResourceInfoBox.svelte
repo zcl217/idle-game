@@ -4,14 +4,14 @@
         rowPositionY,
         rowPositionX,
         displayResourceInfoBox,
-        resourceProfitsAndLosses,
+        resourceGenerationList,
         resourceName,
-    } from "../store/infoBox";
+    } from "~/store/infoBox";
 
     let infoBox: any;
     $: infoBoxBounds = infoBox?.getBoundingClientRect();
     $: y = $rowPositionY - infoBoxBounds?.height / 2;
-    $: x = $rowPositionX + 70;
+    $: x = $rowPositionX + 90;
 
     const formatGenerationRate = (generationRate: number) => {
         const prefix = generationRate >= 0 ? "+" : "";
@@ -29,7 +29,7 @@
         <div class="flex flex-col">
             <p class="text-center">{$resourceName}</p>
             <hr class="-mx-2" />
-            {#each Object.entries($resourceProfitsAndLosses) as [name, value]}
+            {#each Object.entries($resourceGenerationList) as [name, value]}
                 {#if value !== 0}
                     <p class="text-left">
                         {name}:

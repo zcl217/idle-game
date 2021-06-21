@@ -7,7 +7,7 @@ import { GRANARY_BONUS, SAWMILL_BONUS, UNIVERSITY_BONUS, WORKER_FOOD_CONSUMPTION
 import type { IResourceList } from "~/interfaces/resource";
 import { resourcesFromExpeditions } from "~/store/resources";
 
-export const calculateGenerationRate = (type: string, resources: any, workers: any, insufficientFood: boolean): number => {
+export const calculateGenerationRate = (type: string, resources: any, workers: any, insufficientFood: boolean, isDev: boolean): number => {
     const generator = RESOURCE_GENERATOR_MAP[type];
     let resourcesFromBuildings = 0;
     if (resources && generator) {
@@ -28,7 +28,7 @@ export const calculateGenerationRate = (type: string, resources: any, workers: a
     // we don't want to include negative bonuses into the multiplier
     resourcesGenerated -= resourceConsumption;
     resourcesGenerated += get(resourcesFromExpeditions)[type];
-    resourcesGenerated += 10000;
+    // if (isDev) resourcesGenerated += 10000;
     return resourcesGenerated;
 }
 

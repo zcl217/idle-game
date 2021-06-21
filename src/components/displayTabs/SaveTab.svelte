@@ -106,8 +106,10 @@
         } catch (error) {
             console.log(error);
             loadError = true;
+            loadSuccess = false;
             return;
         }
+        loadError = false;
         loadSuccess = true;
     };
     const setStoreValues = (stores: any, storeValues: any[]) => {

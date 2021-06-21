@@ -147,22 +147,23 @@ export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.WOOD, cost: 500 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: [
-        { type: RESOURCE_TYPES.WOOD, cost: 500 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 30 },
         { type: RESOURCE_TYPES.IRON, cost: 5 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: [
-        { type: RESOURCE_TYPES.FOOD, cost: 400 },
-        { type: RESOURCE_TYPES.WOOD, cost: 50 },
+        { type: RESOURCE_TYPES.FOOD, cost: 500 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 20 },
         { type: RESOURCE_TYPES.IRON, cost: 10 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: [
         { type: RESOURCE_TYPES.WOOD, cost: 500 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 20 },
         { type: RESOURCE_TYPES.IRON, cost: 10 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 500 },
-        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 500 },
         { type: RESOURCE_TYPES.FURS, cost: 100 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 20 },
         { type: RESOURCE_TYPES.IRON, cost: 10 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: [
@@ -170,17 +171,18 @@ export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.GOLD, cost: 1 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: [
-        { type: RESOURCE_TYPES.WOOD, cost: 5000 },
         { type: RESOURCE_TYPES.RAW_ORE, cost: 5000 },
         { type: RESOURCE_TYPES.COAL, cost: 500 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 100 },
         { type: RESOURCE_TYPES.GOLD, cost: 5 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: [
-        { type: RESOURCE_TYPES.WOOD, cost: 10000 },
         { type: RESOURCE_TYPES.RAW_ORE, cost: 10000 },
+        { type: RESOURCE_TYPES.WOOD, cost: 5000 },
         { type: RESOURCE_TYPES.COAL, cost: 1000 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 200 },
         { type: RESOURCE_TYPES.IRON, cost: 100 },
-        { type: RESOURCE_TYPES.GOLD, cost: 10 },
+        { type: RESOURCE_TYPES.GOLD, cost: 20 },
     ],
 }
 

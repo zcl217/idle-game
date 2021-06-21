@@ -5,7 +5,7 @@
         buttonCategory,
         buttonPositionX,
         buttonPositionY,
-    } from "../store/infoBox";
+    } from "~/store/infoBox";
     import {
         BUTTON_CATEGORIES,
         BUTTON_WIDTH,

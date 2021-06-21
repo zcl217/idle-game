@@ -1,9 +1,9 @@
 <script lang="ts">
-import { initial } from "lodash";
+    import { initial } from "lodash";
 
-import { onMount } from "svelte";
+    import { onMount } from "svelte";
 
-    import InfoBoxButton from "~/components/InfoBoxButton.svelte";
+    import InfoBoxButton from "~/components/infoBoxes/InfoBoxButton.svelte";
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
     import {
         MILITARY_BUTTON_COSTS,
@@ -13,7 +13,10 @@ import { onMount } from "svelte";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { militaryUnitList } from "~/store/military";
     import { resources } from "~/store/resources";
-    import { hasEnoughResources, spendResources } from "~/utils/resourceHelpers";
+    import {
+        hasEnoughResources,
+        spendResources,
+    } from "~/utils/resourceHelpers";
     import FramedSprite from "./FramedSprite.svelte";
 
     const BUTTON_WIDTH = 145;
@@ -42,7 +45,7 @@ import { onMount } from "svelte";
             default:
                 break;
         }
-    }
+    };
 
     const trainUnit = () => {
         const buttonType = getTrainButtonType();
@@ -191,7 +194,7 @@ import { onMount } from "svelte";
                 return MILITARY_BUTTON_TYPES.DISABLED_UPGRADE;
         }
     };
-    
+
     let curUpgradeButtonType = getUpgradeButtonType();
 </script>
 

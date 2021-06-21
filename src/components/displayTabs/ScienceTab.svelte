@@ -1,5 +1,5 @@
 <script lang="ts">
-    import InfoBoxButton from "../InfoBoxButton.svelte";
+    import InfoBoxButton from "~/components/infoBoxes/InfoBoxButton.svelte";
     import {
         BUTTON_CATEGORIES,
         BUTTON_WIDTH,

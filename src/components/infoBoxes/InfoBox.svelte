@@ -5,15 +5,15 @@
         buttonCategory,
         buttonPositionX,
         buttonPositionY,
-    } from "../store/infoBox";
-    import { resources } from "../store/resources";
+    } from "~/store/infoBox";
+    import { resources } from "~/store/resources";
     import {
         EMPIRE_INFO_BOXES,
         MILITARY_INFO_BOXES,
         OTHER_INFO_BOXES,
         SCIENCE_INFO_BOXES,
-    } from "../constants/infoBoxes";
-    import { resourceParser } from "../utils/resourceHelpers";
+    } from "~/constants/infoBoxes";
+    import { resourceParser } from "~/utils/resourceHelpers";
     import { empireButtonCosts } from "~/store/buttonCosts";
     import type { IButtonCost } from "~/interfaces/buttons";
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";

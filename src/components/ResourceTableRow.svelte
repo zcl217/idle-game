@@ -1,20 +1,14 @@
 <script lang="ts">
-import { keyBy } from "lodash";
-
     import { onDestroy } from "svelte";
+    import { get } from "svelte/store";
     import { WORKER_FOOD_CONSUMPTION } from "~/constants/gameState";
-
     import {
-        BLAST_FURNACE_COAL_INPUT,
-        BLAST_FURNACE_INPUTS,
-        BLAST_FURNACE_IRON_INPUT,
-        BLAST_FURNACE_STEEL_OUTPUT,
-        IRON_SMELTER_COAL_INPUT,
-        IRON_SMELTER_INPUTS,
-        IRON_SMELTER_IRON_OUTPUT,
-        IRON_SMELTER_ORE_INPUT,
+        INDUSTRY_BUILDING_STORE_MAP,
+        INDUSTRY_INPUTS_MAP,
+        RESOURCE_INPUT_TO_INDUSTRY_BUILDINGS_MAP,
+        RESOURCE_TO_RESOURCE_OUTPUT_MAP,
+        RESOURCE_OUTPUT_TO_INDUSTRY_BUILDING_MAP,
     } from "~/constants/resources/industry";
-
     import {
         RESOURCE_GENERATOR_MAP,
         RESOURCE_NAMES,
@@ -28,14 +22,12 @@ import { keyBy } from "lodash";
     import {
         displayResourceInfoBox,
         resourceName,
-        resourceProfitsAndLosses,
+        resourceGenerationList,
         rowPositionX,
         rowPositionY,
     } from "~/store/infoBox";
     import {
-        blastFurnacesActivated,
         insufficientFood,
-        ironSmeltersActivated,
         resources,
         resourcesFromExpeditions,
     } from "~/store/resources";
@@ -44,127 +36,75 @@ import { keyBy } from "lodash";
         calculateGenerationRate,
         calculateResourceMultiplier,
     } from "~/utils/resourceGeneration";
-
     import { resourceParser } from "~/utils/resourceHelpers";
 
     export let resource: IResource, type: string;
-    let formattedGenerationRate = '';
+    let formattedGenerationRate = "";
     $: {
         $resources;
         formattedGenerationRate = formatGenerationRate(type);
     }
+
+    const hasEnoughInputResources = (
+        buildingType: string,
+        buildingCount: number
+    ) => {
+        const inputList = INDUSTRY_INPUTS_MAP[buildingType];
+        let hasEnoughResources = true;
+        for (const resourceType in inputList) {
+            const resourcesRequired = buildingCount * inputList[resourceType];
+            if ($resources[resourceType].value < resourcesRequired) {
+                hasEnoughResources = false;
+                break;
+            }
+        }
+        return hasEnoughResources;
+    };
 
     const formatGenerationRate = (type: string): string => {
         let generationRate = calculateGenerationRate(
             type,
             $resources,
             $workers,
-            $insufficientFood
+            $insufficientFood,
+            process.env.isDev,
         );
-        generationRate -= getResourceConsumption(type);
-        generationRate += getAdditionalResourceGeneration(type);
+        generationRate -= getIndustryConsumption(type);
+        generationRate += getIndustryGeneration(type);
         const prefix = generationRate >= 0 ? "+" : "";
         const formattedGenerationRate = resourceParser(generationRate);
         return `${prefix}${formattedGenerationRate}/s`;
     };
 
-    const getResourceConsumption = (type: string): number => {
-        const ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
-        const blastFurnaceCount =
-            $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
-        switch (type) {
-            case RESOURCE_TYPES.RAW_ORE:
-                return $ironSmeltersActivated
-                    ? ironSmelterCount * IRON_SMELTER_ORE_INPUT
-                    : 0;
-            case RESOURCE_TYPES.COAL:
-                const ironSmelterConsumption =
-                    ironSmelterCount * IRON_SMELTER_COAL_INPUT;
-                const blastFurnaceConsumption =
-                    blastFurnaceCount * BLAST_FURNACE_COAL_INPUT;
-                if ($ironSmeltersActivated && $blastFurnacesActivated) {
-                    return ironSmelterConsumption + blastFurnaceConsumption;
-                }
-                if ($ironSmeltersActivated) return ironSmelterConsumption;
-                if ($blastFurnacesActivated) return blastFurnaceConsumption;
-                break;
-            case RESOURCE_TYPES.IRON:
-                if ($blastFurnacesActivated) {
-                    return blastFurnaceCount * BLAST_FURNACE_IRON_INPUT;
-                }
-                break;
-            default:
-                return 0;
+    const getIndustryConsumption = (resourceType: string): number => {
+        let total = 0;
+        const industryBuildingList =
+            RESOURCE_INPUT_TO_INDUSTRY_BUILDINGS_MAP[resourceType];
+        if (!industryBuildingList) return 0;
+        for (let industryBuilding of industryBuildingList) {
+            const industryBuildingActivated =
+                INDUSTRY_BUILDING_STORE_MAP[industryBuilding];
+            if (!get(industryBuildingActivated)) continue;
+            const industryInputs = INDUSTRY_INPUTS_MAP[industryBuilding];
+            const buildingCount = $resources[industryBuilding].value;
+            total += buildingCount + industryInputs[resourceType];
         }
-        return 0;
+        return total;
     };
 
-    const getAdditionalResourceGeneration = (type: string) => {
-        const ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
-        const blastFurnaceCount =
-            $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
-        switch (type) {
-            case RESOURCE_TYPES.IRON:
-                if (!$ironSmeltersActivated) return 0;
-                for (const type in IRON_SMELTER_INPUTS) {
-                    if (
-                        !hasEnoughInputResource(
-                            ironSmelterCount,
-                            IRON_SMELTER_INPUTS[type],
-                            type
-                        )
-                    )
-                        return 0;
-                }
-                return ironSmelterCount * IRON_SMELTER_IRON_OUTPUT;
-            case RESOURCE_TYPES.STEEL:
-                if (!$blastFurnacesActivated) return 0;
-                for (const type in BLAST_FURNACE_INPUTS) {
-                    if (
-                        !hasEnoughInputResource(
-                            blastFurnaceCount,
-                            BLAST_FURNACE_INPUTS[type],
-                            type
-                        )
-                    )
-                        return 0;
-                }
-                return blastFurnaceCount * BLAST_FURNACE_STEEL_OUTPUT;
-            default:
-                return 0;
-        }
+    const getIndustryGeneration = (resourceType: string) => {
+        const industryBuilding =
+            RESOURCE_OUTPUT_TO_INDUSTRY_BUILDING_MAP[resourceType];
+        if (!industryBuilding) return 0;
+        const industryBuildingActivated =
+            INDUSTRY_BUILDING_STORE_MAP[industryBuilding];
+        if (!get(industryBuildingActivated)) return 0;
+        const buildingCount = $resources[industryBuilding].value;
+        return buildingCount * RESOURCE_TO_RESOURCE_OUTPUT_MAP[resourceType];
     };
 
-    const hasEnoughInputResource = (
-        productionFacilityCount: number,
-        consumptionRate: number,
-        resourceType: string
-    ) => {
-        const resourcesRequired = productionFacilityCount * consumptionRate;
-        switch (resourceType) {
-            case RESOURCE_TYPES.RAW_ORE:
-                return (
-                    $resources[RESOURCE_TYPES.RAW_ORE].value > resourcesRequired
-                );
-            case RESOURCE_TYPES.COAL:
-                return (
-                    $resources[RESOURCE_TYPES.COAL].value > resourcesRequired
-                );
-            case RESOURCE_TYPES.IRON:
-                return (
-                    $resources[RESOURCE_TYPES.IRON].value > resourcesRequired
-                );
-            default:
-                return true;
-        }
-    };
-
-    const redText = (type: string) => {
-        return type === RESOURCE_TYPES.FOOD && $insufficientFood;
-    };
-
-    const getProfitList = (): Record<string, number> => {
-        const profitList: Record<string, number> = {};
+    const getGenerationList = (): Record<string, number> => {
+        const generationList: Record<string, number> = {};
         const multiplier = calculateResourceMultiplier(type, $resources);
         // profits
         const generator = RESOURCE_GENERATOR_MAP[type];
@@ -173,7 +113,7 @@ import { keyBy } from "lodash";
                 $resources[generator].value *
                 $resources[generator].generationValue;
 
-            profitList[RESOURCE_NAMES[generator]] =
+            generationList[RESOURCE_NAMES[generator]] =
                 resourcesFromBuildings * multiplier;
         }
         const workerType = WORKER_GENERATOR_MAP[type];
@@ -182,129 +122,58 @@ import { keyBy } from "lodash";
                 $workers[workerType].value *
                 $workers[workerType].generationValue;
             if ($insufficientFood) resourcesFromWorkers *= 0.5;
-            profitList[workerType] = resourcesFromWorkers * multiplier;
+            generationList[workerType] = resourcesFromWorkers * multiplier;
         }
         const expeditionProfit = $resourcesFromExpeditions[type];
         if (expeditionProfit > 0) {
-            profitList["expeditions"] = expeditionProfit;
+            generationList["expeditions"] = expeditionProfit;
         }
-        getIndustryGenerationForProfitList(profitList, type);
+        getIndustryGenerationForInfoBoxList(generationList, type);
 
         // losses
-        // we don't want to include negative bonuses into the multiplier
         if (type === RESOURCE_TYPES.FOOD) {
             const maxWorkers = $resources[RESOURCE_TYPES.HOUSE].value;
             const assignedWorkers =
                 maxWorkers - $workers[WORKER_TYPES.UNASSIGNED].value;
             const foodConsumption = assignedWorkers * WORKER_FOOD_CONSUMPTION;
-            profitList["workers"] = -1 * foodConsumption;
+            generationList["workers"] = -1 * foodConsumption;
         }
-        getResourceConsumptionForProfitList(profitList, type);
-
-        return profitList;
+        getIndustryConsumptionForInfoBoxList(generationList, type);
+        return generationList;
     };
 
-    const getIndustryGenerationForProfitList = (
-        profitList: Record<string, number>,
-        type: string
-    ) => {
-        const workshopCount = $resources[RESOURCE_TYPES.WORKSHOP].value;
-        const ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
-        const blastFurnaceCount =
-            $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
-        const workshopName = RESOURCE_NAMES[RESOURCE_TYPES.WORKSHOP];
-        const ironSmelterName = RESOURCE_NAMES[RESOURCE_TYPES.IRON_SMELTER];
-        const blastFurnaceName = RESOURCE_NAMES[RESOURCE_TYPES.BLAST_FURNACE];
-        switch (type) {
-            case RESOURCE_TYPES.IRON:
-                if (!$ironSmeltersActivated) return;
-                for (const type in IRON_SMELTER_INPUTS) {
-                    if (
-                        !hasEnoughInputResource(
-                            ironSmelterCount,
-                            IRON_SMELTER_INPUTS[type],
-                            type
-                        )
-                    )
-                        return;
-                }
-                const ironSmelterGeneration =
-                    ironSmelterCount * IRON_SMELTER_IRON_OUTPUT;
-                profitList[ironSmelterName] = ironSmelterGeneration;
-                break;
-            case RESOURCE_TYPES.STEEL:
-                if (!$blastFurnacesActivated) return;
-                for (const type in BLAST_FURNACE_INPUTS) {
-                    if (
-                        !hasEnoughInputResource(
-                            blastFurnaceCount,
-                            BLAST_FURNACE_INPUTS[type],
-                            type
-                        )
-                    )
-                        return;
-                }
-                const blastFurnaceGeneration =
-                    blastFurnaceCount * BLAST_FURNACE_STEEL_OUTPUT;
-                profitList[blastFurnaceName] = blastFurnaceGeneration;
-                break;
-            default:
-                return;
+    const getIndustryConsumptionForInfoBoxList = (generationList: Record<string, number>, resourceType: string): number => {
+        const industryBuildingList =
+            RESOURCE_INPUT_TO_INDUSTRY_BUILDINGS_MAP[resourceType];
+        if (!industryBuildingList) return;
+        for (let industryBuilding of industryBuildingList) {
+            const industryBuildingActivated =
+                INDUSTRY_BUILDING_STORE_MAP[industryBuilding];
+            if (!get(industryBuildingActivated)) continue;
+            const industryInputs = INDUSTRY_INPUTS_MAP[industryBuilding];
+            const buildingCount = $resources[industryBuilding].value;
+            const consumption = buildingCount * industryInputs[resourceType];
+            generationList[RESOURCE_NAMES[industryBuilding]] = -1 * consumption;
         }
     };
 
-    const getResourceConsumptionForProfitList = (
-        profitList: Record<string, number>,
-        type: string
-    ) => {
-        const workshopCount = $resources[RESOURCE_TYPES.WORKSHOP].value;
-        const ironSmelterCount = $resources[RESOURCE_TYPES.IRON_SMELTER].value;
-        const blastFurnaceCount =
-            $resources[RESOURCE_TYPES.BLAST_FURNACE].value;
-        const workshopName = RESOURCE_NAMES[RESOURCE_TYPES.WORKSHOP];
-        const ironSmelterName = RESOURCE_NAMES[RESOURCE_TYPES.IRON_SMELTER];
-        const blastFurnaceName = RESOURCE_NAMES[RESOURCE_TYPES.BLAST_FURNACE];
-        switch (type) {
-            case RESOURCE_TYPES.RAW_ORE: {
-                const ironSmelterConsumption =
-                    ironSmelterCount * IRON_SMELTER_ORE_INPUT;
-                if ($ironSmeltersActivated) {
-                    profitList[ironSmelterName] = -1 * ironSmelterConsumption;
-                }
-                break;
-            }
-            case RESOURCE_TYPES.COAL: {
-                const ironSmelterConsumption =
-                    ironSmelterCount * IRON_SMELTER_COAL_INPUT;
-                const blastFurnaceConsumption =
-                    blastFurnaceCount * BLAST_FURNACE_COAL_INPUT;
-                if ($ironSmeltersActivated) {
-                    profitList[ironSmelterName] = -1 * ironSmelterConsumption;
-                }
-                if ($blastFurnacesActivated) {
-                    profitList[blastFurnaceName] = -1 * blastFurnaceConsumption;
-                }
-                break;
-            }
-            case RESOURCE_TYPES.IRON: {
-                const blastFurnaceConsumption =
-                    blastFurnaceCount * BLAST_FURNACE_IRON_INPUT;
-                if ($blastFurnacesActivated) {
-                    profitList[blastFurnaceName] = -1 * blastFurnaceConsumption;
-                }
-                break;
-            }
-            default:
-                return;
-        }
-        return;
+    const getIndustryGenerationForInfoBoxList = (generationList: Record<string, number>, resourceType: string) => {
+        const industryBuilding =
+            RESOURCE_OUTPUT_TO_INDUSTRY_BUILDING_MAP[resourceType];
+        if (!industryBuilding) return;
+        const industryBuildingActivated =
+            INDUSTRY_BUILDING_STORE_MAP[industryBuilding];
+        if (!get(industryBuildingActivated)) return;
+        const buildingCount = $resources[industryBuilding].value;
+        const generation = buildingCount * RESOURCE_TO_RESOURCE_OUTPUT_MAP[resourceType];
+        generationList[RESOURCE_NAMES[resourceType]] = generation;
     };
 
     let generationRate: Element;
     let isHovering = false;
     const showInfoBox = () => {
         if (!resource.displayGenerationRate) return;
-        const resourceList = getProfitList();
+        const resourceList = getGenerationList();
         let hasNonZeroValue = false;
         for (const type in resourceList) {
             if (resourceList[type] !== 0) {
@@ -313,7 +182,7 @@ import { keyBy } from "lodash";
             }
         }
         if (!hasNonZeroValue) return;
-        resourceProfitsAndLosses.set(getProfitList());
+        resourceGenerationList.set(getGenerationList());
         displayResourceInfoBox.set(true);
         resourceName.set(RESOURCE_NAMES[type]);
         const bounds = generationRate.getBoundingClientRect();
@@ -328,6 +197,7 @@ import { keyBy } from "lodash";
     onDestroy(() => {
         hideInfoBox();
     });
+    $: isTextRed = type === RESOURCE_TYPES.FOOD && $insufficientFood;
 </script>
 
 <tr>
@@ -344,7 +214,7 @@ import { keyBy } from "lodash";
             on:mouseleave={hideInfoBox}
             class="font-resource 
                 {isHovering ? 'font-bold' : ''} 
-                {redText(type) ? 'text-red-500' : ''}"
+                {isTextRed ? 'text-red-500' : ''}"
         >
             {formattedGenerationRate}
         </td>
