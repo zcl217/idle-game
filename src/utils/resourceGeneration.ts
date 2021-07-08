@@ -3,7 +3,7 @@ import { RESOURCE_GENERATOR_MAP, RESOURCE_TYPES } from "~/constants/resources/re
 import { WORKER_GENERATOR_MAP, WORKER_TYPES } from "~/constants/workers/workerTypes";
 import { researchedSciences as researchedSciencesFromStore } from '~/store/gameState';
 import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
-import { GRANARY_BONUS, SAWMILL_BONUS, UNIVERSITY_BONUS, WORKER_FOOD_CONSUMPTION } from "~/constants/gameState";
+import { GRANARY_BONUS, QUARRY_BONUS, SAWMILL_BONUS, UNIVERSITY_BONUS, WORKER_FOOD_CONSUMPTION } from "~/constants/gameState";
 import type { IResourceList } from "~/interfaces/resource";
 import { resourcesFromExpeditions } from "~/store/resources";
 
@@ -28,7 +28,7 @@ export const calculateGenerationRate = (type: string, resources: any, workers: a
     // we don't want to include negative bonuses into the multiplier
     resourcesGenerated -= resourceConsumption;
     resourcesGenerated += get(resourcesFromExpeditions)[type];
-    // if (isDev) resourcesGenerated += 10000;
+    if (isDev) resourcesGenerated += 10000;
     return resourcesGenerated;
 }
 
@@ -54,11 +54,11 @@ export const calculateResourceMultiplier = (type: string, resources: any): numbe
         case RESOURCE_TYPES.KNOWLEDGE:
             return calculateKnowledgeMulitplier(researchedSciences, resources);
         case RESOURCE_TYPES.RAW_ORE:
-            return calculateMiningMultiplier(researchedSciences);
+            return calculateMiningMultiplier(researchedSciences, resources);
         case RESOURCE_TYPES.COAL:
-            return calculateMiningMultiplier(researchedSciences) * 0.2;
+            return calculateMiningMultiplier(researchedSciences, resources) * 0.2;
         case RESOURCE_TYPES.GOLD:
-            return calculateMiningMultiplier(researchedSciences) * 0.001;
+            return calculateMiningMultiplier(researchedSciences, resources) * 0.001;
         case RESOURCE_TYPES.FURS:
             return calculateFurMultiplier(researchedSciences);
         default:
@@ -91,11 +91,12 @@ const calculateKnowledgeMulitplier = (researchedSciences: Set<string>, resources
     return multiplier;
 }
 
-const calculateMiningMultiplier = (researchedSciences: Set<string>): number => {
+const calculateMiningMultiplier = (researchedSciences: Set<string>, resources: any): number => {
     let multiplier = 1;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.WOODEN_PICKAXE)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.IRON_PICKAXE)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.SHAFT_MINING)) multiplier += 0.5;
+    multiplier += resources[RESOURCE_TYPES.QUARRY].value * QUARRY_BONUS;
     return multiplier;
 }
 

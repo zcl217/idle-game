@@ -3,7 +3,7 @@ import { EMPIRE_BUTTON_TYPES } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
 import { MILITARY_BUTTON_TYPES } from './buttons/militaryButtons';
 import { SCIENCE_BUTTON_TYPES } from './buttons/scienceButtons';
-import { GRANARY_BONUS, GRANARY_CAPACITY, SAWMILL_BONUS, SAWMILL_CAPACITY, STORAGE_CAPACITY, UNIVERSITY_BONUS, UNIVERSITY_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
+import { GRANARY_BONUS, GRANARY_CAPACITY, QUARRY_BONUS, QUARRY_CAPACITY, SAWMILL_BONUS, SAWMILL_CAPACITY, STORAGE_CAPACITY, UNIVERSITY_BONUS, UNIVERSITY_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
 import { BLAST_FURNACE_STEEL_OUTPUT, IRON_SMELTER_IRON_OUTPUT, WORKSHOP_WOOD_PLANK_OUTPUT } from './resources/industry';
 
 export const EMPIRE_INFO_BOXES: IInfoBoxList = {
@@ -45,15 +45,19 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: {
         title: 'Build Granary',
-        text: `Increases food storage limit by ${GRANARY_CAPACITY} and food acquisition by ${GRANARY_BONUS * 100}% per granary`
+        text: `Increases food storage limit by ${GRANARY_CAPACITY} and acquisition by ${GRANARY_BONUS * 100}% per granary`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: {
         title: 'Build Sawmill',
-        text: `Increase wood storage limit by ${SAWMILL_CAPACITY} and wood acquisition by ${SAWMILL_BONUS * 100}% per sawmill`
+        text: `Increase wood storage limit by ${SAWMILL_CAPACITY} and acquisition by ${SAWMILL_BONUS * 100}% per sawmill`
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_QUARRY]: {
+        title: 'Build Quarry',
+        text: `Increase raw ore, coal, and gold storage limit by ${QUARRY_CAPACITY} and acquisition by ${QUARRY_BONUS * 100}% per quarry`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: {
         title: 'Build University',
-        text: `Increase knowledge storage limit by ${UNIVERSITY_CAPACITY} and knowledge acquisition by ${UNIVERSITY_BONUS * 100}% per university`
+        text: `Increase knowledge storage limit by ${UNIVERSITY_CAPACITY} and acquisition by ${UNIVERSITY_BONUS * 100}% per university`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: {
         title: 'Build Workshop',
@@ -82,6 +86,10 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
         title: 'Industry',
         text: 'Unlocks advanced material generation',
     },
+    [SCIENCE_BUTTON_TYPES.ADVANCED_INDUSTRY]: {
+        title: 'Industry',
+        text: 'Unlocks even more advanced material generation',
+    },
     [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE]: {
         title: 'Laws of Nature',
         text: 'Unlocks more advanced technology',
@@ -93,6 +101,10 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
     [SCIENCE_BUTTON_TYPES.CONSCRIPTION]: {
         title: 'Conscription',
         text: 'Unlocks unit training in the barracks',
+    },
+    [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: {
+        title: 'Standing Army',
+        text: 'Increases unit limit by 1',
     },
     [SCIENCE_BUTTON_TYPES.BLOCK_PRINTING]: {
         title: 'Block Printing',

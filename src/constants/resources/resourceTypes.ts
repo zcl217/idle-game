@@ -25,7 +25,8 @@ export const RESOURCE_TYPES: Record<string, string> = {
     SINATRAS_SHATTERED_ARMOR: 'sinatraShatteredArmor',
     HALBERD_OF_ADUN: 'halberdOfAdun',
     LUTAREZS_WARHAMMER: 'lutarezWarhammer',
-    AEDUS_TOME_OF_KNOWLEDGE: 'aedusTomeOfKnowledge'
+    AEDUS_TOME_OF_KNOWLEDGE: 'aedusTomeOfKnowledge',
+    GEM_OF_ETHEREALITY: 'gemOfEthereality'
 }
 
 export const RESOURCE_NAMES: Record<string, string> = {
@@ -54,7 +55,8 @@ export const RESOURCE_NAMES: Record<string, string> = {
     [RESOURCE_TYPES.SINATRAS_SHATTERED_ARMOR]: `Sinatra's Shattered Armor`,
     [RESOURCE_TYPES.HALBERD_OF_ADUN]: 'Halberd of Adun',
     [RESOURCE_TYPES.LUTAREZS_WARHAMMER]: `Lutarez's Warhammer`,
-    [RESOURCE_TYPES.AEDUS_TOME_OF_KNOWLEDGE]: `Aedus' Tome of Knowledge`
+    [RESOURCE_TYPES.AEDUS_TOME_OF_KNOWLEDGE]: `Aedus' Tome of Knowledge`,
+    [RESOURCE_TYPES.GEM_OF_ETHEREALITY]: `Gem of Ethereality`,
 }
 
 export const SPECIAL_RESOURCES = new Set<string>([

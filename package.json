@@ -28,5 +28,7 @@
     "build": "cross-env NODE_ENV=production webpack",
     "dev": "webpack serve --content-base public"
   },
-  "dependencies": {}
+  "dependencies": {
+    "svelte-watch-resize": "^1.0.3"
+  }
 }

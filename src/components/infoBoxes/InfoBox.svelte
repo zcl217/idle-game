@@ -19,15 +19,24 @@
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
     import { SCIENCE_BUTTON_COSTS } from "~/constants/buttons/scienceButtons";
     import { MILITARY_BUTTON_COSTS } from "~/constants/buttons/militaryButtons";
-import { RESOURCE_NAMES } from "~/constants/resources/resourceTypes";
+    import { RESOURCE_NAMES } from "~/constants/resources/resourceTypes";
 
+    export let displayScreenHeight;
     let infoBox: any,
         costs: IButtonCost[] = [],
         title: string,
-        text: string;
+        text: string,
+        y: number;
 
     $: infoBoxBounds = infoBox?.getBoundingClientRect();
-    $: y = $buttonPositionY - infoBoxBounds?.height / 2;
+    $: {
+        y = $buttonPositionY - infoBoxBounds?.height / 2;
+        if (y) {
+            if (y + infoBoxBounds.height > displayScreenHeight) {
+                y = displayScreenHeight - infoBoxBounds.height + 50;
+            }
+        }
+    }
     $: x = $buttonPositionX - infoBoxBounds?.width - 10;
     $: {
         switch ($buttonCategory) {

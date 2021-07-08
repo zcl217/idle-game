@@ -21,7 +21,7 @@
     const zone1: string[] = [];
     const zone2: string[] = [];
     const zone3: string[] = [];
-    let zone2Unlocked: boolean = false;
+    let zone2Unlocked: boolean = true;
     let zone3Unlocked: boolean = false;
     let enemyPreviewList: { sprite: ISprite; amount: number }[] = [];
     let enemySpawnPointText = "Enemy spawn point: Bottom";

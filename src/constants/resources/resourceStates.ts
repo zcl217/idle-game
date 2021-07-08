@@ -99,6 +99,11 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         limit: Number.MAX_VALUE,
         displayGenerationRate: false
     },
+    [RESOURCE_TYPES.QUARRY]: {
+        value: 0,
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
+    },
     [RESOURCE_TYPES.UNIVERSITY]: {
         value: 0,
         limit: Number.MAX_VALUE,
@@ -135,6 +140,11 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         displayGenerationRate: false
     },
     [RESOURCE_TYPES.AEDUS_TOME_OF_KNOWLEDGE]: {
+        value: 0,
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
+    },
+    [RESOURCE_TYPES.GEM_OF_ETHEREALITY]: {
         value: 0,
         limit: Number.MAX_VALUE,
         displayGenerationRate: false

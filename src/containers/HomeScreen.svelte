@@ -1,4 +1,5 @@
 <script>
+    import { watchResize } from "svelte-watch-resize";
     import MenuTabs from "./MenuTabs.svelte";
     import ResourceOverview from "~/components/ResourceOverview.svelte";
     import MainDisplay from "~/components/displayTabs/MainDisplay.svelte";
@@ -17,15 +18,23 @@
     import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
     import { STORY_PROGRESS_LIST } from "~/constants/story";
     import ResourceInfoBox from "~/components/infoBoxes/ResourceInfoBox.svelte";
+    import { onMount } from "svelte";
     let darkBackground = true,
         currentTab = TABS.MAIN_1,
         displayMain1 = true,
-        inCharacterChoice = false;
+        inCharacterChoice = false,
+        displayScreen,
+        displayScreenHeight;
+
+    onMount(() => {
+        displayScreenHeight = displayScreen?.getBoundingClientRect().height;
+    });
+    
     const toggleTab = (payload) => {
         currentTab = payload.detail;
     };
-    
-    if (process.env.isDev) curStoryProgress.set(STORY_PROGRESS_LIST['A2S12']);
+
+    if (process.env.isDev) curStoryProgress.set(STORY_PROGRESS_LIST["A2S12"]);
 
     // TODO: if you're currently in main2 and you load a main1 save,
     // the worker tab isn't toggled off
@@ -41,6 +50,12 @@
             inCharacterChoice = false;
         }
     }
+
+    $: displayScreenHeight = displayScreen?.getBoundingClientRect().height;
+
+    const handleResize = () => {
+        displayScreenHeight = displayScreen?.getBoundingClientRect().height;
+    };
 </script>
 
 <div class="overflow-auto bg-gray-800 rpgui-content w-min-1300px">
@@ -74,7 +89,9 @@
                 <div class="mt-68px" />
             {/if}
             <div
-                class="w-8/12 w-min-840px h-min-620px h-5/6 rpgui-container framed-golden-2"
+                class="w-8/12 overflow-y-auto w-min-840px h-min-620px h-5/6 rpgui-container framed-golden-2"
+                bind:this={displayScreen}
+                use:watchResize={handleResize}
             >
                 {#if currentTab === TABS.MAIN_2}
                     <MainDisplayAct2 />
@@ -97,7 +114,7 @@
         </div>
     </div>
     <DialogueBox />
-    <InfoBox />
+    <InfoBox {displayScreenHeight} />
     <ResourceInfoBox />
 </div>
 
@@ -116,5 +133,21 @@
 
     .mt-68px {
         margin-top: 68px;
+    }
+    ::-webkit-scrollbar {
+        width: 12px; /* width of the entire scrollbar */
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #be6714; /* color of the tracking area */
+        border-radius: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: white; /* color of the scroll thumb */
+        border-radius: 20px; /* roundness of the scroll thumb */
+        border: 3px solid #be6714; /* creates padding around scroll thumb */
     }
 </style>

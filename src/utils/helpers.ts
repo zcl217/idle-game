@@ -1,5 +1,5 @@
 import { SCIENCE_BUTTON_PREREQS } from '~/constants/buttons/scienceButtons';
-import { EMPIRE_BUTTON_PREREQS } from '~/constants/buttons/empireButtons';
+import { EMPIRE_BUTTON_PREREQS, EMPIRE_BUTTON_TYPES } from '~/constants/buttons/empireButtons';
 import { get } from 'svelte/store';
 import {
     researchedSciences as researchedSciencesFromStore,

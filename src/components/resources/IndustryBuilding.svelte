@@ -22,23 +22,33 @@
     $: buildingCount = $resources[industryBuilding].value;
 </script>
 
-<div class="flex flex-col w-1/2 mb-10">
-    <div class="text-xl text-center">{title}</div>
-    <div class="flex flex-row justify-center flex-grow my-4">
+<div class="container flex flex-row mb-10">
+    <p class="flex items-center text-xl flex-25">{title}</p>
+    <div class="flex flex-row flex-grow flex-25">
         <div class="flex flex-col mr-10">
-            <p>Input:</p>
+            <p class="industry-text">Input:</p>
             {#each Object.entries(inputList) as [key, value]}
-                <p>{RESOURCE_NAMES[key]} {buildingCount * value}/s</p>
-            {/each}
-        </div>
-        <div class="flex flex-col">
-            <p>Output:</p>
-            {#each Object.entries(outputList) as [key, value]}
-                <p>{RESOURCE_NAMES[key]} {buildingCount * value}/s</p>
+                <p class="industry-text">
+                    {RESOURCE_NAMES[key]}
+                    {buildingCount * value}/s
+                </p>
             {/each}
         </div>
     </div>
-    <div class="flex flex-row justify-evenly">
+
+    <div class="flex flex-row flex-grow flex-25">
+        <div class="flex flex-col">
+            <p class="industry-text">Output:</p>
+            {#each Object.entries(outputList) as [key, value]}
+                <p class="industry-text">
+                    {RESOURCE_NAMES[key]}
+                    {buildingCount * value}/s
+                </p>
+            {/each}
+        </div>
+    </div>
+
+    <div class="flex flex-row flex-25 justify-evenly">
         <input
             class="rpgui-radio golden"
             id={offName}
@@ -60,6 +70,18 @@
 </div>
 
 <style>
+    .flex-25 {
+        flex: 25%;
+    }
+    .flex-50 {
+        flex: 50%;
+    }
+    .industry-text {
+    }
+
+    .container p {
+        font-size: 12px;
+    }
     .mr-10 {
         margin-right: 2.5rem;
     }

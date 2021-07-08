@@ -27,7 +27,4 @@
             />
         {/if}
     {/each}
-    {#if unlockedIndustries % 2 !== 0}
-        <div class="flex-grow" />
-    {/if}
 </div>

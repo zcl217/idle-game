@@ -5,34 +5,37 @@ import { RESOURCE_TYPES } from '../resources/resourceTypes';
 
 export const SCIENCE_BUTTON_TYPES = {
     MATHEMATICS: 'mathematics',
-    CRANE: 'crane',
-    INDUSTRY: 'industry',
-    LAWS_OF_NATURE: 'lawsOfNature',
-    ART_OF_WAR: 'artOfWar',
-    CONSCRIPTION: 'conscription',
-    BLOCK_PRINTING: 'blockPrinting',
     DOUBLE_BIT_AXE: 'doubleBitAxe',
+    ORE_MINING: 'oreMining',
+    HORSE_COLLAR: 'horseCollar',
+    BLOCK_PRINTING: 'blockPrinting',
     BOW_SAW: 'bowSaw',
     TWO_MAN_SAW: 'twoManSaw',
-    HORSE_COLLAR: 'horseCollar',
     HEAVY_PLOW: 'heavyPlow',
     CROP_ROTATION: 'cropRotation',
     WOODEN_PICKAXE: 'woodenPickaxe',
     IRON_PICKAXE: 'ironPickaxe',
     SHAFT_MINING: 'shaftMining',
-    ORE_MINING: 'oreMining',
+    CRANE: 'crane',
+    INDUSTRY: 'industry',
+    ADVANCED_INDUSTRY: 'advancedIndustry',
+    LAWS_OF_NATURE: 'lawsOfNature',
+    ART_OF_WAR: 'artOfWar',
+    CONSCRIPTION: 'conscription',
     IRON_SMELTING: 'ironSmelting',
     STEELMAKING: 'steelMaking',
     BARRACKS: 'barracks',
     SLINGSHOTS: 'slingshots',
     HEAVY_INFANTRY: 'heavyInfantry',
     MAGIC: 'magic',
+    STANDING_ARMY: 'standingArmy',
 }
 
 export const SCIENCE_BUTTON_TEXTS = {
     [SCIENCE_BUTTON_TYPES.MATHEMATICS]: 'Mathematics',
     [SCIENCE_BUTTON_TYPES.CRANE]: 'Treadmill Crane',
     [SCIENCE_BUTTON_TYPES.INDUSTRY]: 'Industry',
+    [SCIENCE_BUTTON_TYPES.ADVANCED_INDUSTRY]: 'Advanced Industry',
     [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE]: 'Laws of Nature',
     [SCIENCE_BUTTON_TYPES.ART_OF_WAR]: 'Art of War',
     [SCIENCE_BUTTON_TYPES.CONSCRIPTION]: 'Conscription',
@@ -53,61 +56,10 @@ export const SCIENCE_BUTTON_TEXTS = {
     [SCIENCE_BUTTON_TYPES.SLINGSHOTS]: 'Slingshots',
     [SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY]: 'Heavy Infantry',
     [SCIENCE_BUTTON_TYPES.MAGIC]: 'Magic',
+    [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: 'Standing Army',
 }
 
 export const SCIENCE_BUTTON_PREREQS: IPrereqsList = {
-    [SCIENCE_BUTTON_TYPES.MATHEMATICS]: {
-        sciencePrereqs: [],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.BLOCK_PRINTING]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MATHEMATICS, SCIENCE_BUTTON_TYPES.ORE_MINING],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.CRANE]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MATHEMATICS],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.INDUSTRY]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.IRON_SMELTING]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.ORE_MINING, SCIENCE_BUTTON_TYPES.INDUSTRY],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.BARRACKS]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.IRON_SMELTING],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.SLINGSHOTS]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.BARRACKS],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.BARRACKS, SCIENCE_BUTTON_TYPES.STEELMAKING],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.CONSCRIPTION]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MATHEMATICS, SCIENCE_BUTTON_TYPES.BARRACKS],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE, SCIENCE_BUTTON_TYPES.IRON_SMELTING, SCIENCE_BUTTON_TYPES.BARRACKS],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.MAGIC]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.BARRACKS, SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.STEELMAKING]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE, SCIENCE_BUTTON_TYPES.IRON_SMELTING],
-        resourcePrereqs: []
-    },
-    [SCIENCE_BUTTON_TYPES.ART_OF_WAR]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
-        resourcePrereqs: []
-    },
     [SCIENCE_BUTTON_TYPES.DOUBLE_BIT_AXE]: {
         sciencePrereqs: [],
         resourcePrereqs: []
@@ -118,6 +70,18 @@ export const SCIENCE_BUTTON_PREREQS: IPrereqsList = {
     },
     [SCIENCE_BUTTON_TYPES.ORE_MINING]: {
         sciencePrereqs: [],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.MATHEMATICS]: {
+        sciencePrereqs: [],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.CRANE]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MATHEMATICS],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.INDUSTRY]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
         resourcePrereqs: []
     },
     [SCIENCE_BUTTON_TYPES.BOW_SAW]: {
@@ -148,6 +112,54 @@ export const SCIENCE_BUTTON_PREREQS: IPrereqsList = {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.IRON_PICKAXE, SCIENCE_BUTTON_TYPES.STEELMAKING],
         resourcePrereqs: []
     },
+    [SCIENCE_BUTTON_TYPES.BLOCK_PRINTING]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MATHEMATICS, SCIENCE_BUTTON_TYPES.ORE_MINING],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.ADVANCED_INDUSTRY]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.INDUSTRY],
+        resourcePrereqs: [RESOURCE_TYPES.GEM_OF_ETHEREALITY]
+    },
+    [SCIENCE_BUTTON_TYPES.IRON_SMELTING]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.ORE_MINING, SCIENCE_BUTTON_TYPES.INDUSTRY],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.BARRACKS]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.IRON_SMELTING],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.SLINGSHOTS]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.BARRACKS],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.BARRACKS, SCIENCE_BUTTON_TYPES.STEELMAKING],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.CONSCRIPTION]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MATHEMATICS, SCIENCE_BUTTON_TYPES.BARRACKS],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CONSCRIPTION],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE, SCIENCE_BUTTON_TYPES.IRON_SMELTING, SCIENCE_BUTTON_TYPES.BARRACKS],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.MAGIC]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.BARRACKS, SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.STEELMAKING]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE, SCIENCE_BUTTON_TYPES.IRON_SMELTING],
+        resourcePrereqs: []
+    },
+    [SCIENCE_BUTTON_TYPES.ART_OF_WAR]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
+        resourcePrereqs: []
+    },
 }
 
 export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
@@ -159,37 +171,38 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.WOOD, cost: 500 }
     ],
     [SCIENCE_BUTTON_TYPES.BOW_SAW]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 2000 },
-        { type: RESOURCE_TYPES.IRON, cost: 100 }
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 5000 },
+        { type: RESOURCE_TYPES.IRON, cost: 150 }
     ],
     [SCIENCE_BUTTON_TYPES.TWO_MAN_SAW]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 15000 },
-        { type: RESOURCE_TYPES.STEEL, cost: 100 }
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 25000 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 300 },
+        { type: RESOURCE_TYPES.STEEL, cost: 200 }
     ],
     [SCIENCE_BUTTON_TYPES.HORSE_COLLAR]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 300 },
         { type: RESOURCE_TYPES.WOOD, cost: 500 }
     ],
     [SCIENCE_BUTTON_TYPES.HEAVY_PLOW]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 2000 },
-        { type: RESOURCE_TYPES.IRON, cost: 100 }
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 5000 },
+        { type: RESOURCE_TYPES.IRON, cost: 150 }
     ],
     [SCIENCE_BUTTON_TYPES.CROP_ROTATION]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 17000 },
-        { type: RESOURCE_TYPES.STEEL, cost: 150 }
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 25000 },
+        { type: RESOURCE_TYPES.STEEL, cost: 300 }
     ],
     [SCIENCE_BUTTON_TYPES.WOODEN_PICKAXE]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 300 },
         { type: RESOURCE_TYPES.WOOD, cost: 500 }
     ],
     [SCIENCE_BUTTON_TYPES.IRON_PICKAXE]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 2000 },
-        { type: RESOURCE_TYPES.IRON, cost: 100 }
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 5000 },
+        { type: RESOURCE_TYPES.IRON, cost: 150 }
     ],
     [SCIENCE_BUTTON_TYPES.SHAFT_MINING]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 12000 },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 30000 },
         { type: RESOURCE_TYPES.IRON, cost: 200 },
-        { type: RESOURCE_TYPES.STEEL, cost: 100 }
+        { type: RESOURCE_TYPES.STEEL, cost: 200 }
     ],
     [SCIENCE_BUTTON_TYPES.ORE_MINING]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 1000 }
@@ -201,6 +214,12 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
     [SCIENCE_BUTTON_TYPES.INDUSTRY]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 5000 },
         { type: RESOURCE_TYPES.WOOD, cost: 1000 }
+    ],
+    [SCIENCE_BUTTON_TYPES.ADVANCED_INDUSTRY]: [
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 30000 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 1000 },
+        { type: RESOURCE_TYPES.STEEL, cost: 500 },
+        { type: RESOURCE_TYPES.GEM_OF_ETHEREALITY, cost: 1 },
     ],
     [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 10000 }
@@ -241,6 +260,10 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
     ],
     [SCIENCE_BUTTON_TYPES.MAGIC]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 12000 }
+    ],
+    [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: [
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 20000 },
+        { type: RESOURCE_TYPES.GOLD, cost: 700 },
     ],
     // [EMPIRE_BUTTON_TYPES.CREATE_FARM]: [
     //     {

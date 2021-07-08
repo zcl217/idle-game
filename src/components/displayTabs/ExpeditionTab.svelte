@@ -7,7 +7,11 @@
         STAGE_REWARD_LIST,
     } from "~/constants/military/stageList";
     import { clearedStages } from "~/store/military";
-    import { resources, resourcesFromExpeditions } from "~/store/resources";
+    import {
+        obtainedResources,
+        resources,
+        resourcesFromExpeditions,
+    } from "~/store/resources";
 
     const MAP_TYPES = {
         [STAGE_LIST["1-1"]]: 1,
@@ -39,7 +43,8 @@
         const rewards = STAGE_REWARD_LIST[selectedStage];
         for (let reward of rewards) {
             if (reward.amountPerSecond === 0) {
-                resources.setResourceValue(reward.resourceType, 1);
+                resources.incrementResourceValue(reward.resourceType, 1);
+                obtainedResources.add(reward.resourceType);
                 continue;
             }
             resourcesFromExpeditions.increaseResourceRate(

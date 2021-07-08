@@ -49,7 +49,7 @@
     </div>
 {/if}
 
-<div class="w-3/5 mt-5 w-min-670px rpgui-container">
+<div class="mt-5 w-min-670px rpgui-container {selectedTab === TABS.INDUSTRY ? "w-full position-relative" : "w-3/5" }">
     {#if selectedTab === TABS.WORKERS}
         <Workers />
     {:else if selectedTab === TABS.INDUSTRY}
@@ -65,5 +65,8 @@
     }
     .selected {
         background-image: url("../img/button-down.png");
+    }
+    .position-relative {
+        position: relative !important;
     }
 </style>

@@ -1,25 +1,19 @@
 <script lang="ts">
     import InfoBoxButton from "~/components/infoBoxes/InfoBoxButton.svelte";
-    import CharacterFrame from "../CharacterFrame.svelte";
     import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
     import {
         BUTTON_CATEGORIES,
         BUTTON_WIDTH,
     } from "~/constants/buttons/buttons";
-    import { DIALOGUES } from "~/constants/story";
-    import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
     import { obtainedResources, resources } from "~/store/resources";
-    import {
-        playerImage,
-        playerName,
-        researchedSciences,
-        hiddenButtons,
-    } from "~/store/gameState";
+    import { researchedSciences, hiddenButtons } from "~/store/gameState";
     import {
         BUTTON_RESOURCE_MAPPING,
         EMPIRE_BUTTON_TYPES,
         EMPIRE_COST_MULTIPLIERS,
-        INITIAL_EMPIRE_BUTTON_COSTS,
+        INDUSTRY_SECTOR_BUTTONS,
+        RESIDENTIAL_SECTOR_BUTTONS,
+        STORAGE_SECTOR_BUTTONS,
     } from "~/constants/buttons/empireButtons";
     import { empireButtonCosts } from "~/store/buttonCosts";
     import { buttonPrereqsMet } from "~/utils/helpers";
@@ -27,6 +21,7 @@
     import { WORKER_TYPES } from "~/constants/workers/workerTypes";
     import {
         GRANARY_CAPACITY,
+        QUARRY_CAPACITY,
         SAWMILL_CAPACITY,
         STORAGE_CAPACITY,
         UNIVERSITY_CAPACITY,
@@ -36,25 +31,54 @@
         hasEnoughResources,
         spendResources,
     } from "~/utils/resourceHelpers";
-    import { INITIAL_RESOURCE_STATE } from "~/constants/resources/resourceStates";
 
     let buttonsToDisplay: Set<string> = new Set();
+    let residentialSectorButtons: Set<string> = new Set();
+    let storageSectorButtons: Set<string> = new Set();
+    let industrySectorButtons: Set<string> = new Set();
     $: {
         //have to use multiple lists
         $obtainedResources;
         $researchedSciences;
-        let oldLength = buttonsToDisplay.size;
-        buttonsToDisplay.clear();
+        let oldResidentialSectorLength = residentialSectorButtons.size;
+        let oldStorageSectorLength = storageSectorButtons.size;
+        let oldIndustrySectorLength = industrySectorButtons.size;
+        residentialSectorButtons.clear();
+        storageSectorButtons.clear();
+        industrySectorButtons.clear();
         for (let [key, id] of Object.entries(EMPIRE_BUTTON_TYPES)) {
             if ($hiddenButtons.has(id)) continue;
             if (buttonPrereqsMet(id, BUTTON_CATEGORIES.EMPIRE)) {
-                buttonsToDisplay.add(id);
+                if (RESIDENTIAL_SECTOR_BUTTONS.has(id))
+                    residentialSectorButtons.add(id);
+                if (STORAGE_SECTOR_BUTTONS.has(id))
+                    storageSectorButtons.add(id);
+                if (INDUSTRY_SECTOR_BUTTONS.has(id))
+                    industrySectorButtons.add(id);
             }
         }
-        // trigger reactivity
-        if (buttonsToDisplay.size !== oldLength)
-            buttonsToDisplay = buttonsToDisplay;
+        triggerButtonReactivity(
+            oldResidentialSectorLength,
+            oldStorageSectorLength,
+            oldIndustrySectorLength
+        );
     }
+
+    const triggerButtonReactivity = (
+        oldResidentialSectorLength: number,
+        oldStorageSectorLength: number,
+        oldIndustrySectorLength: number
+    ) => {
+        if (oldResidentialSectorLength !== residentialSectorButtons.size) {
+            residentialSectorButtons = residentialSectorButtons;
+        }
+        if (oldStorageSectorLength !== storageSectorButtons.size) {
+            storageSectorButtons = storageSectorButtons;
+        }
+        if (oldIndustrySectorLength !== industrySectorButtons.size) {
+            industrySectorButtons = industrySectorButtons;
+        }
+    };
 
     const handleResource = (buttonType: string) => {
         const resourceType = BUTTON_RESOURCE_MAPPING[buttonType];
@@ -90,6 +114,20 @@
                 resources.incrementResourceLimit(
                     RESOURCE_TYPES.WOOD,
                     SAWMILL_CAPACITY
+                );
+                break;
+            case EMPIRE_BUTTON_TYPES.BUILD_QUARRY:
+                resources.incrementResourceLimit(
+                    RESOURCE_TYPES.RAW_ORE,
+                    QUARRY_CAPACITY
+                );
+                resources.incrementResourceLimit(
+                    RESOURCE_TYPES.COAL,
+                    QUARRY_CAPACITY
+                );
+                resources.incrementResourceLimit(
+                    RESOURCE_TYPES.GOLD,
+                    QUARRY_CAPACITY
                 );
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY:
@@ -144,13 +182,89 @@
             />
         </div>
     {/each}
-    {#if buttonsToDisplay.size % 2 !== 0}
+    {#if residentialSectorButtons.size > 0}
+        <h1 class="flex-1 text-left">Residential Sector</h1>
+    {/if}
+    {#each [...residentialSectorButtons] as id}
+        <div class="flex justify-center">
+            <InfoBoxButton
+                width={BUTTON_WIDTH}
+                curButtonType={id}
+                curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
+                handler={() => {
+                    handleResource(id);
+                }}
+            />
+        </div>
+        <div class="flex justify-center">
+            <InfoBoxButton
+                width={BUTTON_WIDTH}
+                curButtonType={id}
+                curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
+                handler={() => {
+                    handleResource(id);
+                }}
+            />
+        </div>
+    {/each}
+    {#if residentialSectorButtons.size % 3 === 1}
+        <div />
+        <div />
+    {:else if residentialSectorButtons.size % 3 === 2}
+        <div />
+    {/if}
+    {#if storageSectorButtons.size > 0}
+        <h1 class="flex-1 pt-3 text-left">Storage Sector</h1>
+    {/if}
+    {#each [...storageSectorButtons] as id}
+        <div class="flex justify-center">
+            <InfoBoxButton
+                width={BUTTON_WIDTH}
+                curButtonType={id}
+                curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
+                handler={() => {
+                    handleResource(id);
+                }}
+            />
+        </div>
+    {/each}
+    {#if storageSectorButtons.size % 3 === 1}
+        <div />
+        <div />
+    {:else if storageSectorButtons.size % 3 === 2}
+        <div />
+    {/if}
+    {#if industrySectorButtons.size > 0}
+        <h1 class="flex-1 pt-3 text-left">Industry Sector</h1>
+    {/if}
+    {#each [...industrySectorButtons] as id}
+        <div class="flex justify-center">
+            <InfoBoxButton
+                width={BUTTON_WIDTH}
+                curButtonType={id}
+                curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
+                handler={() => {
+                    handleResource(id);
+                }}
+            />
+        </div>
+    {/each}
+    {#if industrySectorButtons.size % 3 === 1}
+        <div />
+        <div />
+    {:else if industrySectorButtons.size % 3 === 2}
         <div />
     {/if}
 </div>
 
 <style>
     .container > * {
-        flex: 50%;
+        flex: 33%;
+    }
+    .flex-1 {
+        flex: 100% !important;
+    }
+    .pt-3 {
+        padding-top: 12px;
     }
 </style>

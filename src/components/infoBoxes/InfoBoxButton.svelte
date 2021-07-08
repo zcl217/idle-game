@@ -50,7 +50,9 @@
             case MILITARY_BUTTON_TYPES.TRAIN_SIEGETROOPER:
             case MILITARY_BUTTON_TYPES.TRAIN_SPEARMAN:
             case MILITARY_BUTTON_TYPES.TRAIN_MAGE:
-                disabled = unitCount >= 3;
+                let unitCap = 4;
+                if ($researchedSciences.has(SCIENCE_BUTTON_TYPES.STANDING_ARMY)) unitCap++;
+                disabled = unitCount >= unitCap;
                 if (
                     !$researchedSciences.has(SCIENCE_BUTTON_TYPES.CONSCRIPTION)
                 ) {
