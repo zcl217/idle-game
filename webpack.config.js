@@ -3,8 +3,12 @@ const sveltePreprocess = require('svelte-preprocess');
 const path = require('path');
 const webpack = require('webpack');
 
-const mode = process.env.NODE_ENV || 'development';
-const prod = mode === 'production';
+// const mode = process.env.NODE_ENV || 'development';
+// const prod = mode === 'production';
+
+//NODE_ENV=development npm run dev
+const mode = process.env.NODE_ENV || 'production';
+const prod = mode !== 'development';
 
 module.exports = {
 	entry: {
