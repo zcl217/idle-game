@@ -1,8 +1,8 @@
 <script lang="ts">
     import type { ISprite } from "~/interfaces/military/sprite";
     import {
-        highlightMeleeCells,
-        highlightRangedCells,
+        shouldHighlightMeleeCells,
+        shouldHighlightRangedCells,
         unitHasBeenDeployed,
         unitToDeploy,
     } from "~/store/military";
@@ -33,11 +33,11 @@
         //make the cells green.
         // send event based on sprite ranged or melee
         if (sprite.spriteInfo.melee) {
-            highlightMeleeCells.set(true);
-            highlightRangedCells.set(false);
+            shouldHighlightMeleeCells.set(true);
+            shouldHighlightRangedCells.set(false);
         } else {
-            highlightRangedCells.set(true);
-            highlightMeleeCells.set(false);
+            shouldHighlightRangedCells.set(true);
+            shouldHighlightMeleeCells.set(false);
         }
         //after you click the cell, then you deploy.
     };

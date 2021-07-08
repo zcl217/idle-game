@@ -75,7 +75,7 @@ export const STAGE_REWARD_LIST: Record<string, { resourceType: string, amountPer
     [STAGE_LIST["1-5"]]: [
         { resourceType: RESOURCE_TYPES.STEEL, amountPerSecond: 1 },
         { resourceType: RESOURCE_TYPES.SINATRAS_SHATTERED_ARMOR, amountPerSecond: 0 },
-        { resourceType: RESOURCE_TYPES.HALBERD_OF_ADUN, amountPerSecond: 0 }
+        { resourceType: RESOURCE_TYPES.GEM_OF_ETHEREALITY, amountPerSecond: 0 }
     ],
     
     [STAGE_LIST["2-1"]]: [
@@ -94,10 +94,11 @@ export const STAGE_REWARD_LIST: Record<string, { resourceType: string, amountPer
 export const ALL_CLEAR_REWARDS: Record<number, string[]> = {
     1: [
         `Sinatra's Shattered Armor x 1`,
-        `Halberd of Adun x 1`
+        `Gem of Ethereality x 1`
     ],
     2: [
         `Lutarez's Warhammer x 1`,
+        `Halberd of Adun x 1`,
         `Aedus' Tome of Knowledge x 1`
     ],
     3: [

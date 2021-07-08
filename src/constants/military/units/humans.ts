@@ -40,9 +40,9 @@ export const SPEARMAN: ISprite = {
 
 export const PIKEMAN: ISprite = {
     spriteInfo: {
-        damage: 10,
+        damage: 15,
         melee: true,
-        maxHp: 100,
+        maxHp: 120,
         name: "Pikeman",
         unitType: UNIT_TYPES.PIKEMAN,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -64,7 +64,7 @@ export const PIKEMAN: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 100,
+        currentHp: 120,
         currentFrameList: [],
     },
     offsetX: 0,
@@ -269,7 +269,7 @@ export const SIEGETROOPER: ISprite = {
 
 export const MAGE: ISprite = {
     spriteInfo: {
-        damage: 5,
+        damage: 6,
         attackRange: 2,
         melee: false,
         maxHp: 40,

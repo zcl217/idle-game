@@ -2,9 +2,9 @@
     import Sprite from "~/components/military/Sprite.svelte";
     import type { ISprite } from "~/interfaces/military/sprite";
     import {
-        highlightAttackRange,
-        highlightMeleeCells,
-        highlightRangedCells,
+        attackRangeCenterCoordinates,
+        shouldHighlightMeleeCells,
+        shouldHighlightRangedCells,
         lifeCount,
         removedEnemyUnitCount,
         unitHasBeenDeployed,
@@ -29,6 +29,7 @@
     import type { IProjectile } from "~/interfaces/military/projectile";
     import Projectile from "../military/Projectile.svelte";
     import { STAGE_LIST } from "~/constants/military/stageList";
+    import { rowPositionX } from "~/store/infoBox";
 
     export let mapType: number = 1,
         level = 1,
@@ -51,10 +52,10 @@
         setGridPath(grid, mapType);
         setLifeCount(level, lifeCount);
         enemiesRemaining = initializeEnemies(stage, enemyUnits, grid);
+        loadExpeditionLevel();
     });
 
-    const startExpeditionLevel = () => {
-        expeditionLevelStarted = true;
+    const loadExpeditionLevel = () => {
         /*
             current problem:
             if unit's movement delay is same as this delay, the game loop
@@ -69,33 +70,38 @@
         let frame = 0;
         interval = setInterval(() => {
             frame++;
-            handleDamageCalculations(
-                grid,
-                playerUnits,
-                enemyUnits,
-                projectiles
-            );
-            handleProjectiles(projectiles, grid, playerUnits, enemyUnits);
-            /*
+            if (expeditionLevelStarted) {
+                handleDamageCalculations(
+                    grid,
+                    playerUnits,
+                    enemyUnits,
+                    projectiles
+                );
+                handleProjectiles(projectiles, grid, playerUnits, enemyUnits);
+                /*
              if we want to implement faster/slower movements,
              we need the setinterval to be at the lowest tick (the fastest moving unit
              speed's interval) and then just ignore the mobs that are still moving 
              (which can be done by checking their state)
             */
-            handleEnemyMovements(enemyUnits, grid, lifeCount);
-            handleUnitAnimations(playerUnits, enemyUnits, frame);
-            // when all enemies are dead, emit event to parent that stage is over
-            // OR if you run out of lives,
-            if (frame > 60) frame = 0;
-            //
-            enemyUnits = enemyUnits.sort(
-                (unitA: ISprite, unitB: ISprite) =>
-                    unitB.state.currentHp - unitA.state.currentHp
-            );
-            //enemyUnits = enemyUnits;
-            playerUnits = playerUnits;
-            grid = grid;
-            projectiles = projectiles;
+                handleEnemyMovements(enemyUnits, grid, lifeCount);
+                handleUnitAnimations(playerUnits, enemyUnits, frame);
+                // when all enemies are dead, emit event to parent that stage is over
+                // OR if you run out of lives,
+                if (frame > 60) frame = 0;
+                //
+                enemyUnits = enemyUnits.sort(
+                    (unitA: ISprite, unitB: ISprite) =>
+                        unitB.state.currentHp - unitA.state.currentHp
+                );
+                //enemyUnits = enemyUnits;
+                playerUnits = playerUnits;
+                grid = grid;
+                projectiles = projectiles;
+            } else {
+                handleUnitAnimations(playerUnits, enemyUnits, frame);
+                playerUnits = playerUnits;
+            }
         }, delay);
     };
 
@@ -140,7 +146,7 @@
 
     $: {
         // console.log("hightlight melee cells");
-        if ($highlightMeleeCells) {
+        if ($shouldHighlightMeleeCells) {
             for (let row of grid) {
                 for (let cell of row) {
                     if (meleeCellIsDeployable(cell)) {
@@ -150,7 +156,10 @@
                     }
                 }
             }
-        } else if (!$highlightRangedCells && !$highlightMeleeCells) {
+        } else if (
+            !$shouldHighlightRangedCells &&
+            !$shouldHighlightMeleeCells
+        ) {
             turnOffCellHighlighting();
         }
         grid = grid;
@@ -168,7 +177,7 @@
     }
 
     $: {
-        if ($highlightRangedCells) {
+        if ($shouldHighlightRangedCells) {
             for (let row of grid) {
                 for (let cell of row) {
                     if (
@@ -182,36 +191,43 @@
                     }
                 }
             }
-        } else if (!$highlightRangedCells && !$highlightMeleeCells) {
+        } else if (
+            !$shouldHighlightRangedCells &&
+            !$shouldHighlightMeleeCells
+        ) {
             turnOffCellHighlighting();
         }
         grid = grid;
     }
 
     $: {
-        if ($highlightRangedCells) {
+        if ($shouldHighlightRangedCells) {
             for (let row of grid) {
                 for (let cell of row) {
-                    cell.highlightAttackRange = undefined;
+                    cell.highlightAttackRange = false;
                 }
             }
-            const coordinates = $highlightAttackRange;
+            const coordinates = $attackRangeCenterCoordinates;
             let curRow = coordinates.row;
             let curCol = coordinates.col;
-            let attackRange = $unitToDeploy.spriteInfo.attackRange;
-            if (curRow !== undefined && curCol !== undefined) {
-                for (let row = 0; row < grid.length; row++) {
-                    for (let col = 0; col < grid[0].length; col++) {
-                        if (row === curRow && col === curCol) continue;
-                        let rowDiff = Math.abs(curRow - row);
-                        let colDiff = Math.abs(curCol - col);
-                        if (rowDiff <= attackRange && colDiff <= attackRange)
-                            grid[row][col].highlightAttackRange = true;
-                    }
+            highlightAttackRange(curRow, curCol);
+        }
+    }
+
+    const highlightAttackRange = (curRow: number, curCol: number) => {
+        let attackRange = $unitToDeploy.spriteInfo.attackRange;
+        if (curRow !== undefined && curCol !== undefined) {
+            for (let row = 0; row < grid.length; row++) {
+                for (let col = 0; col < grid[0].length; col++) {
+                    if (row === curRow && col === curCol) continue;
+                    let rowDiff = Math.abs(curRow - row);
+                    let colDiff = Math.abs(curCol - col);
+                    if (rowDiff <= attackRange && colDiff <= attackRange)
+                        grid[row][col].highlightAttackRange = true;
                 }
             }
         }
-    }
+    };
 
     const handleCellClick = (cell: IExpeditionCell) => {
         // check the property of cell
@@ -239,9 +255,9 @@
                 cell.highlightAttackRange = false;
             }
         }
-        highlightMeleeCells.set(false);
-        highlightRangedCells.set(false);
-        highlightAttackRange.set({} as ICoordinates);
+        shouldHighlightMeleeCells.set(false);
+        shouldHighlightRangedCells.set(false);
+        attackRangeCenterCoordinates.set({} as ICoordinates);
     };
 </script>
 
@@ -254,7 +270,9 @@
         <button
             class="flex items-center h-12 mb-1 rpgui-button golden"
             type="button"
-            on:click={startExpeditionLevel}
+            on:click={() => {
+                expeditionLevelStarted = true;
+            }}
         >
             <p class="p-5">BEGIN</p>
         </button>

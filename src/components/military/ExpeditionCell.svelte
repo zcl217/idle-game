@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { IExpeditionCell } from "~/interfaces/military/expeditionGrid";
     import type { ISprite } from "~/interfaces/military/sprite";
-    import { highlightAttackRange, unitToDeploy } from "~/store/military";
+    import { attackRangeCenterCoordinates, unitToDeploy } from "~/store/military";
     import Sprite from "./Sprite.svelte";
     import { getExpeditionBackgroundPosition } from "~/utils/helpers";
     import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
@@ -23,7 +23,9 @@ import type { ICoordinates } from "~/interfaces/common";
             // and then show low opacity sprite on it
             sprite = $unitToDeploy;
             displayDeployableSprite = true;
-            highlightAttackRange.set({ row, col });
+            attackRangeCenterCoordinates.set({ row, col });
+        } else {
+            attackRangeCenterCoordinates.set({ row: -1, col: -1 });
         }
     };
 
@@ -32,6 +34,9 @@ import type { ICoordinates } from "~/interfaces/common";
             displayDeployableSprite = false;
         }
     }
+    $: {
+        if ($attackRangeCenterCoordinates.col === -1) cell.highlightAttackRange = false;
+    }
 
     const handleCellLeave = () => {
         // check the property of cell
@@ -39,7 +44,7 @@ import type { ICoordinates } from "~/interfaces/common";
             // get the type of unit to deploy from store
             // and then hide low opacity sprite
             displayDeployableSprite = false;
-            highlightAttackRange.set({} as ICoordinates);
+            attackRangeCenterCoordinates.set({} as ICoordinates);
         }
     };
 
@@ -60,7 +65,7 @@ import type { ICoordinates } from "~/interfaces/common";
     on:mouseleave={handleCellLeave}
     on:click={emitCellClick}
 >
-    {#if cell.highlightAttackRange}
+    {#if cell.highlightAttackRange === true}
         <div class="attackRangeCell" />
     {/if}
     {#if cell.isDeployable}

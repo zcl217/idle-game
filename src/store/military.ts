@@ -51,12 +51,12 @@ const createCount = () => {
         set
     };
 }
+export const attackRangeCenterCoordinates = writable({} as ICoordinates);
 export const clearedStages = writable(clearedStagesList);
-export const highlightAttackRange = writable({} as ICoordinates);
-export const highlightMeleeCells = writable(false);
-export const highlightRangedCells = writable(false);
 export const lifeCount = writable(1);
 export const militaryUnitList = createNewMilitaryUnitList(initialMilitaryUnitList);
 export const removedEnemyUnitCount = createCount();
+export const shouldHighlightMeleeCells = writable(false);
+export const shouldHighlightRangedCells = writable(false);
 export const unitHasBeenDeployed = writable(false);
 export const unitToDeploy = writable({} as ISprite);
