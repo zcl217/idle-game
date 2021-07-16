@@ -11,7 +11,7 @@
     import SaveTab from "~/components/displayTabs/SaveTab.svelte";
     import MessageLog from "~/components/MessageLog.svelte";
     import DialogueBox from "~/components/DialogueBox.svelte";
-    import InfoBox from "~/components/InfoBoxes/InfoBox.svelte";
+    import InfoBox from "~/components/infoBoxes/InfoBox.svelte";
     import { TABS } from "~/constants/buttons/buttons";
     import CharacterChoice from "~/components/displayTabs/CharacterChoice.svelte";
     import { curStoryProgress, inExpedition } from "~/store/gameState";
