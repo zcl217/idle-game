@@ -29,7 +29,7 @@
     onMount(() => {
         displayScreenHeight = displayScreen?.getBoundingClientRect().height;
     });
-    
+
     const toggleTab = (payload) => {
         currentTab = payload.detail;
     };
@@ -89,7 +89,10 @@
                 <div class="mt-68px" />
             {/if}
             <div
-                class="w-8/12 overflow-y-auto w-min-840px h-min-620px h-5/6 rpgui-container framed-golden-2"
+                class="w-8/12 overflow-x-hidden w-min-840px h-min-620px h-5/6 rpgui-container framed-golden-2 {currentTab ===
+                    TABS.EXPEDITION
+                        ? 'overflow-y-hidden'
+                        : 'overflow-y-auto'}"
                 bind:this={displayScreen}
                 use:watchResize={handleResize}
             >
@@ -133,6 +136,12 @@
 
     .mt-68px {
         margin-top: 68px;
+    }
+    .overflow-x-hidden {
+        overflow-x: hidden;
+    }
+    .overflow-y-hidden {
+        overflow-y: hidden;
     }
     ::-webkit-scrollbar {
         width: 12px; /* width of the entire scrollbar */
