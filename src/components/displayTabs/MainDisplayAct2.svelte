@@ -196,16 +196,6 @@
                 }}
             />
         </div>
-        <div class="flex justify-center">
-            <InfoBoxButton
-                width={BUTTON_WIDTH}
-                curButtonType={id}
-                curButtonCategory={BUTTON_CATEGORIES.EMPIRE}
-                handler={() => {
-                    handleResource(id);
-                }}
-            />
-        </div>
     {/each}
     {#if residentialSectorButtons.size % 3 === 1}
         <div />
