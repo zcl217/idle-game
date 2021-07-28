@@ -9,6 +9,7 @@
     //  import * as ScienceStore from "~/store/science";
     import * as WorkersStore from "~/store/workers";
 
+    let displayCredits = false;
     // TODO: refactor this file
     // KEY POINT: Don't forget to add every hashset store into the hashSetStores constant!
     const dividerCount =
@@ -68,10 +69,7 @@
             const resources = get(ResourcesStore.resources);
             for (let [name, resource] of Object.entries(resources)) {
                 if (resource.limit < Number.MAX_VALUE - 5000) {
-                    ResourcesStore.resources.setResourceLimit(
-                        name,
-                        100000000
-                    );
+                    ResourcesStore.resources.setResourceLimit(name, 100000000);
                     ResourcesStore.resources.setResourceValue(
                         name,
                         resources[name].limit
@@ -140,9 +138,35 @@
         ResourcesStore.resources.set(storeValues.shift());
         ResourcesStore.resourcesFromExpeditions.set(storeValues.shift());
         ResourcesStore.workshopsActivated.set(storeValues.shift());
-    }
+    };
 </script>
 
+{#if displayCredits}
+    <div
+        class="absolute flex flex-col w-95 h-95 z-100 rpgui-container framed-golden"
+    >
+        <p class="flex justify-center mt-4 mb-10">Credits</p>
+        <p>Sprites: Battle for Wesnoth</p>
+        <br />
+        <a target="_blank" rel="noopener noreferrer" href="https://github.com/wesnoth/wesnoth"> https://github.com/wesnoth/wesnoth </a>
+        <br />
+        <p>Icons: Shikashi's Fantasy Icons Pack</p>
+        <br />
+        <a target="_blank" rel="noopener noreferrer" href="https://cheekyinkling.itch.io/shikashis-fantasy-icons-pack">
+            https://cheekyinkling.itch.io/shikashis-fantasy-icons-pack
+        </a>
+
+        <div class="bottom-0 flex justify-center mt-10">
+            <button
+                class="flex items-center rpgui-button b-4"
+                type="button"
+                on:click={() => (displayCredits = false)}
+            >
+                <p>Close</p>
+            </button>
+        </div>
+    </div>
+{/if}
 <div class="w-3/5 w-min-670px h-min-620px rpgui-container">
     <h4>
         Automatic saving hasn't been implemented yet so you have to save
@@ -179,15 +203,24 @@
             <h2>Import Save</h2>
             <h5>Copy and paste your exported save here</h5>
             <textarea bind:value={loadText} />
-            <button
-                class="flex items-center rpgui-button"
-                type="button"
-                on:click={() => {
-                    loadSave();
-                }}
-            >
-                <p>Load Save</p>
-            </button>
+            <div class="flex justify-between">
+                <button
+                    class="flex items-center rpgui-button"
+                    type="button"
+                    on:click={() => {
+                        loadSave();
+                    }}
+                >
+                    <p>Load Save</p>
+                </button>
+                <button
+                    class="flex items-center rpgui-button"
+                    type="button"
+                    on:click={() => (displayCredits = true)}
+                >
+                    <p>Credits</p>
+                </button>
+            </div>
             {#if loadError}
                 <p class="">Save file format error. Could not load save.</p>
             {/if}
@@ -205,5 +238,19 @@
 
     .h-min-620px {
         min-height: 620px;
+    }
+
+    .z-100 {
+        z-index: 100;
+    }
+
+    .h-95 {
+        height: 95%;
+    }
+    .w-95 {
+        width: 95%;
+    }
+    .mt-10 {
+        margin-top: 40px;
     }
 </style>
