@@ -19,15 +19,18 @@
     }
 
     const handleDeployClick = () => {
+        if (deploymentMode) {
+            // if we click the same unit again, turn off deployment mode
+            if (sprite.spriteInfo.unitType === $unitToDeploy.spriteInfo.unitType) {
+                deploymentMode = false;
+                unitToDeploy.set({} as ISprite);
+                return;
+            }
+        }
         unitToDeploy.set(sprite);
         highlightMapCells();
         deploymentMode = true;
     };
-
-    // toggle deploymentMode again if we finish deploying the unit
-    $: {
-        if (Object.keys($unitToDeploy).length === 0) deploymentMode = false;
-    }
 
     const highlightMapCells = () => {
         //make the cells green.

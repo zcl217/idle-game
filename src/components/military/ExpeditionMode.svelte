@@ -94,6 +94,12 @@
                     (unitA: ISprite, unitB: ISprite) =>
                         unitB.state.currentHp - unitA.state.currentHp
                 );
+                // enemy units aren't removed properly sometimes so double check that
+                // (TODO: find cause of the bug)
+                for (let a = enemyUnits.length - 1; a >= 0; a--) {
+                    if (enemyUnits[a].state.currentHp <= 0)
+                        enemyUnits.splice(a, 1);
+                }
                 //enemyUnits = enemyUnits;
                 playerUnits = playerUnits;
                 grid = grid;
@@ -248,6 +254,11 @@
         }
     };
 
+    // unitToDeploy is set in DeployableUnit.svelte to deactivate unit deployment
+    $: {
+        if (Object.keys($unitToDeploy).length === 0) turnOffCellHighlighting();
+    }
+
     const turnOffCellHighlighting = () => {
         for (let row of grid) {
             for (let cell of row) {
@@ -262,63 +273,65 @@
 </script>
 
 <div class="text-center" />
-<div
-    class="flex px-10
+<div class="flex flex-col ml-5">
+    <div
+        class="flex px-10
     {expeditionLevelStarted ? 'justify-between mb-9px' : 'justify-center mb-3'}"
->
-    {#if !expeditionLevelStarted}
-        <button
-            class="flex items-center h-12 mb-1 rpgui-button golden"
-            type="button"
-            on:click={() => {
-                expeditionLevelStarted = true;
-            }}
-        >
-            <p class="p-5">BEGIN</p>
-        </button>
-    {:else}
-        <div class="flex flex-col">
-            <p class="my-1">Enemies Remaining: {enemiesRemaining}</p>
-            <p>Lives: {$lifeCount}</p>
-        </div>
-        <button
-            class="flex items-center h-12 rpgui-button golden"
-            type="button"
-            on:click={handleDefeat}
-        >
-            <p class="p-4">RETREAT</p>
-        </button>
-    {/if}
-</div>
-<div class="mx-auto border-4 border-black w-656px h-512px">
-    <div class="relative flex flex-row flex-wrap w-648px h-504px">
-        {#each grid as row, y}
-            {#each row as cell, x}
-                <ExpeditionCell
-                    handleCellClick={() => {
-                        handleCellClick(cell);
-                    }}
-                    row={y}
-                    col={x}
-                    {cell}
+    >
+        {#if !expeditionLevelStarted}
+            <button
+                class="flex items-center h-12 mb-1 rpgui-button golden"
+                type="button"
+                on:click={() => {
+                    expeditionLevelStarted = true;
+                }}
+            >
+                <p class="p-5">BEGIN</p>
+            </button>
+        {:else}
+            <div class="flex flex-col">
+                <p class="my-1">Enemies Remaining: {enemiesRemaining}</p>
+                <p>Lives: {$lifeCount}</p>
+            </div>
+            <button
+                class="flex items-center h-12 rpgui-button golden"
+                type="button"
+                on:click={handleDefeat}
+            >
+                <p class="p-4">RETREAT</p>
+            </button>
+        {/if}
+    </div>
+    <div class="mx-auto border-4 border-black w-656px h-512px">
+        <div class="relative flex flex-row flex-wrap w-648px h-504px">
+            {#each grid as row, y}
+                {#each row as cell, x}
+                    <ExpeditionCell
+                        handleCellClick={() => {
+                            handleCellClick(cell);
+                        }}
+                        row={y}
+                        col={x}
+                        {cell}
+                    />
+                {/each}
+            {/each}
+            {#each playerUnits as sprite}
+                <Sprite {sprite} />
+            {/each}
+            {#each enemyUnits as sprite}
+                <Sprite {sprite} />
+            {/each}
+            {#each projectiles as projectile}
+                <Projectile
+                    spriteSheet={projectile.spriteSheet}
+                    positionSpring={projectile.positionSpring}
+                    positionXTweened={projectile.positionXTweened}
+                    positionYTweened={projectile.positionYTweened}
+                    homing={projectile.homing}
                 />
             {/each}
-        {/each}
-        {#each playerUnits as sprite}
-            <Sprite {sprite} />
-        {/each}
-        {#each enemyUnits as sprite}
-            <Sprite {sprite} />
-        {/each}
-        {#each projectiles as projectile}
-            <Projectile
-                spriteSheet={projectile.spriteSheet}
-                positionSpring={projectile.positionSpring}
-                positionXTweened={projectile.positionXTweened}
-                positionYTweened={projectile.positionYTweened}
-                homing={projectile.homing}
-            />
-        {/each}
+        </div>
     </div>
 </div>
 
