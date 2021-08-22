@@ -5,6 +5,7 @@ package-lock.json
 yarn.lock
 roadmap.md
 key points.md
+lore.md
 .eslintrc.js
 public/build/
 .VSCodeCounter
