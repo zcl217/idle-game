@@ -1,8 +1,4 @@
 <script lang="ts">
-    import { initial } from "lodash";
-
-    import { onMount } from "svelte";
-
     import InfoBoxButton from "~/components/infoBoxes/InfoBoxButton.svelte";
     import { BUTTON_CATEGORIES } from "~/constants/buttons/buttons";
     import {
@@ -204,7 +200,7 @@
             <p class="w-32 text-center">{sprite.spriteInfo.name}</p>
         </div>
         <div class="flex flex-row">
-            <FramedSprite {sprite} />
+            <FramedSprite {sprite} shouldAnimateSprite={false} />
             <div class="my-auto ml-4">
                 <p>HP: {sprite.spriteInfo.maxHp}</p>
                 <p>Damage: {sprite.spriteInfo.damage}</p>

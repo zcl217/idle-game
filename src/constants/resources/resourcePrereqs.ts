@@ -29,7 +29,7 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
     },
     [RESOURCE_TYPES.KNOWLEDGE]: {
         sciencePrereqs: [],
-        resourcePrereqs: [RESOURCE_TYPES.LIBRARY]
+        resourcePrereqs: [RESOURCE_TYPES.ATHENAEUM]
     },
     [RESOURCE_TYPES.RAW_ORE]: {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.ORE_MINING],

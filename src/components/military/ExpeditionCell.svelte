@@ -25,7 +25,7 @@ import type { ICoordinates } from "~/interfaces/common";
             displayDeployableSprite = true;
             attackRangeCenterCoordinates.set({ row, col });
         } else {
-            attackRangeCenterCoordinates.set({ row: -1, col: -1 });
+            attackRangeCenterCoordinates.set({} as ICoordinates);
         }
     };
 

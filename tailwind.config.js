@@ -20,7 +20,9 @@ module.exports = {
         'barracks': "url('/icons/barracks.png')",
         'expedition': "url('/icons/expedition.png')",
         'save': "url('/icons/save.png')",
-        'greenCheckmark': "url('/icons/greenCheckmark.png')"
+        'greenCheckmark': "url('/icons/greenCheckmark.png')",
+        'industry': "url('/icons/industry.png')",
+        'library': "url('/icons/library.png')"
       })
     },
     fontFamily: {

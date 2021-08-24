@@ -113,13 +113,13 @@
 
     onDestroy(() => {
         clearInterval(interval);
+        removedEnemyUnitCount.reset();
     });
 
     $: {
         if ($lifeCount <= 0) {
             setTimeout(() => {
                 handleDefeat();
-                removedEnemyUnitCount.reset();
             }, 500);
         }
     }
@@ -151,7 +151,6 @@
     };
 
     $: {
-        // console.log("hightlight melee cells");
         if ($shouldHighlightMeleeCells) {
             for (let row of grid) {
                 for (let cell of row) {
@@ -186,17 +185,14 @@
         if ($shouldHighlightRangedCells) {
             for (let row of grid) {
                 for (let cell of row) {
-                    if (
-                        !cell.isPath &&
-                        !cell.playerUnit &&
-                        !cell.undeployableTerrain
-                    ) {
-                        cell.isDeployable = true;
-                    } else {
-                        cell.isDeployable = false;
-                    }
+                    cell.highlightAttackRange = false;
+                    cell.isDeployable = rangedCellIsDeployable(cell);
                 }
             }
+            const coordinates = $attackRangeCenterCoordinates;
+            let curRow = coordinates.row;
+            let curCol = coordinates.col;
+            highlightAttackRange(curRow, curCol);
         } else if (
             !$shouldHighlightRangedCells &&
             !$shouldHighlightMeleeCells
@@ -206,21 +202,11 @@
         grid = grid;
     }
 
-    $: {
-        if ($shouldHighlightRangedCells) {
-            for (let row of grid) {
-                for (let cell of row) {
-                    cell.highlightAttackRange = false;
-                }
-            }
-            const coordinates = $attackRangeCenterCoordinates;
-            let curRow = coordinates.row;
-            let curCol = coordinates.col;
-            highlightAttackRange(curRow, curCol);
-        }
+    function rangedCellIsDeployable(cell: IExpeditionCell) {
+        return !cell.isPath && !cell.playerUnit && !cell.undeployableTerrain;
     }
 
-    const highlightAttackRange = (curRow: number, curCol: number) => {
+    const highlightAttackRange = (curRow: number | undefined, curCol: number | undefined) => {
         let attackRange = $unitToDeploy.spriteInfo.attackRange;
         if (curRow !== undefined && curCol !== undefined) {
             for (let row = 0; row < grid.length; row++) {
@@ -273,10 +259,10 @@
 </script>
 
 <div class="text-center" />
-<div class="flex flex-col ml-5">
+<div class="flex flex-col">
     <div
-        class="flex px-10
-    {expeditionLevelStarted ? 'justify-between mb-9px' : 'justify-center mb-3'}"
+        class="flex px-10 mb-3 h-52px
+    {expeditionLevelStarted ? 'justify-between' : 'justify-center'}"
     >
         {#if !expeditionLevelStarted}
             <button
@@ -351,8 +337,8 @@
     .p-5 {
         padding: 20px;
     }
-    .mb-9px {
-        margin-bottom: 9px;
+    .h-52px {
+        height: 52px;
     }
     .mb-3 {
         margin-bottom: 0.75rem;

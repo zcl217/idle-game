@@ -3,31 +3,37 @@
     import { SPRITE_SIZES } from "~/constants/military/sprites";
     import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
     import type { ISprite } from "~/interfaces/military/sprite";
-    import { getMenuBackgroundPosition } from "~/utils/helpers";
+    import { getSpriteBackgroundPosition } from "~/utils/helpers";
 
-    export let sprite: ISprite;
+    export let sprite: ISprite,
+        isSmallFrame: boolean = false,
+        shouldAnimateSprite = true;
     let interval = 0;
     let currentFrame = 0;
-    let backgroundPosition = getMenuBackgroundPosition(
+    let backgroundPosition = getSpriteBackgroundPosition(
         sprite,
         SPRITESHEET_MAP[sprite.spriteInfo.unitType].idleFrames,
-        currentFrame
+        currentFrame,
+        shouldAnimateSprite
     );
     let isType1 = sprite.spriteInfo.spriteSize === SPRITE_SIZES.TYPE_1;
     $: isType1 = sprite.spriteInfo.spriteSize === SPRITE_SIZES.TYPE_1;
 
     onMount(() => {
-        interval = setInterval(() => {
-            let idleFrames =
-                SPRITESHEET_MAP[sprite.spriteInfo.unitType].idleFrames;
-            if (currentFrame >= idleFrames.length) currentFrame = 0;
-            backgroundPosition = getMenuBackgroundPosition(
-                sprite,
-                idleFrames,
-                currentFrame
-            );
-            currentFrame++;
-        }, 250);
+        if (shouldAnimateSprite) {
+            interval = setInterval(() => {
+                let idleFrames =
+                    SPRITESHEET_MAP[sprite.spriteInfo.unitType].idleFrames;
+                if (currentFrame >= idleFrames.length) currentFrame = 0;
+                backgroundPosition = getSpriteBackgroundPosition(
+                    sprite,
+                    idleFrames,
+                    currentFrame,
+                    shouldAnimateSprite
+                );
+                currentFrame++;
+            }, 250);
+        }
     });
 
     onDestroy(() => {
@@ -35,10 +41,15 @@
     });
 </script>
 
-<div class="relative w-32 h-32 p-0 rpgui-container framed">
+<div
+    class="relative p-0 rpgui-container {isSmallFrame
+        ? ''
+        : 'w-32 h-32 framed'} "
+>
     <div class="flex items-center justify-center h-full">
+        <!-- For non animating sprites or type 1 sprites, use type1FrameSize -->
         <div
-            class={isType1 ? "type1FrameSize" : "h-24 w-24"}
+            class={isType1 || !shouldAnimateSprite ? "type1FrameSize" : "h-24 w-24"}
             style="
             background-image: url('${SPRITESHEET_MAP[sprite.spriteInfo.unitType]
                 .spriteSheet}');

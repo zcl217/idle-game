@@ -1,6 +1,5 @@
 <script lang="ts">
-import { onMount } from "svelte";
-
+    import { onMount } from "svelte";
     import CharacterFrame from "../components/CharacterFrame.svelte";
     import {
         displayDialogueBox,
@@ -27,8 +26,8 @@ import { onMount } from "svelte";
         </div>
         <!-- not sure why mt pt not working here -->
         <div
-            class="text-sm dialogueText"
-            style="margin-top: {$characterImage !== "" ? 40 : 0}px"
+            class="text-sm dialogue-text"
+            style="margin-top: {$characterImage !== '' ? 40 : 0}px"
             class:text-center={$characterImage === ""}
         >
             {@html $mainText}
@@ -38,7 +37,7 @@ import { onMount } from "svelte";
             <button
                 class="flex items-center rpgui-button golden"
                 type="button"
-                on:click={$yesHandler}
+                on:click={() => $yesHandler()}
             >
                 <p class="p-4">{$yesText}</p>
             </button>
@@ -46,7 +45,7 @@ import { onMount } from "svelte";
                 <button
                     class="flex items-center rpgui-button golden"
                     type="button"
-                    on:click={$noHandler}
+                    on:click={() => $noHandler()}
                 >
                     <p class="p-4">{$noText}</p>
                 </button>
@@ -56,7 +55,7 @@ import { onMount } from "svelte";
 {/if}
 
 <style>
-    .dialogueText {
+    .dialogue-text {
         font-family: Arial, Helvetica, sans-serif !important;
         line-height: 25px !important;
         font-size: 23px !important;

@@ -12,7 +12,7 @@ export const WOLF1: ISprite = {
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: true,
         animationSpeed: 1,
-        movementAnimationSpeed: 1,
+        movementAnimationSpeed: 2,
         attackAnimationSpeed: 2,
         hpBarOffsetX: 11,
         hpBarOffsetY: -10
@@ -25,7 +25,7 @@ export const WOLF1: ISprite = {
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
         facingRight: true,
-        tweenedDelay: 1000,
+        tweenedDelay: 1050,
     },
     state: {
         currentState: UNIT_STATES.IDLE,
@@ -47,7 +47,7 @@ export const WOLF2: ISprite = {
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: true,
         animationSpeed: 1,
-        movementAnimationSpeed: 3,
+        movementAnimationSpeed: 2,
         attackAnimationSpeed: 2,
         hpBarOffsetX: 0,
     },
@@ -59,7 +59,7 @@ export const WOLF2: ISprite = {
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
         facingRight: true,
-        tweenedDelay: 950,
+        tweenedDelay: 1050,
     },
     state: {
         currentState: UNIT_STATES.IDLE,
@@ -81,7 +81,7 @@ export const WOLF3: ISprite = {
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: true,
         animationSpeed: 1,
-        movementAnimationSpeed: 3,
+        movementAnimationSpeed: 2,
         attackAnimationSpeed: 2,
         hpBarOffsetX: 0,
     },
@@ -92,7 +92,8 @@ export const WOLF3: ISprite = {
         },
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
-        facingRight: true
+        facingRight: true,
+        tweenedDelay: 1050,
     },
     state: {
         currentState: UNIT_STATES.IDLE,
@@ -190,7 +191,7 @@ export const BAT: ISprite = {
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
         facingRight: true,
-        tweenedDelay: 500
+        tweenedDelay: 550
     },
     state: {
         currentState: UNIT_STATES.IDLE,
@@ -223,7 +224,7 @@ export const GHOST: ISprite = {
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
         facingRight: true,
-        tweenedDelay: 1000
+        tweenedDelay: 970
     },
     state: {
         currentState: UNIT_STATES.IDLE,

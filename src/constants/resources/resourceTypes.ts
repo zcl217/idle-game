@@ -36,7 +36,7 @@ export const RESOURCE_NAMES: Record<string, string> = {
     [RESOURCE_TYPES.TREE_FARM]: 'tree farms',
     [RESOURCE_TYPES.STORAGE]: 'storages',
     [RESOURCE_TYPES.HOUSE]: 'homes',
-    [RESOURCE_TYPES.LIBRARY]: 'libraries',
+    [RESOURCE_TYPES.ATHENAEUM]: 'athanaeum',
     [RESOURCE_TYPES.KNOWLEDGE]: 'knowledge',
     [RESOURCE_TYPES.RAW_ORE]: 'raw ore',
     [RESOURCE_TYPES.COAL]: 'coal',

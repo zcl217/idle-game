@@ -21,7 +21,7 @@
     import { MILITARY_BUTTON_COSTS } from "~/constants/buttons/militaryButtons";
     import { RESOURCE_NAMES } from "~/constants/resources/resourceTypes";
 
-    export let displayScreenHeight;
+    export let displayScreenHeight: number;
     let infoBox: any,
         costs: IButtonCost[] = [],
         title: string,

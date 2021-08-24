@@ -84,7 +84,7 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         limit: Number.MAX_VALUE,
         displayGenerationRate: false
     },
-    [RESOURCE_TYPES.LIBRARY]: {
+    [RESOURCE_TYPES.ATHENAEUM]: {
         value: 0,
         limit: Number.MAX_VALUE,
         displayGenerationRate: false

@@ -1,11 +1,12 @@
 <script lang="ts">
     import { cloneDeep, entries } from "lodash";
-import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
+    import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
 
     import { HEAVY_INFANTRY, MAGE } from "~/constants/military/units/humans";
-import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
+    import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
+import type { ISprite } from "~/interfaces/military/sprite";
     import type { IMilitaryUnit } from "~/interfaces/military/units";
-import { researchedSciences } from "~/store/gameState";
+    import { researchedSciences } from "~/store/gameState";
     import {
         militaryUnitList,
         unitHasBeenDeployed,
@@ -24,6 +25,7 @@ import { researchedSciences } from "~/store/gameState";
         if ($unitHasBeenDeployed) {
             subtractUnitCount($unitToDeploy.spriteInfo.unitType);
             unitHasBeenDeployed.set(false);
+            unitToDeploy.set({} as ISprite);
         }
     }
     const subtractUnitCount = (type: string) => {
@@ -36,33 +38,42 @@ import { researchedSciences } from "~/store/gameState";
         }
     };
     const unlockedUnit = (type: string) => {
-        switch(type) {
+        switch (type) {
             case UNIT_TYPES.FOOTPAD:
                 return $researchedSciences.has(SCIENCE_BUTTON_TYPES.SLINGSHOTS);
             case UNIT_TYPES.HEAVY_INFANTRY:
-                return $researchedSciences.has(SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY);
+                return $researchedSciences.has(
+                    SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY
+                );
             case UNIT_TYPES.MAGE:
                 return $researchedSciences.has(SCIENCE_BUTTON_TYPES.MAGIC);
             default:
                 return true;
         }
-    }
+    };
 </script>
 
-<div class="mt-12 rpgui-container framed-golden-2 w-min-283px">
-    <p class="text-center">Available Units</p>
-    {#each Object.entries(availableUnits) as [key, unit]}
-        {#if unlockedUnit(unit.type)}
-            <DeployableUnit
-                sprite={getSprite(unit.type)}
-                unitCount={unit.count}
-            />
-        {/if}
-    {/each}
+<div class="flex flex-col ml-3">
+    <p class="mb-3 text-center h-52px">Available Units</p>
+    <div class="relative p-0 rpgui-container framed-golden">
+        {#each Object.entries(availableUnits) as [key, unit]}
+            {#if unlockedUnit(unit.type)}
+                <DeployableUnit
+                    sprite={getSprite(unit.type)}
+                    unitCount={unit.count}
+                    shouldAnimateSprite={false}
+                />
+            {/if}
+        {/each}
+    </div>
 </div>
 
 <style>
     .w-min-283px {
         min-width: 283px;
+    }
+
+    .h-52px {
+        height: 52px;
     }
 </style>
