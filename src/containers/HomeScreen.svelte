@@ -4,8 +4,7 @@
     import ResourceOverview from "~/components/ResourceOverview.svelte";
     import MainDisplay from "~/components/displayTabs/MainDisplay.svelte";
     import MainDisplayAct2 from "~/components/displayTabs/MainDisplayAct2.svelte";
-    import ResourcesTab from "~/components/displayTabs/ResourcesTab.svelte";
-    import ScienceTab from "~/components/displayTabs/ScienceTab.svelte";
+    import LibraryTab from "~/components/displayTabs/LibraryTab.svelte";
     import BarracksTab from "~/components/displayTabs/BarracksTab.svelte";
     import ExpeditionTab from "~/components/displayTabs/ExpeditionTab.svelte";
     import SaveTab from "~/components/displayTabs/SaveTab.svelte";
@@ -19,6 +18,9 @@
     import { STORY_PROGRESS_LIST } from "~/constants/story";
     import ResourceInfoBox from "~/components/infoBoxes/ResourceInfoBox.svelte";
     import { onMount } from "svelte";
+    import ScienceTab from "~/components/displayTabs/ScienceTab.svelte";
+    import IndustryTab from "~/components/displayTabs/IndustryTab.svelte";
+    import WorkersTab from "~/components/displayTabs/WorkersTab.svelte";
     let darkBackground = true,
         currentTab = TABS.MAIN_1,
         displayMain1 = true,
@@ -42,7 +44,6 @@
         if ($curStoryProgress === STORY_PROGRESS_LIST["A1S5"]) {
             currentTab = TABS.CHARACTER_CHOICE;
             inCharacterChoice = true;
-            console.log(inCharacterChoice);
         }
         if ($curStoryProgress >= STORY_PROGRESS_LIST["A2S12"]) {
             currentTab = TABS.MAIN_2;
@@ -71,37 +72,36 @@
         toggle lights
     </div> -->
     <div class="flex">
-        <div class="w-3/12 h-full m-5 mr-0">
-            {#if $inExpedition}
-                <UnitDeploymentTab />
-            {:else}
+            <div class="w-3/12 h-full m-5 mr-0">
                 <ResourceOverview />
-            {/if}
-        </div>
+            </div>
         <div class="ml-5">
-            {#if !$inExpedition && !inCharacterChoice}
+            {#if !inCharacterChoice}
                 <MenuTabs
                     {currentTab}
                     {displayMain1}
                     on:toggleTab={toggleTab}
                 />
-            {:else}
-                <div class="mt-68px" />
             {/if}
             <div
-                class="w-8/12 overflow-x-hidden w-min-840px h-min-620px h-5/6 rpgui-container framed-golden-2 {currentTab ===
-                    TABS.EXPEDITION
-                        ? 'overflow-y-hidden'
-                        : 'overflow-y-auto'}"
+                class="overflow-x-hidden w-min-840px h-min-620px rpgui-container framed-golden-2 w-8/12 h-5/6
+                {currentTab === TABS.EXPEDITION
+                    ? 'overflow-y-hidden'
+                    : 'overflow-y-auto'}
+                {$inExpedition ? 'pr-0' : ''} "
                 bind:this={displayScreen}
                 use:watchResize={handleResize}
             >
                 {#if currentTab === TABS.MAIN_2}
                     <MainDisplayAct2 />
                 {:else if currentTab === TABS.WORKERS}
-                    <ResourcesTab />
+                    <WorkersTab />
+                {:else if currentTab === TABS.INDUSTRY}
+                    <IndustryTab />
                 {:else if currentTab === TABS.SCIENCE}
                     <ScienceTab />
+                {:else if currentTab === TABS.LIBRARY}
+                    <LibraryTab />
                 {:else if currentTab === TABS.BARRACKS}
                     <BarracksTab />
                 {:else if currentTab === TABS.EXPEDITION}
@@ -132,6 +132,10 @@
 
     .h-min-620px {
         min-height: 620px;
+    }
+
+    .pr-0 {
+        padding-right: 0px;
     }
 
     .mt-68px {
