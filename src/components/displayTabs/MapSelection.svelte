@@ -7,6 +7,7 @@
     } from "~/constants/military/stageList";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { clearedStages } from "~/store/military";
+    import { areAllZoneStagesCleared } from "~/utils/helpers";
     import StagePreview from "./StagePreview.svelte";
 
     const ZONES = {
@@ -40,10 +41,10 @@
         zone2[a - 1] += `-${a}`;
     }
     $: {
-        if ($clearedStages[STAGE_LIST["1-5"]]) {
+        if (areAllZoneStagesCleared("1", $clearedStages)) {
             zone2Unlocked = true;
-        } else if ($clearedStages[STAGE_LIST["2-3"]]) {
-            // zone3Unlocked = true;
+        } else if (areAllZoneStagesCleared("2", $clearedStages)) {
+            zone3Unlocked = true;
         }
     }
 

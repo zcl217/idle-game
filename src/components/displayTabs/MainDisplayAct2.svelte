@@ -91,8 +91,8 @@
         }
         if (!createBuilding(buttonType, resourceType)) return;
         switch (buttonType) {
-            case EMPIRE_BUTTON_TYPES.BUILD_LIBRARY:
-                $hiddenButtons.add(EMPIRE_BUTTON_TYPES.BUILD_LIBRARY);
+            case EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM:
+                $hiddenButtons.add(EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
                 resources.setResourceValue(RESOURCE_TYPES.WOOD_PLANK, 0);

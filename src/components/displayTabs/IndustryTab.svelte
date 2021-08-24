@@ -6,7 +6,7 @@
         INDUSTRY_BUILDING_TITLES,
     } from "~/constants/resources/industry";
     import { obtainedResources } from "~/store/resources";
-    import IndustryBuilding from "./IndustryBuilding.svelte";
+    import IndustryBuilding from "../IndustryBuilding.svelte";
 
     const toggleBuilding = (industryBuilding: string, state: boolean) => {
         const store = INDUSTRY_BUILDING_STORE_MAP[industryBuilding];
@@ -17,7 +17,7 @@
     ).length;
 </script>
 
-<div class="flex flex-row flex-wrap justify-around">
+<div class="flex flex-row flex-wrap justify-around m-4">
     {#each INDUSTRY_BUILDINGS as industryBuilding}
         {#if $obtainedResources.has(industryBuilding)}
             <IndustryBuilding
@@ -28,3 +28,9 @@
         {/if}
     {/each}
 </div>
+
+<style>
+    .m-4 {
+        margin: 16px;
+    }
+</style>
