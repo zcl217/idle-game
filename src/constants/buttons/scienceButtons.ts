@@ -28,7 +28,8 @@ export const SCIENCE_BUTTON_TYPES = {
     SLINGSHOTS: 'slingshots',
     HEAVY_INFANTRY: 'heavyInfantry',
     MAGIC: 'magic',
-    STANDING_ARMY: 'standingArmy',
+    // disable unit limit increasing for now
+    // STANDING_ARMY: 'standingArmy',
 }
 
 export const SCIENCE_BUTTON_TEXTS = {
@@ -56,7 +57,7 @@ export const SCIENCE_BUTTON_TEXTS = {
     [SCIENCE_BUTTON_TYPES.SLINGSHOTS]: 'Slingshots',
     [SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY]: 'Heavy Infantry',
     [SCIENCE_BUTTON_TYPES.MAGIC]: 'Magic',
-    [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: 'Standing Army',
+    // [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: 'Standing Army',
 }
 
 export const SCIENCE_BUTTON_PREREQS: IPrereqsList = {
@@ -140,10 +141,10 @@ export const SCIENCE_BUTTON_PREREQS: IPrereqsList = {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.MATHEMATICS, SCIENCE_BUTTON_TYPES.BARRACKS],
         resourcePrereqs: []
     },
-    [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.CONSCRIPTION],
-        resourcePrereqs: []
-    },
+    // [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: {
+    //     sciencePrereqs: [SCIENCE_BUTTON_TYPES.CONSCRIPTION],
+    //     resourcePrereqs: []
+    // },
     [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE]: {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE, SCIENCE_BUTTON_TYPES.IRON_SMELTING, SCIENCE_BUTTON_TYPES.BARRACKS],
         resourcePrereqs: []
@@ -261,19 +262,9 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
     [SCIENCE_BUTTON_TYPES.MAGIC]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 12000 }
     ],
-    [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 20000 },
-        { type: RESOURCE_TYPES.GOLD, cost: 700 },
-    ],
-    // [EMPIRE_BUTTON_TYPES.CREATE_FARM]: [
-    //     {
-    //         type: [RESOURCE_TYPES.FOOD],
-    //        
-    //         cost: 10,
-    //     },
-    //     {
-    //         text:
-    //     }
+    // [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: [
+    //     { type: RESOURCE_TYPES.KNOWLEDGE, cost: 20000 },
+    //     { type: RESOURCE_TYPES.GOLD, cost: 700 },
     // ],
 
 }

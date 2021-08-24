@@ -35,8 +35,8 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
         title: 'Build House',
         text: 'Increases max workers by 1'
     },
-    [EMPIRE_BUTTON_TYPES.BUILD_LIBRARY]: {
-        title: 'Build Library',
+    [EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM]: {
+        title: 'Build Athenaeum',
         text: `Unlocks the science tab.`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: {
@@ -102,10 +102,10 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
         title: 'Conscription',
         text: 'Unlocks unit training in the barracks',
     },
-    [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: {
-        title: 'Standing Army',
-        text: 'Increases unit limit by 1',
-    },
+    // [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: {
+    //     title: 'Standing Army',
+    //     text: 'Increases unit limit by 1',
+    // },
     [SCIENCE_BUTTON_TYPES.BLOCK_PRINTING]: {
         title: 'Block Printing',
         text: 'Increases knowledge acquisition speed by 50%',
