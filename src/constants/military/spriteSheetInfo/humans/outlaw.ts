@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite"
 
 export const OUTLAW_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/humans/outlaw.png",
+    spriteSheet: "~/../sprites/spritesheets/humans/outlaw.png",
     idleFrames: [
         { row: 0, col: 0 },
         { row: 1, col: 0 },

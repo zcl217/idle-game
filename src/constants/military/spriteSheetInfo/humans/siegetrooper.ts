@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite";
 
 export const SIEGETROOPER_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/humans/siegetrooper.png",
+    spriteSheet: "~/../sprites/spritesheets/humans/siegetrooper.png",
     idleFrames: [
         { row: 0, col: 0 },
     ],

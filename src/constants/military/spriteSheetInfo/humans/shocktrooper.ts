@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite";
 
 export const SHOCKTROOPER_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/humans/shocktrooper.png",
+    spriteSheet: "~/../sprites/spritesheets/humans/shocktrooper.png",
     idleFrames: [
         { row: 0, col: 0 },
     ],

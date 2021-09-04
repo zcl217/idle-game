@@ -1,9 +1,10 @@
 import type { ISprite } from "~/interfaces/military/sprite"
+import { SPECIAL_ABILITIES } from "../specialAbilities";
 import { SPRITE_SIZES, UNIT_STATES } from "../sprites"
 import { UNIT_TYPES } from "./unitTypes"
 
-const defaultHpBarOffsetX = 9;
-const defaultHpBarOffsetY = -15;
+export const defaultHpBarOffsetX = 9;
+export const defaultHpBarOffsetY = -15;
 
 
 export const SPEARMAN: ISprite = {
@@ -207,7 +208,7 @@ export const SHOCKTROOPER: ISprite = {
     spriteInfo: {
         damage: 30,
         melee: true,
-        maxHp: 150,
+        maxHp: 200,
         name: "Shocktrooper",
         unitType: UNIT_TYPES.SHOCKTROOPER,
         spriteSize: SPRITE_SIZES.TYPE_1,
@@ -229,7 +230,7 @@ export const SHOCKTROOPER: ISprite = {
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 150,
+        currentHp: 200,
         currentFrameList: []
     },
     offsetX: 0
@@ -332,3 +333,39 @@ export const ARCH_MAGE: ISprite = {
     },
     offsetX: 0,
 }
+
+
+export const NECROMANCER: ISprite = {
+    spriteInfo: {
+        damage: 10,
+        attackRange: 2,
+        melee: false,
+        maxHp: 80,
+        name: "Necromancer",
+        unitType: UNIT_TYPES.ARCH_MAGE,
+        spriteSize: SPRITE_SIZES.TYPE_1,
+        isEnemy: false,
+        animationSpeed: 2,
+        attackAnimationSpeed: 1,
+        hpBarOffsetX: defaultHpBarOffsetX,
+        hpBarOffsetY: defaultHpBarOffsetY,
+        specialAbility: SPECIAL_ABILITIES.AOE,
+    },
+    position: {
+        coordinates: {
+            row: 0,
+            col: 0
+        },
+        spriteSheetPositionX: 0,
+        spriteSheetPositionY: 0,
+        facingRight: true,
+    },
+    state: {
+        currentState: UNIT_STATES.IDLE,
+        currentFrame: 0,
+        currentHp: 80,
+        currentFrameList: [],
+    },
+    offsetX: 0,
+}
+

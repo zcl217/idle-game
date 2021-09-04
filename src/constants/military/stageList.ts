@@ -11,49 +11,11 @@ export const STAGE_LIST: Record<string, string> = {
     '2-1': '2-1',
     '2-2': '2-2',
     '2-3': '2-3',
+    '2-4': '2-4',
+    '2-5': '2-5',
     '3-1': '3-1',
     '3-2': '3-2',
     '3-3': '3-3',
-}
-
-export const ENEMY_PREVIEW_LIST: Record<string, { sprite: ISprite, amount: number }[]> = {
-    [STAGE_LIST["1-1"]]: [
-        { sprite: WOLF1, amount: 4 }
-    ],
-    [STAGE_LIST["1-2"]]: [
-        { sprite: WOLF1, amount: 11 },
-    ],
-    [STAGE_LIST["1-3"]]: [
-        { sprite: WOLF1, amount: 8 },
-        { sprite: WOLF2, amount: 1 },
-    ],
-    [STAGE_LIST["1-4"]]: [
-        { sprite: WOLF1, amount: 50 },
-        { sprite: WOLF2, amount: 10 },
-        { sprite: SKELETON_ARCHER, amount: 3 }
-    ],
-    [STAGE_LIST["1-5"]]: [
-        { sprite: WOLF2, amount: 30 },
-        { sprite: SKELETON_ARCHER, amount: 10 },
-        { sprite: WOLF3, amount: 2 }
-    ],
-    [STAGE_LIST["2-1"]]: [
-        { sprite: WOLF2, amount: 10 },
-        { sprite: BAT, amount: 5 },
-        { sprite: SKELETON, amount: 7 },
-    ],
-    [STAGE_LIST["2-2"]]: [
-        { sprite: WOLF3, amount: 1 },
-        { sprite: BAT, amount: 5 },
-        { sprite: GHOST, amount: 3 },
-    ]
-    /*
-    [STAGE_LIST["2-2"]]:
-    [STAGE_LIST["2-3"]]:
-    [STAGE_LIST["3-1"]]:
-    [STAGE_LIST["3-2"]]:
-    [STAGE_LIST["3-3"]]:
-    */
 }
 
 export const STAGE_REWARD_LIST: Record<string, { resourceType: string, amountPerSecond: number }[]> = {
@@ -73,7 +35,6 @@ export const STAGE_REWARD_LIST: Record<string, { resourceType: string, amountPer
         { resourceType: RESOURCE_TYPES.IRON, amountPerSecond: 1 },
     ],
     [STAGE_LIST["1-5"]]: [
-        { resourceType: RESOURCE_TYPES.STEEL, amountPerSecond: 1 },
         { resourceType: RESOURCE_TYPES.SINATRAS_SHATTERED_ARMOR, amountPerSecond: 0 },
         { resourceType: RESOURCE_TYPES.GEM_OF_ETHEREALITY, amountPerSecond: 0 }
     ],

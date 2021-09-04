@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite";
 
 export const PIKEMAN_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/humans/pikeman.png",
+    spriteSheet: "~/../sprites/spritesheets/humans/pikeman.png",
     idleFrames: [
         { row: 0, col: 0 },
         { row: 1, col: 0 },

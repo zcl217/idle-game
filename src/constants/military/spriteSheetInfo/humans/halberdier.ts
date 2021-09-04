@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite";
 
 export const HALBERDIER_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/humans/halberdier.png",
+    spriteSheet: "~/../sprites/spritesheets/humans/halberdier.png",
     idleFrames: [
         { row: 0, col: 0 },
         { row: 0, col: 1 },

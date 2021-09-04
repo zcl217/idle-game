@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite";
 
 export const SKELETON_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/enemies/skeleton.png",
+    spriteSheet: "~/../sprites/spritesheets/enemies/skeleton.png",
     idleFrames: [
         {
             row: 0,

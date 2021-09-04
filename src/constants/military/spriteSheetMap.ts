@@ -9,6 +9,7 @@ import { PIKEMAN_SPRITESHEET_INFO } from "./spriteSheetInfo/humans/pikeman";
 import { SHOCKTROOPER_SPRITESHEET_INFO } from "./spriteSheetInfo/humans/shocktrooper";
 import { SIEGETROOPER_SPRITESHEET_INFO } from "./spriteSheetInfo/humans/siegetrooper";
 import { SPEARMAN_SPRITESHEET_INFO } from "./spriteSheetInfo/humans/spearman";
+import { THUNDERER_SPRITESHEET_INFO } from "./spriteSheetInfo/dwarves/thunderer";
 import { BAT_SPRITESHEET_INFO } from "./spriteSheetInfo/monsters/bat";
 import { GHAST_SPRITESHEET_INFO } from "./spriteSheetInfo/monsters/ghast";
 import { GHOST_SPRITESHEET_INFO } from "./spriteSheetInfo/monsters/ghost";
@@ -31,6 +32,7 @@ export const SPRITESHEET_MAP: Record<string, ISpriteSheetInfo> = {
     [UNIT_TYPES.SHOCKTROOPER]: SHOCKTROOPER_SPRITESHEET_INFO,
     [UNIT_TYPES.MAGE]: MAGE_SPRITESHEET_INFO,
     [UNIT_TYPES.ARCH_MAGE]: ARCH_MAGE_SPRITESHEET_INFO,
+    [UNIT_TYPES.THUNDERER]: THUNDERER_SPRITESHEET_INFO,
     [UNIT_TYPES.WOLF1]: WOLF1_SPRITESHEET_INFO,
     [UNIT_TYPES.WOLF2]: WOLF2_SPRITESHEET_INFO,
     [UNIT_TYPES.WOLF3]: WOLF3_SPRITESHEET_INFO,

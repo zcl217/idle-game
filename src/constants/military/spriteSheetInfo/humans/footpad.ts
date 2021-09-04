@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite"
 
 export const FOOTPAD_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/humans/footpad.png",
+    spriteSheet: "~/../sprites/spritesheets/humans/footpad.png",
     idleFrames: [
         { row: 0, col: 0 },
         { row: 1, col: 1 },

@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite";
 
 export const BAT_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/enemies/bat.png",
+    spriteSheet: "~/../sprites/spritesheets/enemies/bat.png",
     idleFrames: [
         { row: 0, col: 0 },
     ],

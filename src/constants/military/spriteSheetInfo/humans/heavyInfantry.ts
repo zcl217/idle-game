@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite"
 
 export const HEAVY_INFANTRY_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/humans/heavyInfantry.png",
+    spriteSheet: "~/../sprites/spritesheets/humans/heavyInfantry.png",
     idleFrames: [
         {
             row: 1,

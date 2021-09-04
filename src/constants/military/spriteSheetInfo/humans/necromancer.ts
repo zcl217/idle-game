@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite"
 
 export const MAGE_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/humans/necromancer.png",
+    spriteSheet: "~/../sprites/spritesheets/humans/necromancer.png",
     idleFrames: [
         { row: 0, col: 0 },
     ],

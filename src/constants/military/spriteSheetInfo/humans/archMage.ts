@@ -1,7 +1,7 @@
 import type { ISpriteSheetInfo } from "~/interfaces/military/sprite"
 
 export const ARCH_MAGE_SPRITESHEET_INFO: ISpriteSheetInfo = {
-    spriteSheet: "~/../sprites/spriteSheets/humans/archMage.png",
+    spriteSheet: "~/../sprites/spritesheets/humans/archMage.png",
     idleFrames: [
         { row: 1, col: 0 },
         { row: 1, col: 1 },

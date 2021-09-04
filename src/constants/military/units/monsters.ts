@@ -1,4 +1,5 @@
 import type { ISprite } from "~/interfaces/military/sprite"
+import { SPECIAL_ABILITIES } from "../specialAbilities"
 import { SPRITE_SIZES, UNIT_STATES } from "../sprites"
 import { UNIT_TYPES } from "./unitTypes"
 
@@ -15,7 +16,7 @@ export const WOLF1: ISprite = {
         movementAnimationSpeed: 2,
         attackAnimationSpeed: 2,
         hpBarOffsetX: 11,
-        hpBarOffsetY: -10
+        hpBarOffsetY: -10,
     },
     position: {
         coordinates: {
@@ -148,7 +149,9 @@ export const SKELETON_ARCHER: ISprite = {
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: true,
         animationSpeed: 1,
+        movementAnimationSpeed: 3,
         hpBarOffsetX: 0,
+        specialAbility: SPECIAL_ABILITIES.RANGED
     },
     position: {
         coordinates: {
@@ -182,6 +185,7 @@ export const BAT: ISprite = {
         isEnemy: true,
         animationSpeed: 1,
         hpBarOffsetX: 0,
+        specialAbility: SPECIAL_ABILITIES.RANGED
     },
     position: {
         coordinates: {
@@ -215,6 +219,7 @@ export const GHOST: ISprite = {
         isEnemy: true,
         animationSpeed: 1,
         hpBarOffsetX: 0,
+        specialAbility: SPECIAL_ABILITIES.ETHEREAL
     },
     position: {
         coordinates: {
@@ -247,6 +252,7 @@ export const SHADOW: ISprite = {
         isEnemy: true,
         animationSpeed: 1,
         hpBarOffsetX: 0,
+        specialAbility: SPECIAL_ABILITIES.ETHEREAL
     },
     position: {
         coordinates: {
@@ -272,14 +278,15 @@ export const GHAST: ISprite = {
     spriteInfo: {
         damage: 5,
         melee: true,
-        maxHp: 30,
+        maxHp: 300,
         name: "Ghast",
         unitType: UNIT_TYPES.GHAST,
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: true,
         animationSpeed: 1,
-        movementAnimationSpeed: 3,
+        movementAnimationSpeed: 5,
         hpBarOffsetX: 0,
+        specialAbility: SPECIAL_ABILITIES.GLOBAL_POISON
     },
     position: {
         coordinates: {
@@ -289,12 +296,12 @@ export const GHAST: ISprite = {
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
         facingRight: true,
-        tweenedDelay: 2000
+        tweenedDelay: 3000
     },
     state: {
         currentState: UNIT_STATES.IDLE,
         currentFrame: 0,
-        currentHp: 30,
+        currentHp: 300,
         currentPathIndex: 0,
         currentFrameList: [],
     },
