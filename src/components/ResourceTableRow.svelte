@@ -77,7 +77,7 @@
             if (!get(industryBuildingActivated)) continue;
             const industryInputs = INDUSTRY_INPUTS_MAP[industryBuilding];
             const buildingCount = $resources[industryBuilding].value;
-            total += buildingCount + industryInputs[resourceType];
+            total += buildingCount * industryInputs[resourceType];
         }
         return total;
     };
