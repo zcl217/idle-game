@@ -8,13 +8,13 @@ module.exports = {
     'p-0': ['important'],
     'border-4': ['important'],
     'h-12': ['important'],
-    'ml-20': ['important']
+    'ml-20': ['important'],
   },
   theme: {
     extend: {
       backgroundImage: theme => ({
         'smallBase': "url('/icons/smallBase.png')",
-        'base': "url('/icons/base.png')",
+        'buildings': "url('/icons/buildings.png')",
         'worker': "url('/icons/worker.png')",
         'science': "url('/icons/science.png')",
         'barracks': "url('/icons/barracks.png')",
@@ -22,7 +22,11 @@ module.exports = {
         'save': "url('/icons/save.png')",
         'greenCheckmark': "url('/icons/greenCheckmark.png')",
         'industry': "url('/icons/industry.png')",
-        'library': "url('/icons/library.png')"
+        'library': "url('/icons/library.png')",
+        'hammer': "url('/icons/hammer.png')",
+        'chest': "url('/icons/chest.png')",
+        'spawn': "url('/icons/spawn.png')",
+        'poison': "url('/sprites/effects/poison.png')",
       })
     },
     fontFamily: {
