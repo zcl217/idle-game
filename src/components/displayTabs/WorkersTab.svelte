@@ -2,7 +2,7 @@
     import { resources } from "~/store/resources";
     import WorkerCountButtons from "../WorkerCountButtons.svelte";
     import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
-    import { workers } from "~/store/workers";
+    import { totalWorkers, workers } from "~/store/workers";
     import { WORKER_TYPES } from "~/constants/workers/workerTypes";
     import { researchedSciences } from "~/store/gameState";
     import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
@@ -10,7 +10,7 @@
     import { INITIAL_WORKER_STATE } from "~/constants/workers/workerStates";
     import { capitalize } from "lodash";
 
-    $: maxWorkers = $resources[RESOURCE_TYPES.HOUSE].value;
+    $: maxWorkers = $totalWorkers;
     $: availableWorkers = $workers[WORKER_TYPES.UNASSIGNED].value;
     let workerChangeValue = 1;
     const handleWorkerChange = (workerType: string, operation: string) => {
@@ -32,12 +32,24 @@
                 return true;
             case WORKER_TYPES.SCHOLAR:
                 return $resources[RESOURCE_TYPES.ATHENAEUM].value > 0;
+            case WORKER_TYPES.HUNTER:
+                return $researchedSciences.has(SCIENCE_BUTTON_TYPES.HUNTERS);
             case WORKER_TYPES.MINER:
                 return $researchedSciences.has(SCIENCE_BUTTON_TYPES.ORE_MINING);
+            case WORKER_TYPES.MITHRIL_MINER:
+                return $researchedSciences.has(SCIENCE_BUTTON_TYPES.MITHRIL);
+            case WORKER_TYPES.ADAMANTITE_MINER:
+                return $researchedSciences.has(SCIENCE_BUTTON_TYPES.ADAMANTITE);
             default:
                 return false;
         }
     };
+
+    const capitalizeAll = (value: string) => {
+        const allWords = value.split(' ');
+        const capitalized = allWords.map(word => capitalize(word));
+        return capitalized.join(' ');
+    }
 </script>
 
 <div>
@@ -50,7 +62,7 @@
         {#if displayWorkerType(workerType)}
             <tr class="bg">
                 <td class="px-16"><span> {$workers[workerType].value} </span></td>
-                <td class="px-8"><span> {capitalize(workerType)} </span></td>
+                <td class="px-8"><span> {capitalizeAll(workerType)} </span></td>
                 <td class="pl-8">
                     <WorkerCountButtons
                         on:increment={() => {

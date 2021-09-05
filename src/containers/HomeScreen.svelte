@@ -32,6 +32,8 @@
         displayScreenHeight = displayScreen?.getBoundingClientRect().height;
     });
 
+    $: displayMain1 = $curStoryProgress < STORY_PROGRESS_LIST["A2S1"];
+
     const toggleTab = (payload) => {
         currentTab = payload.detail;
     };
@@ -136,10 +138,6 @@
 
     .pr-0 {
         padding-right: 0px;
-    }
-
-    .mt-68px {
-        margin-top: 68px;
     }
     .overflow-x-hidden {
         overflow-x: hidden;

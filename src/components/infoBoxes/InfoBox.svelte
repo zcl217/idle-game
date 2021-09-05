@@ -8,7 +8,9 @@
     } from "~/store/infoBox";
     import { resources } from "~/store/resources";
     import {
+        ABILITY_INFO_BOXES,
         EMPIRE_INFO_BOXES,
+        INFO_BOX_TYPES,
         MILITARY_INFO_BOXES,
         OTHER_INFO_BOXES,
         SCIENCE_INFO_BOXES,
@@ -26,7 +28,8 @@
         costs: IButtonCost[] = [],
         title: string,
         text: string,
-        y: number;
+        y: number,
+        infoBoxType: string = INFO_BOX_TYPES.RESOURCE;
 
     $: infoBoxBounds = infoBox?.getBoundingClientRect();
     $: {
@@ -39,6 +42,7 @@
     }
     $: x = $buttonPositionX - infoBoxBounds?.width - 10;
     $: {
+        infoBoxType = INFO_BOX_TYPES.RESOURCE;
         switch ($buttonCategory) {
             case BUTTON_CATEGORIES.EMPIRE:
                 if (!EMPIRE_INFO_BOXES[$buttonType]) break;
@@ -61,6 +65,9 @@
                 text = OTHER_INFO_BOXES[$buttonType].text;
                 costs = [];
                 break;
+            case BUTTON_CATEGORIES.EXPEDITION:
+                title = ABILITY_INFO_BOXES[$buttonType];
+                infoBoxType = INFO_BOX_TYPES.ABILITY;
             default:
                 costs = [];
                 break;
@@ -75,35 +82,45 @@
 </script>
 
 {#if $displayInfoBox}
-    <div
-        class="absolute border-4 rpgui-container framed-grey max-w-250px"
-        style="top: {y}px; margin-left: {x}px"
-        bind:this={infoBox}
-    >
-        <div class="flex flex-col text-center">
-            <p>{title}</p>
-            <hr class="-mx-2" />
-            <p>{text}</p>
-            {#if costs.length > 0}
-                <p class="my-3 underline">Cost</p>
-            {/if}
-            {#key $resources}
-                {#each costs as obj}
-                    <p class="text-left">
-                        {RESOURCE_NAMES[obj.type]}:
-                        <span
-                            class:text-red={!hasEnoughResources(
-                                obj.type,
-                                obj.cost
-                            )}
-                        >
-                            {resourceParser(obj.cost)}
-                        </span>
-                    </p>
-                {/each}
-            {/key}
+    {#if infoBoxType === INFO_BOX_TYPES.RESOURCE}
+        <div
+            class="absolute border-4 rpgui-container framed-grey max-w-250px"
+            style="top: {y}px; margin-left: {x}px"
+            bind:this={infoBox}
+        >
+            <div class="flex flex-col text-center">
+                <p>{title}</p>
+                <hr class="-mx-2" />
+                <p>{text}</p>
+                {#if costs.length > 0}
+                    <p class="my-3 underline">Cost</p>
+                {/if}
+                {#key $resources}
+                    {#each costs as obj}
+                        <p class="text-left">
+                            {RESOURCE_NAMES[obj.type]}:
+                            <span
+                                class:text-red={!hasEnoughResources(
+                                    obj.type,
+                                    obj.cost
+                                )}
+                            >
+                                {resourceParser(obj.cost)}
+                            </span>
+                        </p>
+                    {/each}
+                {/key}
+            </div>
         </div>
-    </div>
+    {:else}
+        <div
+            class="absolute border-4 rpgui-container framed-grey max-w-250px"
+            style="top: {y}px; margin-left: {x}px"
+            bind:this={infoBox}
+        >
+            <p>{title}</p>
+        </div>
+    {/if}
 {/if}
 
 <style>

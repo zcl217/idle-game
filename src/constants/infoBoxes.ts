@@ -3,13 +3,14 @@ import { EMPIRE_BUTTON_TYPES } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
 import { MILITARY_BUTTON_TYPES } from './buttons/militaryButtons';
 import { SCIENCE_BUTTON_TYPES } from './buttons/scienceButtons';
-import { GRANARY_BONUS, GRANARY_CAPACITY, QUARRY_BONUS, QUARRY_CAPACITY, SAWMILL_BONUS, SAWMILL_CAPACITY, STORAGE_CAPACITY, UNIVERSITY_BONUS, UNIVERSITY_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
+import { GATHER_FOOD_AMOUNT, GATHER_WOOD_AMOUNT, GRANARY_BONUS, GRANARY_CAPACITY, HOUSE_BONUS, MANSION_BONUS, MANSION_COAL_CONSUMPTION, QUARRY_BONUS, QUARRY_CAPACITY, SAWMILL_BONUS, SAWMILL_CAPACITY, STORAGE_CAPACITY, TAVERN_BONUS, TAVERN_FOOD_CONSUMPTION, UNIVERSITY_BONUS, UNIVERSITY_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
 import { BLAST_FURNACE_STEEL_OUTPUT, IRON_SMELTER_IRON_OUTPUT, WORKSHOP_WOOD_PLANK_OUTPUT } from './resources/industry';
+import { SPECIAL_ABILITIES } from './military/specialAbilities';
 
 export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     [EMPIRE_BUTTON_TYPES.GATHER_FOOD]: {
         title: 'Gather Food',
-        text: 'Collect 10 food'
+        text: `Collect ${GATHER_FOOD_AMOUNT} food`
     },
     [EMPIRE_BUTTON_TYPES.CREATE_FARM]: {
         title: 'Create Farm',
@@ -17,7 +18,7 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.GATHER_WOOD]: {
         title: 'Create Farm',
-        text: 'Collect 10 wood'
+        text: `Collect ${GATHER_WOOD_AMOUNT} wood`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: {
         title: 'Build Storage',
@@ -33,11 +34,19 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: {
         title: 'Build House',
-        text: 'Increases max workers by 1'
+        text: `Increases max workers by ${HOUSE_BONUS}`
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_MANSION]: {
+        title: 'Build Mansion',
+        text: `Increases max workers by ${MANSION_BONUS} and consumes ${MANSION_COAL_CONSUMPTION} coal per second`
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_TAVERN]: {
+        title: 'Build Tavern',
+        text: `Increases worker efficiency by ${TAVERN_BONUS}% per tavern and consumes ${TAVERN_FOOD_CONSUMPTION} food per second`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM]: {
         title: 'Build Athenaeum',
-        text: `Unlocks the science tab.`
+        text: `Unlocks the science tab`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: {
         title: 'Build Warehouse',
@@ -65,11 +74,19 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: {
         title: 'Build Iron Smelter',
-        text: `Converts raw ore into iron`
+        text: `Smelts raw ore into iron`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: {
         title: 'Build Blast Furnace',
-        text: `Converts iron into steel`
+        text: `Purifies iron into steel`
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_MITHRIL_FURNACE]: {
+        title: 'Build Mith Furnace',
+        text: `Forges a powerful alloy by combining steel and raw mithril ore`
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_MAGIC_FURNACE]: {
+        title: 'Build Magic Furnace',
+        text: `Uses magic to forcibly combine mithril alloy with raw adamantite ore`
     },
 }
 
@@ -94,9 +111,13 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
         title: 'Laws of Nature',
         text: 'Unlocks more advanced technology',
     },
-    [SCIENCE_BUTTON_TYPES.ART_OF_WAR]: {
-        title: 'Art of War',
-        text: 'Unlocks unit upgrades in the barracks',
+    // [SCIENCE_BUTTON_TYPES.ART_OF_WAR]: {
+    //     title: 'Art of War',
+    //     text: 'Unlocks unit upgrades in the barracks',
+    // },
+    [SCIENCE_BUTTON_TYPES.TAXATION]: {
+        title: 'Taxation',
+        text: 'Each worker generates 0.5 gold per second',
     },
     [SCIENCE_BUTTON_TYPES.CONSCRIPTION]: {
         title: 'Conscription',
@@ -146,6 +167,14 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
         title: 'Shaft Mining',
         text: 'Increases mining speed by 50% (stacks with previous upgrades)',
     },
+    [SCIENCE_BUTTON_TYPES.MITHRIL_PICKAXE]: {
+        title: 'Mithril Pickaxe',
+        text: 'Increases mining speed by 50% (stacks with previous upgrades)',
+    },
+    [SCIENCE_BUTTON_TYPES.ADAMANTITE_PICKAXE]: {
+        title: 'Adamantite Pickaxe',
+        text: 'Increases mining speed by 50% (stacks with previous upgrades)',
+    },
     [SCIENCE_BUTTON_TYPES.ORE_MINING]: {
         title: 'Ore Mining',
         text: 'Unlocks ore mining',
@@ -154,9 +183,17 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
         title: 'Iron Smelting',
         text: 'Unlocks iron processing',
     },
+    [SCIENCE_BUTTON_TYPES.HUNTERS]: {
+        title: 'Hunters',
+        text: 'Allows workers to hunt for fur',
+    },
     [SCIENCE_BUTTON_TYPES.STEELMAKING]: {
         title: 'Steelmaking',
         text: 'Unlocks steel',
+    },
+    [SCIENCE_BUTTON_TYPES.STEEL_FRAMING]: {
+        title: 'Steel Framing',
+        text: 'Unlocks more advanced buildings',
     },
     [SCIENCE_BUTTON_TYPES.BARRACKS]: {
         title: 'Barracks',
@@ -173,6 +210,30 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
     [SCIENCE_BUTTON_TYPES.MAGIC]: {
         title: 'Magic',
         text: 'Unlocks the mage unit line',
+    },
+    [SCIENCE_BUTTON_TYPES.MITHRIL]: {
+        title: 'Mithril',
+        text: 'Unlocks mithril',
+    },
+    [SCIENCE_BUTTON_TYPES.ADAMANTITE]: {
+        title: 'Adamantite',
+        text: 'Unlocks adamantite',
+    },
+    [SCIENCE_BUTTON_TYPES.STUDY_SINATRA_ARTIFACT]: {
+        title: 'Study Artifact',
+        text: 'Unlocks the heavy infantry unit upgrade',
+    },
+    [SCIENCE_BUTTON_TYPES.STUDY_ADUN_ARTIFACT]: {
+        title: 'Study Artifact',
+        text: 'Unlocks the pikeman unit upgrade',
+    },
+    [SCIENCE_BUTTON_TYPES.STUDY_AEDUS_TOME_ARTIFACT]: {
+        title: 'Study Artifact',
+        text: 'Unlocks the mage unit upgrade',
+    },
+    [SCIENCE_BUTTON_TYPES.STUDY_LUTAREZ_ARTIFACT]: {
+        title: 'Study Artifact',
+        text: 'Unlocks the shocktrooper unit upgrade',
     },
 
 }
@@ -242,6 +303,33 @@ export const MILITARY_INFO_BOXES: IInfoBoxList = {
         title: 'Train Arch Mage',
         text: 'Increases arch mage count by one'
     },
+    [MILITARY_BUTTON_TYPES.TRAIN_THUNDERER]: {
+        title: 'Train Thunderer',
+        text: 'Increases thunderer count by one'
+    },
+    [MILITARY_BUTTON_TYPES.UPGRADE_THUNDERER]: {
+        title: 'Upgrade Thunderer',
+        text: 'Upgrades thunderers mages'
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_THUNDERGUARD]: {
+        title: 'Train Thunderguard',
+        text: 'Increases thunderguard count by one'
+    },
+    [MILITARY_BUTTON_TYPES.UPGRADE_THUNDERGUARD]: {
+        title: 'Upgrade Thunderguard',
+        text: 'Upgrades all thunderguards'
+    },
+    [MILITARY_BUTTON_TYPES.TRAIN_DRAGONGUARD]: {
+        title: 'Train Dragonguard',
+        text: 'Increases dragonguard count by one'
+    },
+}
+
+export const ABILITY_INFO_BOXES: Record<string, string> = {
+    [SPECIAL_ABILITIES.RANGED]: 'Ranged: Can attack from a distance',
+    [SPECIAL_ABILITIES.ETHEREAL]: 'Ethereal: Can move off of the main path',
+    [SPECIAL_ABILITIES.AOE]: 'AOE: Deals damage to all units in the target cell',
+    [SPECIAL_ABILITIES.GLOBAL_POISON]: 'Global poison: Every time the ghast moves to the next tile, every unit takes poison damage'
 }
 
 export const OTHER_INFO_BOXES: IInfoBoxList = {
@@ -253,4 +341,9 @@ export const OTHER_INFO_BOXES: IInfoBoxList = {
         title: 'Destroyer of All',
         text: `Don't worry, you're not actually going to destroy everything. However, your power will become so great that one could mistake you as a bringer of apocalypse. Be warned, however, as humans aren't capable of such power, nor will humans want to follow you...`
     },
+}
+
+export const INFO_BOX_TYPES: Record<string, string> = {
+    RESOURCE: 'resource',
+    ABILITY: 'ability',
 }

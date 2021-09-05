@@ -42,6 +42,26 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         limit: 100,
         displayGenerationRate: true
     },
+    [RESOURCE_TYPES.MITHRIL]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.MITHRIL_ALLOY]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.ADAMANTITE]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
+    [RESOURCE_TYPES.ADAMANTITE_ALLOY]: {
+        value: 0,
+        limit: 100,
+        displayGenerationRate: true
+    },
     [RESOURCE_TYPES.GOLD]: {
         value: 0,
         limit: 100,
@@ -84,6 +104,16 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         limit: Number.MAX_VALUE,
         displayGenerationRate: false
     },
+    [RESOURCE_TYPES.MANSION]: {
+        value: 0,
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
+    },
+    [RESOURCE_TYPES.TAVERN]: {
+        value: 0,
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
+    },
     [RESOURCE_TYPES.ATHENAEUM]: {
         value: 0,
         limit: Number.MAX_VALUE,
@@ -120,6 +150,16 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         displayGenerationRate: false
     },
     [RESOURCE_TYPES.BLAST_FURNACE]: {
+        value: 0,
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
+    },
+    [RESOURCE_TYPES.MITHRIL_FURNACE]: {
+        value: 0,
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
+    },
+    [RESOURCE_TYPES.MAGIC_FURNACE]: {
         value: 0,
         limit: Number.MAX_VALUE,
         displayGenerationRate: false

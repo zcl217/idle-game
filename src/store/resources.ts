@@ -92,7 +92,9 @@ const createNewResources = (resources: IResourceList) => {
 export const blastFurnacesActivated = writable(false);
 export const insufficientFood = writable(false);
 export const ironSmeltersActivated = writable(false);
+export const magicFurnacesActivated = writable(false);
 export const obtainedResources = createNewObtainedResources(initialResourceSet);
 export const resources = createNewResources(INITIAL_RESOURCE_STATE);
 export const resourcesFromExpeditions = createResourcesFromExpeditions(initialExpeditionResourceRate);
+export const mithrilFurnacesActivated = writable(false);
 export const workshopsActivated = writable(false);

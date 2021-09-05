@@ -15,6 +15,8 @@
         hasEnoughResources,
         spendResources,
     } from "~/utils/resourceHelpers";
+import { selectedMilitaryUnits } from "~/store/military";
+import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
 
     let buttonsToDisplay: Set<string> = new Set();
     $: {
@@ -34,8 +36,17 @@
         spendResources(SCIENCE_BUTTON_COSTS, resources, science);
         researchedSciences.update((list: Set<string>) => list.add(science));
         switch (science) {
-            case SCIENCE_BUTTON_TYPES.BARRACKS:
+            case SCIENCE_BUTTON_TYPES.SLINGSHOTS:
+                $selectedMilitaryUnits.push(UNIT_TYPES.FOOTPAD);
                 break;
+            case SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY:
+                $selectedMilitaryUnits.push(UNIT_TYPES.HEAVY_INFANTRY);
+                break;
+            case SCIENCE_BUTTON_TYPES.MAGIC:
+                $selectedMilitaryUnits.push(UNIT_TYPES.MAGE);
+                break;
+            default:
+                return;
         }
     };
 </script>

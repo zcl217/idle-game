@@ -14,6 +14,8 @@ export const EMPIRE_BUTTON_TYPES: Record<string, string> = {
     BUILD_WAREHOUSE: 'buildWarehouse',
     BUILD_ATTRACTIVE_HOUSE: 'buildAttractiveHouse',
     BUILD_HOUSE: 'buildHouse',
+    BUILD_MANSION: 'buildMansion',
+    BUILD_TAVERN: 'buildTavern',
     BUILD_ATHENAEUM: 'buildAthenaeum ',
     BUILD_GRANARY: 'buildGranary',
     BUILD_SAWMILL: 'buildSawmill',
@@ -22,6 +24,8 @@ export const EMPIRE_BUTTON_TYPES: Record<string, string> = {
     BUILD_WORKSHOP: 'buildWorkshop',
     BUILD_IRON_SMELTER: 'buildIronSmelter',
     BUILD_BLAST_FURNACE: 'buildBlastFurnace',
+    BUILD_MITHRIL_FURNACE: 'buildMithrilFurnace',
+    BUILD_MAGIC_FURNACE: 'buildMagicFurnace',
 }
 
 export const EMPIRE_BUTTON_TEXTS = {
@@ -32,7 +36,9 @@ export const EMPIRE_BUTTON_TEXTS = {
     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: 'Create Tree Farm',
     [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: 'Attractive House',
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: 'Build House',
-    [EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM]: 'Build Athenaeum ',
+    [EMPIRE_BUTTON_TYPES.BUILD_MANSION]: 'Build Mansion',
+    [EMPIRE_BUTTON_TYPES.BUILD_TAVERN]: 'Build Tavern',
+    [EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM]: 'Build Athenaeum',
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: 'Build Warehouse',
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: 'Build Granary',
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: 'Build Sawmill',
@@ -41,6 +47,8 @@ export const EMPIRE_BUTTON_TEXTS = {
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: 'Build Workshop',
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: 'Build Iron Smelter',
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: 'Build Blast Furnace',
+    [EMPIRE_BUTTON_TYPES.BUILD_MITHRIL_FURNACE]: 'Build Mith Furnace',
+    [EMPIRE_BUTTON_TYPES.BUILD_MAGIC_FURNACE]: 'Build Magic Furnace',
 }
 
 
@@ -52,6 +60,8 @@ export const BUTTON_RESOURCE_MAPPING = {
     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: RESOURCE_TYPES.TREE_FARM,
     [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: RESOURCE_TYPES.ATTRACTIVE_HOUSE,
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: RESOURCE_TYPES.HOUSE,
+    [EMPIRE_BUTTON_TYPES.BUILD_MANSION]: RESOURCE_TYPES.MANSION,
+    [EMPIRE_BUTTON_TYPES.BUILD_TAVERN]: RESOURCE_TYPES.TAVERN,
     [EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM]: RESOURCE_TYPES.ATHENAEUM,
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: RESOURCE_TYPES.WAREHOUSE,
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: RESOURCE_TYPES.GRANARY,
@@ -61,6 +71,8 @@ export const BUTTON_RESOURCE_MAPPING = {
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: RESOURCE_TYPES.WORKSHOP,
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: RESOURCE_TYPES.IRON_SMELTER,
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: RESOURCE_TYPES.BLAST_FURNACE,
+    [EMPIRE_BUTTON_TYPES.BUILD_MITHRIL_FURNACE]: RESOURCE_TYPES.MITHRIL_FURNACE,
+    [EMPIRE_BUTTON_TYPES.BUILD_MAGIC_FURNACE]: RESOURCE_TYPES.MAGIC_FURNACE,
 }
 
 export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
@@ -92,6 +104,14 @@ export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
         sciencePrereqs: [],
         resourcePrereqs: [],
         storyPrereq: STORY_PROGRESS_LIST['A2S1']
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_MANSION]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEEL_FRAMING],
+        resourcePrereqs: [],
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_TAVERN]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEEL_FRAMING],
+        resourcePrereqs: [],
     },
     [EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM]: {
         sciencePrereqs: [],
@@ -130,6 +150,14 @@ export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEELMAKING],
         resourcePrereqs: [],
     },
+    [EMPIRE_BUTTON_TYPES.BUILD_MITHRIL_FURNACE]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MITHRIL],
+        resourcePrereqs: [],
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_MAGIC_FURNACE]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.ADAMANTITE],
+        resourcePrereqs: [],
+    },
 }
 
 export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
@@ -148,7 +176,17 @@ export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.WOOD, cost: 700 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: [
-        { type: RESOURCE_TYPES.WOOD, cost: 100 },
+        { type: RESOURCE_TYPES.WOOD, cost: 150 },
+    ],
+    [EMPIRE_BUTTON_TYPES.BUILD_MANSION]: [
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 50 },
+        { type: RESOURCE_TYPES.STEEL, cost: 20 }
+    ],
+    [EMPIRE_BUTTON_TYPES.BUILD_TAVERN]: [
+        { type: RESOURCE_TYPES.FOOD, cost: 1000 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 100 },
+        { type: RESOURCE_TYPES.STEEL, cost: 30 },
+        { type: RESOURCE_TYPES.GOLD, cost: 10 }
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM]: [
         { type: RESOURCE_TYPES.WOOD, cost: 500 },
@@ -196,51 +234,20 @@ export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.IRON, cost: 100 },
         { type: RESOURCE_TYPES.GOLD, cost: 20 },
     ],
-}
-
-export const EMPIRE_COST_MULTIPLIERS = {
-    [EMPIRE_BUTTON_TYPES.CREATE_FARM]: (val: number): number => {
-        return val * 1.05 + 5
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: (val: number): number => {
-        return val + (STORAGE_CAPACITY * 0.5)
-    },
-    [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: (val: number): number => {
-        return val * 1.05
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE]: (val: number): number => {
-        return Math.min(val * 1.3 + 33, 1000);
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: (val: number): number => {
-        return val * 1.2
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM]: (val: number): number => {
-        return val * 1.2 + 300
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: (val: number): number => {
-        return val * 1.1 + 10
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: (val: number): number => {
-        return val * 1.2 + 30
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: (val: number): number => {
-        return val * 1.2 + 30
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_QUARRY]: (val: number): number => {
-        return val * 1.2 + 30
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: (val: number): number => {
-        return val * 1.2 + 30
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: (val: number): number => {
-        return val * 1.2
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: (val: number): number => {
-        return val * 1.2
-    },
-    [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: (val: number): number => {
-        return val * 1.2
-    },
+    [EMPIRE_BUTTON_TYPES.BUILD_MITHRIL_FURNACE]: [
+        { type: RESOURCE_TYPES.COAL, cost: 10000 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 1000 },
+        { type: RESOURCE_TYPES.STEEL, cost: 500 },
+        { type: RESOURCE_TYPES.MITHRIL, cost: 100 },
+        { type: RESOURCE_TYPES.GOLD, cost: 100 },
+    ],
+    [EMPIRE_BUTTON_TYPES.BUILD_MAGIC_FURNACE]: [
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 20000 },
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 10000 },
+        { type: RESOURCE_TYPES.MITHRIL_ALLOY, cost: 500 },
+        { type: RESOURCE_TYPES.ADAMANTITE, cost: 50 },
+        { type: RESOURCE_TYPES.GOLD, cost: 500 },
+    ],
 }
 
 export const RESIDENTIAL_SECTOR_BUTTONS = new Set<string>([
@@ -249,6 +256,8 @@ export const RESIDENTIAL_SECTOR_BUTTONS = new Set<string>([
     EMPIRE_BUTTON_TYPES.GATHER_WOOD,
     EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM,
     EMPIRE_BUTTON_TYPES.BUILD_HOUSE,
+    EMPIRE_BUTTON_TYPES.BUILD_MANSION,
+    EMPIRE_BUTTON_TYPES.BUILD_TAVERN,
     EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM,
     EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY
 ]);
@@ -264,5 +273,7 @@ export const STORAGE_SECTOR_BUTTONS = new Set<string>([
 export const INDUSTRY_SECTOR_BUTTONS = new Set<string>([
     EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP,
     EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER,
-    EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE
+    EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE,
+    EMPIRE_BUTTON_TYPES.BUILD_MITHRIL_FURNACE,
+    EMPIRE_BUTTON_TYPES.BUILD_MAGIC_FURNACE
 ]);

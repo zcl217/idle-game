@@ -5,6 +5,7 @@ export const BUTTON_CATEGORIES: Record<string, string> = {
     EMPIRE: 'empire',
     SCIENCE: 'science',
     MILITARY: 'military',
+    EXPEDITION: 'expedition'
 }
 
 export const TABS = {

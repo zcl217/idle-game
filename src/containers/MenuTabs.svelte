@@ -61,7 +61,7 @@
                 toggleTab(TABS.MAIN_2);
             }}
         >
-            <span class="w-8 h-8 m-auto bg-base" />
+            <span class="w-8 h-8 m-auto bg-hammer" />
         </button>
         <button
             class="flex rpgui-button tab-width 
@@ -168,8 +168,5 @@
     .tab-width {
         width: 105px;
         min-width: 0px !important;
-    }
-    .selected {
-        background-image: url("../img/button-down.png");
     }
 </style>

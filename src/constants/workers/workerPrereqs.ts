@@ -14,6 +14,10 @@ export const WORKER_PREREQS: IPrereqsList = {
         sciencePrereqs: [],
         resourcePrereqs: []
     },
+    [WORKER_TYPES.HUNTER]: {
+        sciencePrereqs: [],
+        resourcePrereqs: []
+    },
     [WORKER_TYPES.MINER]: {
         sciencePrereqs: [],
         resourcePrereqs: []

@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
-import { BLAST_FURNACE_INPUTS, BLAST_FURNACE_OUTPUTS, IRON_SMELTER_INPUTS, IRON_SMELTER_OUTPUTS, WORKSHOP_INPUTS, WORKSHOP_OUTPUTS } from "~/constants/resources/industry";
+import { EMPIRE_BUTTON_TYPES, INITIAL_EMPIRE_BUTTON_COSTS } from "~/constants/buttons/empireButtons";
+import { BLAST_FURNACE_INPUTS, BLAST_FURNACE_OUTPUTS, IRON_SMELTER_INPUTS, IRON_SMELTER_OUTPUTS, MAGIC_FURNACE_INPUTS, MAGIC_FURNACE_OUTPUTS, MITHRIL_FURNACE_INPUTS, MITHRIL_FURNACE_OUTPUTS, WORKSHOP_INPUTS, WORKSHOP_OUTPUTS } from "~/constants/resources/industry";
 import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
 import type { IResourceList } from "~/interfaces/resource";
 
@@ -48,6 +49,10 @@ export const getIndustryInputList = (industryBuilding: string): Record<string, n
             return IRON_SMELTER_INPUTS;
         case RESOURCE_TYPES.BLAST_FURNACE:
             return BLAST_FURNACE_INPUTS;
+        case RESOURCE_TYPES.MITHRIL_FURNACE:
+            return MITHRIL_FURNACE_INPUTS;
+        case RESOURCE_TYPES.MAGIC_FURNACE:
+            return MAGIC_FURNACE_INPUTS;
         default:
             break;
     }
@@ -61,7 +66,39 @@ export const getIndustryOutputList = (industryBuilding: string): Record<string, 
             return IRON_SMELTER_OUTPUTS;
         case RESOURCE_TYPES.BLAST_FURNACE:
             return BLAST_FURNACE_OUTPUTS;
+        case RESOURCE_TYPES.MITHRIL_FURNACE:
+            return MITHRIL_FURNACE_OUTPUTS;
+        case RESOURCE_TYPES.MAGIC_FURNACE:
+            return MAGIC_FURNACE_OUTPUTS;
         default:
             break;
+    }
+}
+
+export const buildingCostCalculator = (buttonType: string, buildingsOwned: number, resourceType: string) => {
+    const baseCost = INITIAL_EMPIRE_BUTTON_COSTS[buttonType].find(i => i.type === resourceType)
+    if (!baseCost) return 0;
+    switch (buttonType) {
+        case EMPIRE_BUTTON_TYPES.CREATE_FARM:
+        case EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM:
+            return baseCost.cost * Math.pow(1.1, buildingsOwned) + 1;
+        case EMPIRE_BUTTON_TYPES.BUILD_STORAGE:
+        case EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE:
+        case EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE:
+        case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
+        case EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY:
+            return baseCost.cost * Math.pow(1.1, buildingsOwned);
+        case EMPIRE_BUTTON_TYPES.BUILD_GRANARY:
+        case EMPIRE_BUTTON_TYPES.BUILD_SAWMILL:
+        case EMPIRE_BUTTON_TYPES.BUILD_QUARRY:
+            return baseCost.cost * Math.pow(1.2, buildingsOwned);
+        case EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP:
+        case EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER:
+        case EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE:
+        case EMPIRE_BUTTON_TYPES.BUILD_MITHRIL_FURNACE:
+        case EMPIRE_BUTTON_TYPES.BUILD_MAGIC_FURNACE:
+            return baseCost.cost * Math.pow(1.05, buildingsOwned);
+        default:
+            return baseCost.cost * Math.pow(1.1, buildingsOwned);
     }
 }

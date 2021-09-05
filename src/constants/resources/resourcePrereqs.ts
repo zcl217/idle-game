@@ -52,12 +52,28 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
         resourcePrereqs: []
     },
     [RESOURCE_TYPES.FURS]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.BARRACKS],
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.HUNTERS],
         resourcePrereqs: []
     },
     [RESOURCE_TYPES.STEEL]: {
         sciencePrereqs: [],
         resourcePrereqs: [RESOURCE_TYPES.BLAST_FURNACE]
+    },
+    [RESOURCE_TYPES.MITHRIL]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MITHRIL],
+        resourcePrereqs: []
+    },
+    [RESOURCE_TYPES.MITHRIL_ALLOY]: {
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.MITHRIL_FURNACE]
+    },
+    [RESOURCE_TYPES.ADAMANTITE]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.ADAMANTITE],
+        resourcePrereqs: []
+    },
+    [RESOURCE_TYPES.ADAMANTITE_ALLOY]: {
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.MAGIC_FURNACE]
     },
     [RESOURCE_TYPES.WAREHOUSE]: {
         sciencePrereqs: [],
@@ -86,5 +102,13 @@ export const RESOURCE_DISPLAY_PREREQS: IPrereqsList = {
     [RESOURCE_TYPES.BLAST_FURNACE]: {
         sciencePrereqs: [],
         resourcePrereqs: [RESOURCE_TYPES.BLAST_FURNACE]
+    },
+    [RESOURCE_TYPES.MITHRIL_FURNACE]: {
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.MITHRIL_FURNACE]
+    },
+    [RESOURCE_TYPES.MAGIC_FURNACE]: {
+        sciencePrereqs: [],
+        resourcePrereqs: [RESOURCE_TYPES.MAGIC_FURNACE]
     },
 }

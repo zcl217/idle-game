@@ -43,10 +43,14 @@
             $insufficientFood,
             process.env.isDev
         );
-        if (type === RESOURCE_TYPES.FOOD) {
-            const hasFoodShortage =
-                $resources[type].value === 0 && generationRate < 0;
-            insufficientFood.set(hasFoodShortage);
+        switch (type) {
+            case RESOURCE_TYPES.FOOD:
+                const hasFoodShortage =
+                    $resources[type].value === 0 && generationRate < 0;
+                insufficientFood.set(hasFoodShortage);
+                break;
+            default:
+                break;
         }
         if (generationRate < 0 && $resources[type].value === 0) return;
         resources.incrementResourceValue(type, generationRate * secondsElapsed);

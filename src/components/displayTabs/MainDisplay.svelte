@@ -20,9 +20,8 @@
     import {
         BUTTON_RESOURCE_MAPPING,
         EMPIRE_BUTTON_TYPES,
-        EMPIRE_COST_MULTIPLIERS,
     } from "~/constants/buttons/empireButtons";
-    import { STORAGE_CAPACITY } from "~/constants/gameState";
+    import { GATHER_FOOD_AMOUNT, GATHER_WOOD_AMOUNT, STORAGE_CAPACITY } from "~/constants/gameState";
     import {
         hasEnoughResources,
         spendResources,
@@ -64,7 +63,18 @@
         }
     };
     const gatherResource = (type: string) => {
-        resources.incrementResourceValue(type, 10);
+        let amount = 0;
+        switch(type) {
+            case RESOURCE_TYPES.FOOD:
+                amount = GATHER_FOOD_AMOUNT;
+                break;
+            case RESOURCE_TYPES.WOOD:
+                amount = GATHER_WOOD_AMOUNT;
+                break;
+            default:
+                break;
+        }
+        resources.incrementResourceValue(type, amount);
         obtainedResources.add(type);
     };
     const createBuilding = (
@@ -77,7 +87,7 @@
         resources.incrementResourceValue(resourceType, 1);
         empireButtonCosts.updateButtonCosts(
             buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
+            $resources[resourceType].value
         );
         obtainedResources.add(resourceType);
         return true;

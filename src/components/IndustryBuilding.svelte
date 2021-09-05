@@ -73,9 +73,6 @@
     .flex-25 {
         flex: 25%;
     }
-    .flex-50 {
-        flex: 50%;
-    }
     .bg {
         background-color: rgba(133, 76, 48, 0.5);
     }
@@ -89,13 +86,6 @@
     }
     .mr-10 {
         margin-right: 2.5rem;
-    }
-    .my-4 {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
-    .w-1\/2 {
-        width: 50%;
     }
     .justify-evenly {
         justify-content: space-evenly;

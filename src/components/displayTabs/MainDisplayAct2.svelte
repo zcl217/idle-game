@@ -10,17 +10,18 @@
     import {
         BUTTON_RESOURCE_MAPPING,
         EMPIRE_BUTTON_TYPES,
-        EMPIRE_COST_MULTIPLIERS,
         INDUSTRY_SECTOR_BUTTONS,
         RESIDENTIAL_SECTOR_BUTTONS,
         STORAGE_SECTOR_BUTTONS,
     } from "~/constants/buttons/empireButtons";
     import { empireButtonCosts } from "~/store/buttonCosts";
     import { buttonPrereqsMet } from "~/utils/helpers";
-    import { workers } from "~/store/workers";
+    import { totalWorkers, workers } from "~/store/workers";
     import { WORKER_TYPES } from "~/constants/workers/workerTypes";
     import {
         GRANARY_CAPACITY,
+        HOUSE_BONUS,
+        MANSION_BONUS,
         QUARRY_CAPACITY,
         SAWMILL_CAPACITY,
         STORAGE_CAPACITY,
@@ -95,8 +96,12 @@
                 $hiddenButtons.add(EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
-                resources.setResourceValue(RESOURCE_TYPES.WOOD_PLANK, 0);
-                workers.increment(WORKER_TYPES.UNASSIGNED, 1);
+                workers.increment(WORKER_TYPES.UNASSIGNED, HOUSE_BONUS);
+                totalWorkers.add(HOUSE_BONUS);
+                break;
+            case EMPIRE_BUTTON_TYPES.BUILD_MANSION:
+                workers.increment(WORKER_TYPES.UNASSIGNED, MANSION_BONUS);
+                totalWorkers.add(MANSION_BONUS);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_STORAGE:
                 incrementResourceLimits(STORAGE_CAPACITY);
@@ -154,7 +159,7 @@
         resources.incrementResourceValue(resourceType, 1);
         empireButtonCosts.updateButtonCosts(
             buttonType,
-            EMPIRE_COST_MULTIPLIERS[buttonType]
+            $resources[resourceType].value
         );
         obtainedResources.add(resourceType);
         return true;

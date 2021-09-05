@@ -98,7 +98,6 @@ export const DIALOGUES: IDialogueList = {
             const nextScene = STORY_PROGRESS_LIST['A2S1'];
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
-            displayDialogueBox.set(false);
         },
         noHandler: () => {
             // no second option

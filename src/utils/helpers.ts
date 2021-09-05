@@ -1,5 +1,5 @@
-import { SCIENCE_BUTTON_PREREQS } from '~/constants/buttons/scienceButtons';
-import { EMPIRE_BUTTON_PREREQS, EMPIRE_BUTTON_TYPES } from '~/constants/buttons/empireButtons';
+import { SCIENCE_BUTTON_PREREQS, SCIENCE_BUTTON_TYPES } from '~/constants/buttons/scienceButtons';
+import { EMPIRE_BUTTON_PREREQS, EMPIRE_BUTTON_TYPES, INITIAL_EMPIRE_BUTTON_COSTS } from '~/constants/buttons/empireButtons';
 import { get } from 'svelte/store';
 import {
     researchedSciences as researchedSciencesFromStore,
@@ -7,12 +7,17 @@ import {
 } from '~/store/gameState';
 import { obtainedResources as obtainedResourcesFromStore } from '~/store/resources';
 import { BUTTON_CATEGORIES } from '~/constants/buttons/buttons';
-import * as humanUnits from '~/constants/military/units/humans'
+import * as humanUnits from '~/constants/military/units/humans';
+import * as dwarvenUnits from '~/constants/military/units/dwarves';
 import { UNIT_TYPES } from '~/constants/military/units/unitTypes'
 import type { ICoordinates, IPrereqsList } from '~/interfaces/common';
 import type { ISprite } from '~/interfaces/military/sprite';
 import { SPRITE_SIZES } from '~/constants/military/sprites';
 import { STAGE_LIST } from '~/constants/military/stageList';
+import { PROJECTILE_TYPES, THUNDERSTICK_BLAST_HEIGHT, THUNDERSTICK_BLAST_WIDTH } from '~/constants/military/projectiles';
+import { ENEMY_SPAWN_LIST } from '~/constants/military/enemySpawnList';
+import { cloneDeep } from 'lodash';
+import { LIBRARY_COLLECTIONS } from '~/constants/library/library';
 
 export const buttonPrereqsMet = (type: string, buttonCategory: string): boolean => {
     let prereqList = {} as IPrereqsList;
@@ -30,7 +35,7 @@ export const buttonPrereqsMet = (type: string, buttonCategory: string): boolean 
     const { sciencePrereqs } = prereqList[type]
     const { resourcePrereqs } = prereqList[type]
     const researchedSciences = get(researchedSciencesFromStore);
-    const obtainedResources = get(obtainedResourcesFromStore)
+    const obtainedResources = get(obtainedResourcesFromStore);
     for (const science of sciencePrereqs) {
         if (!researchedSciences.has(science)) return false;
     }
@@ -65,6 +70,12 @@ export const getSprite = (input: string): ISprite => {
             return humanUnits.MAGE;
         case UNIT_TYPES.ARCH_MAGE:
             return humanUnits.ARCH_MAGE;
+        case UNIT_TYPES.THUNDERER:
+            return dwarvenUnits.THUNDERER;
+        case UNIT_TYPES.THUNDERGUARD:
+            return {} as ISprite;
+        case UNIT_TYPES.THUNDERER:
+            return {} as ISprite;
         default:
             return {} as ISprite;
     }
@@ -89,6 +100,29 @@ export const getSpriteBackgroundPosition = (
         (sprite.position.spriteSheetOffsetX || 0) / 1.5 - nonAnimatingOffsetX;
     const spriteSheetPositionY =
         spriteSheetPosition.row * -sprite.spriteInfo.spriteSize.y - nonAnimatingOffsetY;
+    return `${spriteSheetPositionX}px ${spriteSheetPositionY}px`;
+}
+
+export const getProjectileBackgroundPosition = (
+    type: string,
+    attackFrames: ICoordinates[],
+    currentFrame: number,
+): string => {
+    let width = 0;
+    let height = 0;
+    switch (type) {
+        case PROJECTILE_TYPES.THUNDERSTICK_BLAST:
+            width = THUNDERSTICK_BLAST_WIDTH;
+            height = THUNDERSTICK_BLAST_HEIGHT;
+            break;
+        default:
+            return '0px 0px';
+    }
+    const spriteSheetPosition = attackFrames[currentFrame];
+    const spriteSheetPositionX =
+        spriteSheetPosition.col * -width;
+    const spriteSheetPositionY =
+        spriteSheetPosition.row * -height;
     return `${spriteSheetPositionX}px ${spriteSheetPositionY}px`;
 }
 
@@ -123,5 +157,45 @@ export const areAllZoneStagesCleared = (
             );
         default:
             return;
+    }
+};
+
+export const generatePreviewList = (stageList: string): { sprite: ISprite, amount: number }[] => {
+    const previewList: { sprite: ISprite, amount: number }[] = [] as any;
+    if (!ENEMY_SPAWN_LIST[stageList]) return previewList;
+    const spawnList = cloneDeep(ENEMY_SPAWN_LIST[stageList]);
+    for (let a = spawnList.length - 1; a >= 0;) {
+        let currentUnit = spawnList[a].enemyUnit;
+        let amount = spawnList[a].amount;
+        spawnList.splice(a, 1);
+        for (let b = a - 1; b >= 0; b--) {
+            if (spawnList[b].enemyUnit === currentUnit) {
+                amount += spawnList[b].amount;
+                spawnList.splice(b, 1);
+            }
+        }
+        previewList.push({
+            sprite: currentUnit,
+            amount
+        });
+        a = spawnList.length - 1;
+    }
+    return previewList;
+}
+
+export const displayUnit = (unitType: string, researchedSciences: Set<string>, completedCollections: Set<string>): boolean => {
+    switch (unitType) {
+        case UNIT_TYPES.FOOTPAD:
+            return researchedSciences.has(SCIENCE_BUTTON_TYPES.SLINGSHOTS);
+        case UNIT_TYPES.HEAVY_INFANTRY:
+            return researchedSciences.has(
+                SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY
+            );
+        case UNIT_TYPES.MAGE:
+            return researchedSciences.has(SCIENCE_BUTTON_TYPES.MAGIC);
+        case UNIT_TYPES.THUNDERER:
+            return completedCollections.has(LIBRARY_COLLECTIONS.TODO);
+        default:
+            return true;
     }
 };

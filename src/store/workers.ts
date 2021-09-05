@@ -57,4 +57,15 @@ const createNewWorkers = (workers: Record<string, { value: number, generationVal
     }
 }
 
+const createNewTotalWorkers = (total: number) => {
+    const { subscribe, update, set } = writable(total);
+    return {
+        subscribe,
+        set,
+        add: (value: number) => update(total => total + value),
+        subtract: (value: number) => update(total => total - value),
+    };
+}
+
 export const workers = createNewWorkers(INITIAL_WORKER_STATE);
+export const totalWorkers = createNewTotalWorkers(1);
