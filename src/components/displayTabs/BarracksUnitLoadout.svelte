@@ -79,7 +79,7 @@
 <style>
     .button-style {
         overflow: hidden;
-        background: url(img/button-golden.png) center no-repeat no-repeat;
+        background: url("../img/button-golden.png") center no-repeat no-repeat;
         background-clip: padding-box;
         background-origin: padding-box;
         background-size: 100% 100%;
