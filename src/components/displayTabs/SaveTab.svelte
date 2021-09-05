@@ -1,40 +1,59 @@
 <script lang="ts">
     import { isEmpty, size } from "lodash";
     import { get } from "svelte/store";
-    import GameLoop from "~/GameLoop.svelte";
     import * as ButtonCostsStore from "~/store/buttonCosts";
     import * as GameStateStore from "~/store/gameState";
     import * as MilitaryStore from "~/store/military";
     import * as ResourcesStore from "~/store/resources";
     //  import * as ScienceStore from "~/store/science";
     import * as WorkersStore from "~/store/workers";
+    import * as LibraryStore from "~/store/library";
 
+    const STORE_TYPES: Record<string, string> = {
+        BUTTON_COSTS: "buttonCostsStore",
+        GAME_STATE: "gameStateStore",
+        MILITARY: "militaryStore",
+        RESOURCES: "resourcesStore",
+        WORKERS: "workersStore",
+        LIBRARY: "libraryStore",
+    };
+    const storeCategories: Set<string> = new Set([
+        STORE_TYPES.BUTTON_COSTS,
+        STORE_TYPES.GAME_STATE,
+        STORE_TYPES.MILITARY,
+        STORE_TYPES.RESOURCES,
+        STORE_TYPES.WORKERS,
+        STORE_TYPES.LIBRARY,
+    ]);
     let displayCredits = false;
-    // TODO: refactor this file
     // KEY POINT: Don't forget to add every hashset store into the hashSetStores constant!
-    const dividerCount =
-        size(ButtonCostsStore) +
-        size(GameStateStore) +
-        size(MilitaryStore) +
-        size(ResourcesStore) +
-        size(WorkersStore);
     const divider = "divider";
     const hashSetStores = new Set<string>([
         "hiddenButtons",
         "researchedSciences",
         "obtainedResources",
+        "completedCollections",
+        "unlockedCollections",
     ]);
     let loadError = false;
     let loadSuccess = false;
     let saveText = "";
-    let loadText = "";
+    let loadText =
+        "";
     let copiedSave = false;
     const generateSave = () => {
+        saveText += STORE_TYPES.BUTTON_COSTS + divider;
         saveText += generateStoreSave(ButtonCostsStore);
+        saveText += STORE_TYPES.GAME_STATE + divider;
         saveText += generateStoreSave(GameStateStore);
+        saveText += STORE_TYPES.MILITARY + divider;
         saveText += generateStoreSave(MilitaryStore);
+        saveText += STORE_TYPES.RESOURCES + divider;
         saveText += generateStoreSave(ResourcesStore);
+        saveText += STORE_TYPES.WORKERS + divider;
         saveText += generateStoreSave(WorkersStore);
+        saveText += STORE_TYPES.LIBRARY + divider;
+        saveText += generateStoreSave(LibraryStore);
         // remove the last divider
         saveText = saveText.substring(0, saveText.length - divider.length);
         saveText = btoa(saveText);
@@ -55,7 +74,7 @@
                 ? []
                 : [...(storeValue as Set<string>)];
         }
-        return JSON.stringify(storeValue) + divider;
+        return key + divider + JSON.stringify(storeValue) + divider;
     };
     const copySave = () => {
         let text = document.getElementById("generatedSave") as HTMLInputElement;
@@ -77,30 +96,52 @@
                 }
             }
             return;
+        } else if (loadText === "showmesomemoney") {
+            const resources = get(ResourcesStore.resources);
+            for (let [name, resource] of Object.entries(resources)) {
+                ResourcesStore.resources.incrementResourceValue(name, 1000);
+            }
+            return;
         }
         let stringValues = [];
         try {
-            stringValues = atob(loadText).split("divider");
+            stringValues = atob(loadText).split(divider);
         } catch {
-            loadError = true;
-            return;
-        }
-        if (stringValues.length !== dividerCount) {
             loadError = true;
             return;
         }
         let storeValues = [];
         for (let val of stringValues) {
-            val === ""
-                ? storeValues.push("")
-                : storeValues.push(JSON.parse(val));
+            isJsonString(val)
+                ? storeValues.push(JSON.parse(val))
+                : storeValues.push(val);
         }
         try {
-            setStoreValues(ButtonCostsStore, storeValues);
-            setGameStateStore(storeValues);
-            setStoreValues(MilitaryStore, storeValues);
-            setResourcesStore(storeValues);
-            setStoreValues(WorkersStore, storeValues);
+            while (storeValues.length > 0) {
+                let category = storeValues.shift();
+                switch (category) {
+                    case STORE_TYPES.BUTTON_COSTS:
+                        setStoreValues(ButtonCostsStore, storeValues);
+                        break;
+                    case STORE_TYPES.GAME_STATE:
+                        setStoreValues(GameStateStore, storeValues);
+                        break;
+                    case STORE_TYPES.MILITARY:
+                        setStoreValues(MilitaryStore, storeValues);
+                        break;
+                    case STORE_TYPES.RESOURCES:
+                        setStoreValues(ResourcesStore, storeValues);
+                        break;
+                    case STORE_TYPES.WORKERS:
+                        setStoreValues(WorkersStore, storeValues);
+                        break;
+                    case STORE_TYPES.LIBRARY:
+                        setStoreValues(LibraryStore, storeValues);
+                        break;
+                    default:
+                        break;
+                }
+            }
         } catch (error) {
             console.log(error);
             loadError = true;
@@ -110,34 +151,23 @@
         loadError = false;
         loadSuccess = true;
     };
+    const isJsonString = (jsonString: string): boolean => {
+        try {
+            const o = JSON.parse(jsonString);
+            return true;
+        } catch (e) {}
+
+        return false;
+    };
     const setStoreValues = (stores: any, storeValues: any[]) => {
-        for (const store of Object.values(stores)) {
-            // @ts-ignore
-            store.set(storeValues.shift());
+        while (storeValues.length > 0 && !storeCategories.has(storeValues[0])) {
+            let storeName = storeValues.shift();
+            const storeValue = hashSetStores.has(storeName)
+                ? new Set<string>(storeValues.shift())
+                : storeValues.shift();
+            // console.log(storeName);
+            stores[storeName].set(storeValue);
         }
-    };
-    // modules are sorted in alphabetical order when building,
-    // so if you manually load modules, you have to
-    // load in alphabetical order too
-    const setGameStateStore = (storeValues: any[]) => {
-        GameStateStore.curStoryProgress.set(storeValues.shift());
-        const hiddenButtons = new Set<string>(storeValues.shift());
-        GameStateStore.hiddenButtons.set(hiddenButtons);
-        GameStateStore.inExpedition.set(storeValues.shift());
-        GameStateStore.playerImage.set(storeValues.shift());
-        GameStateStore.playerName.set(storeValues.shift());
-        const researchedSciences = new Set<string>(storeValues.shift());
-        GameStateStore.researchedSciences.set(researchedSciences);
-    };
-    const setResourcesStore = (storeValues: any[]) => {
-        ResourcesStore.blastFurnacesActivated.set(storeValues.shift());
-        ResourcesStore.insufficientFood.set(storeValues.shift());
-        ResourcesStore.ironSmeltersActivated.set(storeValues.shift());
-        const obtainedResources = new Set<string>(storeValues.shift());
-        ResourcesStore.obtainedResources.set(obtainedResources);
-        ResourcesStore.resources.set(storeValues.shift());
-        ResourcesStore.resourcesFromExpeditions.set(storeValues.shift());
-        ResourcesStore.workshopsActivated.set(storeValues.shift());
     };
 </script>
 
@@ -146,14 +176,44 @@
         class="absolute flex flex-col w-95 h-95 z-100 rpgui-container framed-golden"
     >
         <p class="flex justify-center mt-4 mb-10">Credits</p>
+        <p>CSS framework</p>
+        <br />
+        <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://ronenness.github.io/RPGUI/"
+        >
+            https://ronenness.github.io/RPGUI/
+        </a>
+        <br />
         <p>Sprites: Battle for Wesnoth</p>
         <br />
-        <a target="_blank" rel="noopener noreferrer" href="https://github.com/wesnoth/wesnoth"> https://github.com/wesnoth/wesnoth </a>
+        <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/wesnoth/wesnoth"
+        >
+            https://github.com/wesnoth/wesnoth
+        </a>
         <br />
         <p>Icons: Shikashi's Fantasy Icons Pack</p>
         <br />
-        <a target="_blank" rel="noopener noreferrer" href="https://cheekyinkling.itch.io/shikashis-fantasy-icons-pack">
+        <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://cheekyinkling.itch.io/shikashis-fantasy-icons-pack"
+        >
             https://cheekyinkling.itch.io/shikashis-fantasy-icons-pack
+        </a>
+        <br />
+        <p>Poison gas effect</p>
+        <br />
+        <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="http://jordan.trudgett.com/"
+        >
+            http://jordan.trudgett.com/
         </a>
 
         <div class="bottom-0 flex justify-center mt-10">
