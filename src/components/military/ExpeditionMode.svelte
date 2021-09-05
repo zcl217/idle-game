@@ -23,13 +23,14 @@
         initializeUnitPosition,
         handleProjectiles,
         setGridPath,
+        handleSpecialEffects,
+        handleProjectileAnimations,
     } from "~/utils/expeditionMode";
     import type { ICoordinates } from "~/interfaces/common";
     import { cloneDeep, uniqueId } from "lodash";
     import type { IProjectile } from "~/interfaces/military/projectile";
     import Projectile from "../military/Projectile.svelte";
     import { STAGE_LIST } from "~/constants/military/stageList";
-    import { rowPositionX } from "~/store/infoBox";
 
     export let mapType: number = 1,
         level = 1,
@@ -41,6 +42,7 @@
     let enemyUnits: ISprite[] = [];
     let playerUnits: ISprite[] = [];
     let projectiles: IProjectile[] = [];
+    let arrivedProjectiles: IProjectile[] = [];
     // if enemies remaining is initialized as 0, we instantly win
     let enemiesRemaining: number = 1;
     let interval = 0;
@@ -77,7 +79,13 @@
                     enemyUnits,
                     projectiles
                 );
-                handleProjectiles(projectiles, grid, playerUnits, enemyUnits);
+                handleProjectiles(
+                    projectiles,
+                    arrivedProjectiles,
+                    grid,
+                    playerUnits,
+                    enemyUnits
+                );
                 /*
              if we want to implement faster/slower movements,
              we need the setinterval to be at the lowest tick (the fastest moving unit
@@ -86,6 +94,8 @@
             */
                 handleEnemyMovements(enemyUnits, grid, lifeCount);
                 handleUnitAnimations(playerUnits, enemyUnits, frame);
+                handleProjectileAnimations(arrivedProjectiles);
+                handleSpecialEffects(playerUnits, enemyUnits, grid);
                 // when all enemies are dead, emit event to parent that stage is over
                 // OR if you run out of lives,
                 if (frame > 60) frame = 0;
@@ -97,6 +107,7 @@
                 // enemy units aren't removed properly sometimes so double check that
                 // (TODO: find cause of the bug)
                 for (let a = enemyUnits.length - 1; a >= 0; a--) {
+                    // console.log(enemyUnits[a].state.currentHp);
                     if (enemyUnits[a].state.currentHp <= 0)
                         enemyUnits.splice(a, 1);
                 }
@@ -104,6 +115,7 @@
                 playerUnits = playerUnits;
                 grid = grid;
                 projectiles = projectiles;
+                arrivedProjectiles = arrivedProjectiles;
             } else {
                 handleUnitAnimations(playerUnits, enemyUnits, frame);
                 playerUnits = playerUnits;
@@ -117,7 +129,7 @@
     });
 
     $: {
-        if ($lifeCount <= 0) {
+        if ($lifeCount <= 0 && expeditionLevelStarted) {
             setTimeout(() => {
                 handleDefeat();
             }, 500);
@@ -127,7 +139,7 @@
     $: {
         enemiesRemaining -= $removedEnemyUnitCount;
         removedEnemyUnitCount.reset();
-        if (enemiesRemaining <= 0) {
+        if (enemiesRemaining <= 0 && expeditionLevelStarted) {
             setTimeout(() => {
                 handleVictory();
             }, 1000);
@@ -206,7 +218,10 @@
         return !cell.isPath && !cell.playerUnit && !cell.undeployableTerrain;
     }
 
-    const highlightAttackRange = (curRow: number | undefined, curCol: number | undefined) => {
+    const highlightAttackRange = (
+        curRow: number | undefined,
+        curCol: number | undefined
+    ) => {
         let attackRange = $unitToDeploy.spriteInfo.attackRange;
         if (curRow !== undefined && curCol !== undefined) {
             for (let row = 0; row < grid.length; row++) {
@@ -230,6 +245,7 @@
             let newPlayerUnit: ISprite = cloneDeep($unitToDeploy);
             cell.playerUnit = newPlayerUnit;
             newPlayerUnit.spriteInfo.unitId = uniqueId();
+            newPlayerUnit.state.currentHp = newPlayerUnit.spriteInfo.maxHp;
             initializeUnitPosition(
                 newPlayerUnit,
                 cell.coordinates.row,
@@ -311,10 +327,23 @@
             {#each projectiles as projectile}
                 <Projectile
                     spriteSheet={projectile.spriteSheet}
+                    type={projectile.type}
                     positionSpring={projectile.positionSpring}
                     positionXTweened={projectile.positionXTweened}
                     positionYTweened={projectile.positionYTweened}
                     homing={projectile.homing}
+                />
+            {/each}
+            {#each arrivedProjectiles as projectile}
+                <Projectile
+                    spriteSheet={projectile.spriteSheet}
+                    type={projectile.type}
+                    positionSpring={projectile.positionSpring}
+                    positionXTweened={projectile.positionXTweened}
+                    positionYTweened={projectile.positionYTweened}
+                    homing={projectile.homing}
+                    currentFrame={projectile.currentFrame}
+                    hasAnimation={projectile.hasAnimation || false}
                 />
             {/each}
         </div>

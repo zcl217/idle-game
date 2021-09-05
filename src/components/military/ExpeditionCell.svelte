@@ -1,12 +1,16 @@
 <script lang="ts">
     import type { IExpeditionCell } from "~/interfaces/military/expeditionGrid";
     import type { ISprite } from "~/interfaces/military/sprite";
-    import { attackRangeCenterCoordinates, unitToDeploy } from "~/store/military";
+    import {
+        attackRangeCenterCoordinates,
+        isGlobalPoisonOn,
+        unitToDeploy,
+    } from "~/store/military";
     import Sprite from "./Sprite.svelte";
     import { getExpeditionBackgroundPosition } from "~/utils/helpers";
     import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
     import { CELL_HEIGHT, CELL_WIDTH } from "~/constants/military/maps";
-import type { ICoordinates } from "~/interfaces/common";
+    import type { ICoordinates } from "~/interfaces/common";
 
     export let handleCellClick: any,
         cell: IExpeditionCell,
@@ -35,7 +39,8 @@ import type { ICoordinates } from "~/interfaces/common";
         }
     }
     $: {
-        if ($attackRangeCenterCoordinates.col === -1) cell.highlightAttackRange = false;
+        if ($attackRangeCenterCoordinates.col === -1)
+            cell.highlightAttackRange = false;
     }
 
     const handleCellLeave = () => {
@@ -81,6 +86,15 @@ import type { ICoordinates } from "~/interfaces/common";
         >
             <Sprite {sprite} />
         </div>
+    {/if}
+    {#if $isGlobalPoisonOn}
+        <div
+            style="
+                width: {CELL_WIDTH}px;
+                height: {CELL_HEIGHT}px;
+            "
+            class="bg-auto opacity-80 bg-poison"
+        />
     {/if}
 </div>
 

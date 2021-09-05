@@ -9,9 +9,11 @@ import { tweened, spring } from "svelte/motion";
 import { get } from 'svelte/store';
 import { SPRITESHEET_MAP } from "~/constants/military/spriteSheetMap";
 import type { IProjectile } from "~/interfaces/military/projectile";
-import { UNIT_PROJECTILES } from "~/constants/military/projectiles";
+import { PROJECTILE_TYPES, UNIT_PROJECTILES } from "~/constants/military/projectiles";
 import { ENEMY_SPAWN_LIST } from "~/constants/military/enemySpawnList";
-import { removedEnemyUnitCount } from "~/store/military";
+import { isGlobalPoisonOn, removedEnemyUnitCount } from "~/store/military";
+import { GLOBAL_POISON_DAMAGE, SPECIAL_ABILITIES } from "~/constants/military/specialAbilities";
+import { THUNDERSTICK_BLAST_SPRITESHEET_INFO } from "~/constants/military/spriteSheetInfo/projectiles/thunderstickBlast";
 
 export const initializeGrid = (mapType: number): IExpeditionCell[][] => {
     const grid: IExpeditionCell[][] = [];
@@ -129,6 +131,7 @@ function createEnemies(
     const newEnemy = cloneDeep(enemy);
     initializeUnitPosition(newEnemy, newEnemy.state.unitPath[0].row, newEnemy.state.unitPath[0].col);
     newEnemy.spriteInfo.unitId = uniqueId();
+    newEnemy.state.currentHp = newEnemy.spriteInfo.maxHp;
     enemyUnits.push(newEnemy);
     startingCell.enemyUnitList.push(newEnemy);
     setTimeout(() => {
@@ -185,9 +188,10 @@ function processAttack(
     const targetCol = target.position.coordinates.col;
     unit.position.facingRight = targetCol >= currentCol;
     if (unit.spriteInfo.melee) {
-        processDamageCalculation(unit.spriteInfo.damage, target, grid, playerUnits, enemyUnits);
+        processDamageCalculation(unit.spriteInfo.damage, target, unit.spriteInfo.specialAbility, grid, playerUnits, enemyUnits);
     } else {
         // fire a projectile. when the projectile hits the enemy, that's when we calculate dmg
+        // enemies fire regular projectiles since player units don't move
         if (unit.spriteInfo.isEnemy) {
             fireProjectile(unit, target, grid, playerUnits, enemyUnits, projectiles);
         } else {
@@ -199,19 +203,40 @@ function processAttack(
 export const processDamageCalculation = (
     damage: number,
     target: ISprite,
+    specialAbility: string,
     grid: IExpeditionCell[][],
     playerUnits: ISprite[],
     enemyUnits: ISprite[]
 ): void => {
-    target.state.currentHp -= damage;
-    // remove sprite from cell and master list
-    if (target.state.currentHp <= 0 && !target.state.isDead) {
-        target.state.isDead = true;
-        const targetCoordinates = target.position.coordinates;
-        const targetCell: IExpeditionCell =
-            grid[targetCoordinates.row][targetCoordinates.col];
-        processUnitDeath(target, targetCell, playerUnits, enemyUnits);
+    switch (specialAbility) {
+        case SPECIAL_ABILITIES.AOE:
+            const targetCoordinates = target.position.coordinates;
+            let unitList = grid[targetCoordinates.row][targetCoordinates.col].enemyUnitList;
+            for (let unit of unitList) {
+                unit.state.currentHp -= damage;
+                // remove sprite from cell and master list
+                if (unit.state.currentHp <= 0 && !unit.state.isDead) {
+                    unit.state.isDead = true;
+                    const unitCoordinates = unit.position.coordinates;
+                    const unitCell: IExpeditionCell =
+                        grid[unitCoordinates.row][unitCoordinates.col];
+                    processUnitDeath(unit, unitCell, playerUnits, enemyUnits);
+                }
+            }
+            break;
+        default:
+            target.state.currentHp -= damage;
+            // remove sprite from cell and master list
+            if (target.state.currentHp <= 0 && !target.state.isDead) {
+                target.state.isDead = true;
+                const targetCoordinates = target.position.coordinates;
+                const targetCell: IExpeditionCell =
+                    grid[targetCoordinates.row][targetCoordinates.col];
+                processUnitDeath(target, targetCell, playerUnits, enemyUnits);
+            }
+            break;
     }
+
 }
 
 function fireProjectile(
@@ -412,6 +437,7 @@ export const handleEnemyMovements = (enemyUnits: ISprite[], grid: IExpeditionCel
         // attack the blocking player unit
         if (grid[row][col].playerUnit) {
             changeUnitState(unit, UNIT_STATES.ATTACK);
+            if (unit.spriteInfo.specialAbility) processMovementStopEffects(unit);
         } else {
 
             grid[row][col].enemyUnitArriving = true;
@@ -422,6 +448,7 @@ export const handleEnemyMovements = (enemyUnits: ISprite[], grid: IExpeditionCel
                 unit.position.coordinates = { row, col };
             });
             unit.state.currentPathIndex++
+            if (unit.spriteInfo.specialAbility) processMovementStartEffects(unit);
         }
     }
 };
@@ -449,6 +476,27 @@ function handleCompletedMovement(
     } else {
         currentCell.enemyUnitList.push(unit);
         changeUnitState(unit, UNIT_STATES.IDLE);
+    }
+}
+
+function processMovementStopEffects(unit: ISprite) {
+    switch (unit.spriteInfo.specialAbility) {
+        case SPECIAL_ABILITIES.GLOBAL_POISON:
+            isGlobalPoisonOn.set(false);
+            break;
+        default:
+            break;
+    }
+}
+
+
+function processMovementStartEffects(unit: ISprite) {
+    switch (unit.spriteInfo.specialAbility) {
+        case SPECIAL_ABILITIES.GLOBAL_POISON:
+            isGlobalPoisonOn.set(true);
+            break;
+        default:
+            break;
     }
 }
 
@@ -525,6 +573,7 @@ function setFrameList(unit: ISprite) {
 
 export const handleProjectiles = (
     projectiles: IProjectile[],
+    arrivedProjectiles: IProjectile[],
     grid: IExpeditionCell[][],
     playerUnits: ISprite[],
     enemyUnits: ISprite[]
@@ -545,11 +594,15 @@ export const handleProjectiles = (
                 processDamageCalculation(
                     projectile.damage,
                     projectile.target,
+                    projectile.specialAbility,
                     grid,
                     playerUnits,
                     enemyUnits
                 );
-                projectiles.splice(a, 1);
+                let removedProjectile = projectiles.splice(a, 1)[0];
+                if (projectile.hasAnimation) {
+                    arrivedProjectiles.push(removedProjectile);
+                }
             }
         } else {
             const tweenedTargetX =
@@ -566,6 +619,7 @@ export const handleProjectiles = (
                 processDamageCalculation(
                     projectile.damage,
                     projectile.target,
+                    projectile.specialAbility,
                     grid,
                     playerUnits,
                     enemyUnits
@@ -581,4 +635,35 @@ function changeUnitState(unit: ISprite, newState: string) {
     unit.state.currentState = newState;
     // reset frame on state change to reset the animation
     unit.state.currentFrame = 0;
+}
+
+export const handleSpecialEffects = (
+    playerUnits: ISprite[],
+    enemyUnits: ISprite[],
+    grid: IExpeditionCell[][]): void => {
+    if (get(isGlobalPoisonOn)) {
+        playerUnits.forEach(unit =>
+            processDamageCalculation(GLOBAL_POISON_DAMAGE, unit, '', grid, playerUnits, enemyUnits)
+        );
+    }
+}
+
+export const handleProjectileAnimations = (
+    arrivedProjectiles: IProjectile[]
+) => {
+    for (let a = arrivedProjectiles.length - 1; a >= 0; a--) {
+        const projectile = arrivedProjectiles[a];
+        let attackFrames;
+        switch (projectile.type) {
+            case PROJECTILE_TYPES.THUNDERSTICK_BLAST:
+                attackFrames = THUNDERSTICK_BLAST_SPRITESHEET_INFO.attackFrames;
+                break;
+            default:
+                continue;
+        }
+        projectile.currentFrame++;
+        if (projectile.currentFrame >= attackFrames.length) {
+            arrivedProjectiles.splice(a, 1);
+        }
+    }
 }

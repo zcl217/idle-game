@@ -2,12 +2,11 @@
     import { createEventDispatcher } from "svelte";
     import {
         ALL_CLEAR_REWARDS,
-        ENEMY_PREVIEW_LIST,
         STAGE_LIST,
     } from "~/constants/military/stageList";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { clearedStages } from "~/store/military";
-    import { areAllZoneStagesCleared } from "~/utils/helpers";
+    import { areAllZoneStagesCleared, generatePreviewList } from "~/utils/helpers";
     import StagePreview from "./StagePreview.svelte";
 
     const ZONES = {
@@ -25,13 +24,12 @@
     let zone2Unlocked: boolean = true;
     let zone3Unlocked: boolean = false;
     let enemyPreviewList: { sprite: ISprite; amount: number }[] = [];
-    let enemySpawnPointText = "Enemy spawn point: Bottom";
     const dispatch = createEventDispatcher();
 
     for (let a = 0; a < 5; a++) {
         zone1.push("1");
     }
-    for (let a = 0; a < 2; a++) {
+    for (let a = 0; a < 5; a++) {
         zone2.push("2");
     }
     for (let a = zone1.length; a > 0; a--) {
@@ -52,26 +50,13 @@
 
     const handleStageSelection = (stage: string) => {
         selectedStage = STAGE_LIST[stage];
-        enemyPreviewList = ENEMY_PREVIEW_LIST[selectedStage];
+        enemyPreviewList = generatePreviewList(selectedStage);
     };
     const handleZoneSelection = (zone: number) => {
         enemyPreviewList = [];
         selectedZone = zone;
         selectedStage = "";
         zonePreviewImage = `url("zonePreviews/map${selectedZone}.png")`;
-        switch (zone) {
-            case 1:
-                enemySpawnPointText = "Enemy spawn point: Bottom";
-                break;
-            case 2:
-                enemySpawnPointText = "Enemy spawn point: Left & Top";
-                break;
-            case 3:
-                enemySpawnPointText = "";
-                break;
-            default:
-                break;
-        }
     };
 
     const startExpedition = (stage: string) => {
@@ -168,32 +153,17 @@
         <StagePreview {enemyPreviewList} {selectedStage} {startExpedition} />
     {:else if selectedZone > 0}
         {#if selectedZone === 3} work in progress {/if}
-        <div
-            class="flex flex-col items-center justify-center w-4/6 mt-5 -ml-5 h-5/6"
-        >
-            {#if selectedZone === 2}
-                stages 2-3, 2-4, 2-5 are work in progress
-            {/if}
+        <div class="flex flex-col items-center justify-center w-4/6 mt-5">
             <div
-                class="opacity-80"
+                class="opacity-80 min-preview-size -ml-60px"
                 style="
                     background-image: {zonePreviewImage};
                     background-size: cover; 
                     border: 2px solid;
-                    width: 70%;
-                    height: 70%;
+                    width: 80%;
+                    height: 80%;
                 "
             />
-            <div
-                class="text-red-700"
-                style="margin-top: 20px; margin-bottom: 20px;"
-            >
-                {enemySpawnPointText}
-            </div>
-            <p class="my-2">All clear reward:</p>
-            {#each ALL_CLEAR_REWARDS[selectedZone] as reward}
-                <p>{reward}</p>
-            {/each}
         </div>
     {/if}
 </div>
@@ -201,5 +171,12 @@
 <style>
     .selected {
         background-image: url("../img/button-down.png");
+    }
+    .min-preview-size {
+        min-width: 576px;
+        min-height: 448px;
+    }
+    .-ml-60px {
+        margin-left: -60px !important;
     }
 </style>

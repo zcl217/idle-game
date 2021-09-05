@@ -90,25 +90,24 @@
 </div>
 
 <style>
-    .mt-15px {
+    /* .mt-15px {
         margin-top: 15px !important;
     }
-
     .h72px {
         height: 72px;
     }
-
     .w72px {
         width: 72px;
     }
-
     .left-0 {
         left: 0px;
     }
-
     .right-0 {
         right: 0px;
     }
+    .rounded-lg {
+        border-radius: 0.5rem;
+    } */
 
     .button-width {
         width: 120px;
@@ -117,7 +116,4 @@
         min-width: 0px !important;
     }
 
-    .rounded-lg {
-        border-radius: 0.5rem;
-    }
 </style>

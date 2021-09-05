@@ -1,35 +1,41 @@
 <script lang="ts">
-    import BarracksUnit from "../military/BarracksUnit.svelte";
-    import { militaryUnitList } from "~/store/military";
-    import { getSprite } from "~/utils/helpers";
-    import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
-    import { researchedSciences } from "~/store/gameState";
-    import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
-    let unitList = $militaryUnitList;
-    $: unitList = $militaryUnitList;
-    const displayUnit = (unitType: string): boolean => {
-        switch (unitType) {
-            case UNIT_TYPES.FOOTPAD:
-                return $researchedSciences.has(SCIENCE_BUTTON_TYPES.SLINGSHOTS);
-            case UNIT_TYPES.HEAVY_INFANTRY:
-                return $researchedSciences.has(
-                    SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY
-                );
-            case UNIT_TYPES.MAGE:
-                return $researchedSciences.has(SCIENCE_BUTTON_TYPES.MAGIC);
-            default:
-                return true;
-        }
-    };
-
+    import { LIBRARY_COLLECTIONS } from "~/constants/library/library";
+    import { completedCollections } from "~/store/library";
+    import BarracksUnitList from "./BarracksUnitList.svelte";
+    import BarracksUnitLoadout from "./BarracksUnitLoadout.svelte";
+    
+    enum TABS {
+        UNIT_LIST,
+        LOADOUT,
+    }
+    let selectedTab = TABS.UNIT_LIST;
 </script>
 
-<div class="flex flex-row flex-wrap justify-around">
-    {#each Object.entries(unitList) as [key, unit]}
-        {#if displayUnit(unit.type)}
-            <BarracksUnit
-                sprite={getSprite(unit.type)}
-            />
-        {/if}
-    {/each}
-</div>
+{#if $completedCollections.has(LIBRARY_COLLECTIONS.TODO)}
+    <div class="flex flex-row justify-around">
+        <button
+            class="rpgui-button {selectedTab === TABS.UNIT_LIST
+                ? 'selected'
+                : ''}"
+            type="button"
+            on:click={() => (selectedTab = TABS.UNIT_LIST)}
+        >
+            Units
+        </button>
+        <button
+            class="rpgui-button {selectedTab === TABS.LOADOUT
+                ? 'selected'
+                : ''}"
+            type="button"
+            on:click={() => (selectedTab = TABS.LOADOUT)}
+        >
+            Loadout
+        </button>
+    </div>
+{/if}
+
+{#if selectedTab === TABS.UNIT_LIST}
+    <BarracksUnitList />
+{:else}
+    <BarracksUnitLoadout />
+{/if}

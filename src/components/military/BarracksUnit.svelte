@@ -5,6 +5,7 @@
         MILITARY_BUTTON_COSTS,
         MILITARY_BUTTON_TYPES,
     } from "~/constants/buttons/militaryButtons";
+    import { INFO_BOX_TYPES } from "~/constants/infoBoxes";
     import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { militaryUnitList } from "~/store/military";
@@ -38,6 +39,10 @@
             case UNIT_TYPES.MAGE:
             case UNIT_TYPES.ARCH_MAGE:
                 return UNIT_TYPES.MAGE;
+            case UNIT_TYPES.THUNDERER:
+            case UNIT_TYPES.THUNDERGUARD:
+            case UNIT_TYPES.DRAGONGUARD:
+                return UNIT_TYPES.THUNDERER;
             default:
                 break;
         }
@@ -53,16 +58,10 @@
 
     const upgradeUnit = () => {
         const buttonType = getUpgradeButtonType();
+        if (!hasEnoughResources(MILITARY_BUTTON_COSTS, $resources, buttonType))
+            return;
         switch (unitType) {
             case UNIT_TYPES.SPEARMAN:
-                if (
-                    !hasEnoughResources(
-                        MILITARY_BUTTON_COSTS,
-                        $resources,
-                        buttonType
-                    )
-                )
-                    return;
                 militaryUnitList.updateMilitaryUnitType(
                     UNIT_TYPES.SPEARMAN,
                     UNIT_TYPES.PIKEMAN
@@ -70,14 +69,6 @@
                 unitType = UNIT_TYPES.PIKEMAN;
                 break;
             case UNIT_TYPES.PIKEMAN:
-                if (
-                    !hasEnoughResources(
-                        MILITARY_BUTTON_COSTS,
-                        $resources,
-                        buttonType
-                    )
-                )
-                    return;
                 militaryUnitList.updateMilitaryUnitType(
                     UNIT_TYPES.SPEARMAN,
                     UNIT_TYPES.HALBERDIER
@@ -85,14 +76,6 @@
                 unitType = UNIT_TYPES.HALBERDIER;
                 break;
             case UNIT_TYPES.FOOTPAD:
-                if (
-                    !hasEnoughResources(
-                        MILITARY_BUTTON_COSTS,
-                        $resources,
-                        buttonType
-                    )
-                )
-                    return;
                 militaryUnitList.updateMilitaryUnitType(
                     UNIT_TYPES.FOOTPAD,
                     UNIT_TYPES.OUTLAW
@@ -100,14 +83,6 @@
                 unitType = UNIT_TYPES.OUTLAW;
                 break;
             case UNIT_TYPES.HEAVY_INFANTRY:
-                if (
-                    !hasEnoughResources(
-                        MILITARY_BUTTON_COSTS,
-                        $resources,
-                        buttonType
-                    )
-                )
-                    return;
                 militaryUnitList.updateMilitaryUnitType(
                     UNIT_TYPES.HEAVY_INFANTRY,
                     UNIT_TYPES.SHOCKTROOPER
@@ -115,14 +90,6 @@
                 unitType = UNIT_TYPES.SHOCKTROOPER;
                 break;
             case UNIT_TYPES.SHOCKTROOPER:
-                if (
-                    !hasEnoughResources(
-                        MILITARY_BUTTON_COSTS,
-                        $resources,
-                        buttonType
-                    )
-                )
-                    return;
                 militaryUnitList.updateMilitaryUnitType(
                     UNIT_TYPES.HEAVY_INFANTRY,
                     UNIT_TYPES.SIEGETROOPER
@@ -130,19 +97,25 @@
                 unitType = UNIT_TYPES.SIEGETROOPER;
                 break;
             case UNIT_TYPES.MAGE:
-                if (
-                    !hasEnoughResources(
-                        MILITARY_BUTTON_COSTS,
-                        $resources,
-                        buttonType
-                    )
-                )
-                    return;
                 militaryUnitList.updateMilitaryUnitType(
                     UNIT_TYPES.MAGE,
                     UNIT_TYPES.ARCH_MAGE
                 );
                 unitType = UNIT_TYPES.ARCH_MAGE;
+                break;
+            case UNIT_TYPES.THUNDERER:
+                militaryUnitList.updateMilitaryUnitType(
+                    UNIT_TYPES.THUNDERER,
+                    UNIT_TYPES.THUNDERGUARD
+                );
+                unitType = UNIT_TYPES.THUNDERGUARD;
+                break;
+            case UNIT_TYPES.THUNDERGUARD:
+                militaryUnitList.updateMilitaryUnitType(
+                    UNIT_TYPES.THUNDERGUARD,
+                    UNIT_TYPES.DRAGONGUARD
+                );
+                unitType = UNIT_TYPES.DRAGONGUARD;
                 break;
             default:
                 return;
@@ -167,6 +140,10 @@
             case UNIT_TYPES.MAGE:
             case UNIT_TYPES.ARCH_MAGE:
                 return MILITARY_BUTTON_TYPES.TRAIN_MAGE;
+            case UNIT_TYPES.THUNDERER:
+            case UNIT_TYPES.THUNDERGUARD:
+            case UNIT_TYPES.DRAGONGUARD:
+                return MILITARY_BUTTON_TYPES.TRAIN_THUNDERER;
             default:
                 return MILITARY_BUTTON_TYPES.DISABLED_TRAIN;
         }
@@ -186,6 +163,8 @@
                 return MILITARY_BUTTON_TYPES.UPGRADE_SHOCKTROOPER;
             case UNIT_TYPES.MAGE:
                 return MILITARY_BUTTON_TYPES.UPGRADE_MAGE;
+            case UNIT_TYPES.THUNDERER:
+            case UNIT_TYPES.THUNDERGUARD:
             default:
                 return MILITARY_BUTTON_TYPES.DISABLED_UPGRADE;
         }
@@ -205,6 +184,14 @@
                 <p>HP: {sprite.spriteInfo.maxHp}</p>
                 <p>Damage: {sprite.spriteInfo.damage}</p>
                 <p>Units: {unitCount}</p>
+                {#if sprite.spriteInfo.specialAbility}
+                    <InfoBoxButton
+                        width={BUTTON_WIDTH}
+                        curButtonType={sprite.spriteInfo.specialAbility}
+                        curButtonCategory={BUTTON_CATEGORIES.EXPEDITION}
+                        infoBoxButtonType={INFO_BOX_TYPES.ABILITY}
+                    />
+                {/if}
             </div>
         </div>
     </div>

@@ -1,14 +1,17 @@
 <script lang="ts">
     import { cloneDeep, entries } from "lodash";
     import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
+    import { LIBRARY_COLLECTIONS } from "~/constants/library/library";
 
     import { HEAVY_INFANTRY, MAGE } from "~/constants/military/units/humans";
     import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
-import type { ISprite } from "~/interfaces/military/sprite";
+    import type { ISprite } from "~/interfaces/military/sprite";
     import type { IMilitaryUnit } from "~/interfaces/military/units";
     import { researchedSciences } from "~/store/gameState";
+    import { completedCollections } from "~/store/library";
     import {
         militaryUnitList,
+        selectedMilitaryUnits,
         unitHasBeenDeployed,
         unitToDeploy,
     } from "~/store/military";
@@ -37,42 +40,24 @@ import type { ISprite } from "~/interfaces/military/sprite";
             }
         }
     };
-    const unlockedUnit = (type: string) => {
-        switch (type) {
-            case UNIT_TYPES.FOOTPAD:
-                return $researchedSciences.has(SCIENCE_BUTTON_TYPES.SLINGSHOTS);
-            case UNIT_TYPES.HEAVY_INFANTRY:
-                return $researchedSciences.has(
-                    SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY
-                );
-            case UNIT_TYPES.MAGE:
-                return $researchedSciences.has(SCIENCE_BUTTON_TYPES.MAGIC);
-            default:
-                return true;
-        }
-    };
 </script>
 
 <div class="flex flex-col ml-3">
     <p class="mb-3 text-center h-52px">Available Units</p>
-    <div class="relative p-0 rpgui-container framed-golden">
-        {#each Object.entries(availableUnits) as [key, unit]}
-            {#if unlockedUnit(unit.type)}
+    {#if $selectedMilitaryUnits.length > 0}
+        <div class="relative p-0 rpgui-container framed-golden">
+            {#each $selectedMilitaryUnits as unit}
                 <DeployableUnit
-                    sprite={getSprite(unit.type)}
-                    unitCount={unit.count}
+                    sprite={getSprite(availableUnits[unit].type)}
+                    unitCount={availableUnits[unit].count}
                     shouldAnimateSprite={false}
                 />
-            {/if}
-        {/each}
-    </div>
+            {/each}
+        </div>
+    {/if}
 </div>
 
 <style>
-    .w-min-283px {
-        min-width: 283px;
-    }
-
     .h-52px {
         height: 52px;
     }

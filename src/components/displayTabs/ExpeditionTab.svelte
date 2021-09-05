@@ -15,7 +15,7 @@
     import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
     import { DIALOGUES, STORY_PROGRESS_LIST } from "~/constants/story";
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
-import { areAllZoneStagesCleared } from "~/utils/helpers";
+    import { areAllZoneStagesCleared } from "~/utils/helpers";
 
     const MAP_TYPES = {
         [STAGE_LIST["1-1"]]: 1,
@@ -42,23 +42,22 @@ import { areAllZoneStagesCleared } from "~/utils/helpers";
     const handleVictory = () => {
         mapSelectionMode = true;
         inExpedition.set(false);
-        console.log(selectedStage);
         if ($clearedStages[selectedStage]) return;
         $clearedStages[selectedStage] = true;
-        const rewards = STAGE_REWARD_LIST[selectedStage];
-        for (let reward of rewards) {
-            if (reward.amountPerSecond === 0) {
-                resources.incrementResourceValue(reward.resourceType, 1);
-                obtainedResources.add(reward.resourceType);
-                continue;
-            }
-            resourcesFromExpeditions.increaseResourceRate(
-                reward.resourceType,
-                reward.amountPerSecond
-            );
-        }
         const zone = selectedStage.substring(0, 1);
         if (areAllZoneStagesCleared(zone, $clearedStages)) {
+            const rewards = STAGE_REWARD_LIST[selectedStage];
+            for (let reward of rewards) {
+                if (reward.amountPerSecond === 0) {
+                    resources.incrementResourceValue(reward.resourceType, 1);
+                    obtainedResources.add(reward.resourceType);
+                    continue;
+                }
+                resourcesFromExpeditions.increaseResourceRate(
+                    reward.resourceType,
+                    reward.amountPerSecond
+                );
+            }
             switch (zone) {
                 case "1":
                     const nextScene = STORY_PROGRESS_LIST["A3S1"];

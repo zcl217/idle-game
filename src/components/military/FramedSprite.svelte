@@ -18,6 +18,15 @@
     );
     let isType1 = sprite.spriteInfo.spriteSize === SPRITE_SIZES.TYPE_1;
     $: isType1 = sprite.spriteInfo.spriteSize === SPRITE_SIZES.TYPE_1;
+    $: {
+        sprite;
+        backgroundPosition = getSpriteBackgroundPosition(
+            sprite,
+            SPRITESHEET_MAP[sprite.spriteInfo.unitType].idleFrames,
+            currentFrame,
+            shouldAnimateSprite
+        );
+    }
 
     onMount(() => {
         if (shouldAnimateSprite) {
@@ -49,7 +58,9 @@
     <div class="flex items-center justify-center h-full">
         <!-- For non animating sprites or type 1 sprites, use type1FrameSize -->
         <div
-            class={isType1 || !shouldAnimateSprite ? "type1FrameSize" : "h-24 w-24"}
+            class={isType1 || !shouldAnimateSprite
+                ? "type1FrameSize"
+                : "h-24 w-24"}
             style="
             background-image: url('${SPRITESHEET_MAP[sprite.spriteInfo.unitType]
                 .spriteSheet}');

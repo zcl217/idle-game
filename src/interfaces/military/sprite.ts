@@ -35,6 +35,7 @@ interface ISpriteInfo {
     attackAnimationSpeed?: number;
     hpBarOffsetX: number;
     hpBarOffsetY?: number;
+    specialAbility?: string;
 }
 
 // The position interface manages any position-related properties
