@@ -1,9 +1,7 @@
 <script lang="ts">
     import { researchedSciences } from "~/store/gameState";
-    import { completedCollections } from "~/store/library";
     import { militaryUnitList, selectedMilitaryUnits } from "~/store/military";
     import { displayUnit, getSprite } from "~/utils/helpers";
-    import DeployableUnit from "../military/DeployableUnit.svelte";
     import FramedSprite from "../military/FramedSprite.svelte";
     let unitList = $militaryUnitList;
     $: unitList = $militaryUnitList;
@@ -16,7 +14,7 @@
 <div class="flex flex-row justify-between mt-5">
     <div class="flex flex-row flex-wrap justify-around w-4/6">
         {#each Object.entries(unitList) as [key, unit]}
-            {#if displayUnit(unit.type, $researchedSciences, $completedCollections)}
+            {#if displayUnit(unit.type, $researchedSciences)}
                 <div class="flex flex-col m-4">
                     <div class="m-auto">
                         <FramedSprite
