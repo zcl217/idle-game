@@ -282,7 +282,6 @@ export const DIALOGUES: IDialogueList = {
             const nextScene = STORY_PROGRESS_LIST['A3S2'];
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
-            console.log('wtf');
         },
         noHandler: () => {
             // no second option
@@ -307,7 +306,7 @@ export const DIALOGUES: IDialogueList = {
         characterImage: '../sprites/grand-knight.png',
         characterName: 'Xinef',
         mainText: `Well... it's shattered. And... it's one of the pieces of armor that he used when he was still a nameless soldie- don't give me that look, I'm sure it'll come in handy in some way!`,
-        yesText: '...',
+        yesText: '.....',
         noText: '',
         yesHandler: () => {
             const nextScene = STORY_PROGRESS_LIST['A3S4'];
@@ -322,7 +321,7 @@ export const DIALOGUES: IDialogueList = {
         characterImage: '../sprites/grand-knight.png',
         characterName: 'Xinef',
         mainText: `Fine, I'll also send some of our master architects to help construct an elegant library for you in case you have any books you want to store.`,
-        yesText: '...',
+        yesText: '.....',
         noText: '',
         yesHandler: () => {
             const nextScene = STORY_PROGRESS_LIST['A3S5'];
@@ -336,15 +335,46 @@ export const DIALOGUES: IDialogueList = {
     [STORY_PROGRESS_LIST['A3S5']]: {
         characterImage: '../sprites/grand-knight.png',
         characterName: 'Xinef',
-        mainText: `Still not good enough? Fine, I'll ALSO- wait who am I kidding, you didn't even do that much yet. I'll bring some more stuff for you after you contribute some more. Anyways, it was nice seeing you. Until we meet again!`,
-        yesText: 'Bye',
+        mainText: `...You want MORE? Fine, here, I'll give you this extremely rare gem of ethereality. I'm sure your scientists will put it to good use.`,
+        yesText: '.....',
         noText: '',
         yesHandler: () => {
             const nextScene = STORY_PROGRESS_LIST['A3S6'];
             curStoryProgress.set(nextScene);
             updateDialogue(DIALOGUES[nextScene]);
+        },
+        noHandler: () => {
+            // no second option
+        }
+    },
+    [STORY_PROGRESS_LIST['A3S6']]: {
+        characterImage: '../sprites/grand-knight.png',
+        characterName: 'Xinef',
+        mainText: `Still not good enough? Fine, I'll ALSO- wait who am I kidding, you didn't even do that much yet. I'll bring some more stuff for you after you contribute some more. Anyways, it was nice seeing you. Until we meet again!`,
+        yesText: 'Thanks for the stuff!',
+        noText: '',
+        yesHandler: () => {
+            const nextScene = STORY_PROGRESS_LIST['A3S7'];
+            curStoryProgress.set(nextScene);
+            updateDialogue(DIALOGUES[nextScene]);
             displayDialogueBox.set(false);
             unlockedLibrary.set(true);
+        },
+        noHandler: () => {
+            // no second option
+        }
+    },
+    [STORY_PROGRESS_LIST['A4S1']]: {
+        characterImage: '../sprites/peasant.png',
+        characterName: 'Dev',
+        mainText: `Congrats! You've cleared everything there is for now. <br><br> TODO: zone 2 rewards & zone 3`,
+        yesText: 'Continue',
+        noText: '',
+        yesHandler: () => {
+            const nextScene = STORY_PROGRESS_LIST['A4S2'];
+            curStoryProgress.set(nextScene);
+            updateDialogue(DIALOGUES[nextScene]);
+            displayDialogueBox.set(false);
         },
         noHandler: () => {
             // no second option

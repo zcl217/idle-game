@@ -67,7 +67,7 @@ const createNewResources = (resources: IResourceList) => {
     }
     function decrementResourceValue(type: string, value: number) {
         update((resources) => {
-            let newValue = resources[type].value - value;
+            const newValue = resources[type].value - value;
             resources[type].value = Math.max(newValue, 0);
             return resources;
         })
@@ -89,12 +89,12 @@ const createNewResources = (resources: IResourceList) => {
 }
 
 
-export const blastFurnacesActivated = writable(false);
+export const blastFurnacesActivated = writable(true);
 export const insufficientFood = writable(false);
-export const ironSmeltersActivated = writable(false);
-export const magicFurnacesActivated = writable(false);
+export const ironSmeltersActivated = writable(true);
+export const magicFurnacesActivated = writable(true);
 export const obtainedResources = createNewObtainedResources(initialResourceSet);
 export const resources = createNewResources(INITIAL_RESOURCE_STATE);
 export const resourcesFromExpeditions = createResourcesFromExpeditions(initialExpeditionResourceRate);
-export const mithrilFurnacesActivated = writable(false);
-export const workshopsActivated = writable(false);
+export const mithrilFurnacesActivated = writable(true);
+export const workshopsActivated = writable(true);

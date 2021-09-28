@@ -5,7 +5,7 @@
         COLLECTION_VOLUMES,
         LIBRARY_COLLECTIONS,
     } from "~/constants/library/library";
-import { unlockedCollections } from "~/store/library";
+    import { unlockedCollections } from "~/store/library";
 
     let selectedCollection = "";
     let selectedVolume = -1;
@@ -17,27 +17,33 @@ import { unlockedCollections } from "~/store/library";
     };
 </script>
 
-
-    {#if isViewingCollection}
-        <div class="flex flex-row justify-between">
-            <button class="rpgui-button" on:click={() => isViewingCollection = false}> Back </button>
+{#if isViewingCollection}
+    <div class="flex flex-row justify-between">
+        <button
+            class="rpgui-button"
+            on:click={() => (isViewingCollection = false)}
+        >
+            Back
+        </button>
         <div>
             {#each COLLECTION_VOLUMES[selectedCollection] as vol, index}
                 <button
                     class="mx-3 rpgui-button"
-                    disabled={$unlockedCollections.has(selectedCollection + index)}
+                    disabled={!$unlockedCollections.has(
+                        selectedCollection + index
+                    )}
                     on:click={() => (selectedVolume = index)}
                     >Vol {index + 1}</button
                 >
             {/each}
         </div>
     </div>
-        {#if selectedVolume >= 0}
-            <div class="text-sm whitespace-pre">
-                {@html COLLECTION_VOLUMES[selectedCollection][selectedVolume]}
-            </div>
-        {/if}
-    {:else}
+    {#if selectedVolume >= 0}
+        <div class="text-sm whitespace-pre">
+            {@html COLLECTION_VOLUMES[selectedCollection][selectedVolume]}
+        </div>
+    {/if}
+{:else}
     <div class="flex flex-row justify-between">
         <div class="w-1/3">
             <h2 class="text-left">Collections</h2>
@@ -62,7 +68,7 @@ import { unlockedCollections } from "~/store/library";
 
                 <p class="my-4">Reward for collection completion:</p>
                 <div class="mb-4 whitespace-pre">
-                    <p> {COLLECTION_REWARDS_TEXT[selectedCollection]} </p>
+                    <p>{COLLECTION_REWARDS_TEXT[selectedCollection]}</p>
                 </div>
 
                 <button
@@ -73,9 +79,8 @@ import { unlockedCollections } from "~/store/library";
                 </button>
             </div>
         {/if}
-        
-</div>
-    {/if}
+    </div>
+{/if}
 
 <style>
     .whitespace-pre {

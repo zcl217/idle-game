@@ -94,6 +94,11 @@ export const INITIAL_RESOURCE_STATE: IResourceList = {
         limit: Number.MAX_VALUE,
         displayGenerationRate: false
     },
+    [RESOURCE_TYPES.HUGE_WAREHOUSE]: {
+        value: 0,
+        limit: Number.MAX_VALUE,
+        displayGenerationRate: false
+    },
     [RESOURCE_TYPES.ATTRACTIVE_HOUSE]: {
         value: 0,
         limit: Number.MAX_VALUE,

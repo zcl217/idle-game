@@ -33,7 +33,7 @@ export const calculateGenerationRate = (type: string, resources: any, workers: a
     const resourceConsumption = getResourceConsumption(type, resources, workers);
     // if 0 food && resource generated from workers and buildings is less than worker consumption
     // decrease generated value
-    let resourcesGenerated = resourcesFromBuildings + resourcesFromWorkers;
+    let resourcesGenerated = resourcesFromBuildings + resourcesFromWorkers + resourcesFromScience;
     const multiplier = calculateResourceMultiplier(type, resources);
     resourcesGenerated *= multiplier;
     // we don't want to include negative bonuses into the multiplier

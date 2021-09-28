@@ -3,8 +3,7 @@ import { EMPIRE_BUTTON_TYPES } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
 import { MILITARY_BUTTON_TYPES } from './buttons/militaryButtons';
 import { SCIENCE_BUTTON_TYPES } from './buttons/scienceButtons';
-import { GATHER_FOOD_AMOUNT, GATHER_WOOD_AMOUNT, GRANARY_BONUS, GRANARY_CAPACITY, HOUSE_BONUS, MANSION_BONUS, MANSION_COAL_CONSUMPTION, QUARRY_BONUS, QUARRY_CAPACITY, SAWMILL_BONUS, SAWMILL_CAPACITY, STORAGE_CAPACITY, TAVERN_BONUS, TAVERN_FOOD_CONSUMPTION, UNIVERSITY_BONUS, UNIVERSITY_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
-import { BLAST_FURNACE_STEEL_OUTPUT, IRON_SMELTER_IRON_OUTPUT, WORKSHOP_WOOD_PLANK_OUTPUT } from './resources/industry';
+import { GATHER_FOOD_AMOUNT, GATHER_WOOD_AMOUNT, GRANARY_BONUS, GRANARY_CAPACITY, HOUSE_BONUS, HUGE_WAREHOUSE_CAPACITY, MANSION_BONUS, MANSION_COAL_CONSUMPTION, QUARRY_BONUS, QUARRY_CAPACITY, SAWMILL_BONUS, SAWMILL_CAPACITY, STORAGE_CAPACITY, TAVERN_BONUS, TAVERN_FOOD_CONSUMPTION, UNIVERSITY_BONUS, UNIVERSITY_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
 import { SPECIAL_ABILITIES } from './military/specialAbilities';
 
 export const EMPIRE_INFO_BOXES: IInfoBoxList = {
@@ -50,7 +49,7 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: {
         title: 'Build Warehouse',
-        text: `Increases resource limit by ${WAREHOUSE_CAPACITY} per storage`
+        text: `Increases resource limit by ${WAREHOUSE_CAPACITY} per warehouse`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: {
         title: 'Build Granary',
@@ -67,6 +66,10 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: {
         title: 'Build University',
         text: `Increase knowledge storage limit by ${UNIVERSITY_CAPACITY} and acquisition by ${UNIVERSITY_BONUS * 100}% per university`
+    },
+    [EMPIRE_BUTTON_TYPES.BUILD_HUGE_WAREHOUSE]: {
+        title: 'Build Huge Warehouse',
+        text: `Increases resource limit by ${HUGE_WAREHOUSE_CAPACITY} per huge warehouse`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: {
         title: 'Build Workshop',
@@ -104,7 +107,7 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
         text: 'Unlocks advanced material generation',
     },
     [SCIENCE_BUTTON_TYPES.ADVANCED_INDUSTRY]: {
-        title: 'Industry',
+        title: 'Advanced Industry',
         text: 'Unlocks even more advanced material generation',
     },
     [SCIENCE_BUTTON_TYPES.LAWS_OF_NATURE]: {
@@ -235,6 +238,14 @@ export const SCIENCE_INFO_BOXES: IInfoBoxList = {
         title: 'Study Artifact',
         text: 'Unlocks the shocktrooper unit upgrade',
     },
+    [SCIENCE_BUTTON_TYPES.DWARVERN_ENGINEERING]: {
+        title: 'Dwarvern Engineering',
+        text: 'Unlocks more advanced technology',
+    },
+    [SCIENCE_BUTTON_TYPES.THUNDERSTICKS]: {
+        title: 'Thunderstick',
+        text: 'Unlocks the thunderer unit',
+    },
 
 }
 
@@ -329,7 +340,7 @@ export const ABILITY_INFO_BOXES: Record<string, string> = {
     [SPECIAL_ABILITIES.RANGED]: 'Ranged: Can attack from a distance',
     [SPECIAL_ABILITIES.ETHEREAL]: 'Ethereal: Can move off of the main path',
     [SPECIAL_ABILITIES.AOE]: 'AOE: Deals damage to all units in the target cell',
-    [SPECIAL_ABILITIES.GLOBAL_POISON]: 'Global poison: Every time the ghast moves to the next tile, every unit takes poison damage'
+    [SPECIAL_ABILITIES.GLOBAL_POISON]: 'Global poison: Every allied unit takes poison damage'
 }
 
 export const OTHER_INFO_BOXES: IInfoBoxList = {

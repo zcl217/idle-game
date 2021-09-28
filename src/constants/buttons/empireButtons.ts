@@ -3,7 +3,6 @@ import type { IButtonCostList } from '~/interfaces/buttons';
 import type { IPrereqsList } from '~/interfaces/common';
 import { STORY_PROGRESS_LIST } from '~/constants/story';
 import { SCIENCE_BUTTON_TYPES } from './scienceButtons';
-import { STORAGE_CAPACITY } from '../gameState';
 
 export const EMPIRE_BUTTON_TYPES: Record<string, string> = {
     GATHER_FOOD: 'gatherFood',
@@ -12,11 +11,12 @@ export const EMPIRE_BUTTON_TYPES: Record<string, string> = {
     CREATE_TREE_FARM: 'createTreeFarm',
     BUILD_STORAGE: 'buildStorage',
     BUILD_WAREHOUSE: 'buildWarehouse',
+    BUILD_HUGE_WAREHOUSE: 'buildHugeWarehouse',
     BUILD_ATTRACTIVE_HOUSE: 'buildAttractiveHouse',
     BUILD_HOUSE: 'buildHouse',
     BUILD_MANSION: 'buildMansion',
     BUILD_TAVERN: 'buildTavern',
-    BUILD_ATHENAEUM: 'buildAthenaeum ',
+    BUILD_ATHENAEUM: 'buildAthenaeum',
     BUILD_GRANARY: 'buildGranary',
     BUILD_SAWMILL: 'buildSawmill',
     BUILD_QUARRY: 'buildQuarry',
@@ -44,6 +44,7 @@ export const EMPIRE_BUTTON_TEXTS = {
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: 'Build Sawmill',
     [EMPIRE_BUTTON_TYPES.BUILD_QUARRY]: 'Build Quarry',
     [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: 'Build University',
+    [EMPIRE_BUTTON_TYPES.BUILD_HUGE_WAREHOUSE]: 'Build Huge Warehouse',
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: 'Build Workshop',
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: 'Build Iron Smelter',
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: 'Build Blast Furnace',
@@ -68,6 +69,7 @@ export const BUTTON_RESOURCE_MAPPING = {
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: RESOURCE_TYPES.SAWMILL,
     [EMPIRE_BUTTON_TYPES.BUILD_QUARRY]: RESOURCE_TYPES.QUARRY,
     [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: RESOURCE_TYPES.UNIVERSITY,
+    [EMPIRE_BUTTON_TYPES.BUILD_HUGE_WAREHOUSE]: RESOURCE_TYPES.HUGE_WAREHOUSE,
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: RESOURCE_TYPES.WORKSHOP,
     [EMPIRE_BUTTON_TYPES.BUILD_IRON_SMELTER]: RESOURCE_TYPES.IRON_SMELTER,
     [EMPIRE_BUTTON_TYPES.BUILD_BLAST_FURNACE]: RESOURCE_TYPES.BLAST_FURNACE,
@@ -138,6 +140,10 @@ export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.CRANE],
         resourcePrereqs: [],
     },
+    [EMPIRE_BUTTON_TYPES.BUILD_HUGE_WAREHOUSE]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.STEEL_FRAMING],
+        resourcePrereqs: [],
+    },
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: {
         sciencePrereqs: [SCIENCE_BUTTON_TYPES.INDUSTRY],
         resourcePrereqs: [],
@@ -151,11 +157,11 @@ export const EMPIRE_BUTTON_PREREQS: IPrereqsList = {
         resourcePrereqs: [],
     },
     [EMPIRE_BUTTON_TYPES.BUILD_MITHRIL_FURNACE]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MITHRIL],
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.MITHRIL, SCIENCE_BUTTON_TYPES.ADVANCED_INDUSTRY],
         resourcePrereqs: [],
     },
     [EMPIRE_BUTTON_TYPES.BUILD_MAGIC_FURNACE]: {
-        sciencePrereqs: [SCIENCE_BUTTON_TYPES.ADAMANTITE],
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.ADAMANTITE, SCIENCE_BUTTON_TYPES.ADVANCED_INDUSTRY],
         resourcePrereqs: [],
     },
 }
@@ -194,6 +200,10 @@ export const INITIAL_EMPIRE_BUTTON_COSTS: IButtonCostList = {
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: [
         { type: RESOURCE_TYPES.WOOD_PLANK, cost: 30 },
         { type: RESOURCE_TYPES.IRON, cost: 5 },
+    ],
+    [EMPIRE_BUTTON_TYPES.BUILD_HUGE_WAREHOUSE]: [
+        { type: RESOURCE_TYPES.WOOD_PLANK, cost: 200 },
+        { type: RESOURCE_TYPES.STEEL, cost: 10 },
     ],
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: [
         { type: RESOURCE_TYPES.FOOD, cost: 500 },
@@ -265,6 +275,7 @@ export const RESIDENTIAL_SECTOR_BUTTONS = new Set<string>([
 export const STORAGE_SECTOR_BUTTONS = new Set<string>([
     EMPIRE_BUTTON_TYPES.BUILD_STORAGE,
     EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE,
+    EMPIRE_BUTTON_TYPES.BUILD_HUGE_WAREHOUSE,
     EMPIRE_BUTTON_TYPES.BUILD_GRANARY,
     EMPIRE_BUTTON_TYPES.BUILD_SAWMILL,
     EMPIRE_BUTTON_TYPES.BUILD_QUARRY

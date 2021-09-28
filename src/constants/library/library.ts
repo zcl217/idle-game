@@ -21,7 +21,7 @@ Huf's journal: -2/s worker food consumption
 
 export const COLLECTION_REWARDS_TEXT: Record<string, string> = {
     [LIBRARY_COLLECTIONS.HUFS_JOURNAL]: 'Worker food consumption -2/s',
-    [LIBRARY_COLLECTIONS.TODO]: 'Unlocks dwarven engineering33',
+    [LIBRARY_COLLECTIONS.TODO]: 'Unlocks dwarven engineering',
 }
 
 export const COLLECTION_VOLUMES: Record<string, Array<string>> = {

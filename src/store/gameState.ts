@@ -10,7 +10,7 @@ export const hiddenButtons = writable(new Set<string>([
 export const inExpedition = writable(false);
 export const playerImage = writable('../sprites/peasant.png');
 export const playerName = writable('Peasant');
-export const researchedSciences = writable(new Set<string>(['a', 'b', 'c', 'd']));
+export const researchedSciences = writable(new Set<string>());
 
 /*
 const createNewMessageLog = () => {

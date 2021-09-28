@@ -21,6 +21,7 @@
     import {
         GRANARY_CAPACITY,
         HOUSE_BONUS,
+        HUGE_WAREHOUSE_CAPACITY,
         MANSION_BONUS,
         QUARRY_CAPACITY,
         SAWMILL_CAPACITY,
@@ -108,6 +109,9 @@
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE:
                 incrementResourceLimits(WAREHOUSE_CAPACITY);
+                break;
+            case EMPIRE_BUTTON_TYPES.BUILD_HUGE_WAREHOUSE:
+                incrementResourceLimits(HUGE_WAREHOUSE_CAPACITY);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_GRANARY:
                 resources.incrementResourceLimit(

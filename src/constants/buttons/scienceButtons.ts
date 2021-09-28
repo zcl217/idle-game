@@ -1,7 +1,9 @@
 
 import type { IButtonCostList } from '~/interfaces/buttons';
 import type { IPrereqsList } from '~/interfaces/common';
+import { LIBRARY_COLLECTIONS } from '../library/library';
 import { RESOURCE_TYPES } from '../resources/resourceTypes';
+import { STORY_PROGRESS_LIST } from '../story';
 
 export const SCIENCE_BUTTON_TYPES = {
     MATHEMATICS: 'mathematics',
@@ -39,6 +41,8 @@ export const SCIENCE_BUTTON_TYPES = {
     MAGIC: 'magic',
     MITHRIL: 'mithril',
     ADAMANTITE: 'adamantite',
+    DWARVERN_ENGINEERING: 'dwarvernEngineering',
+    THUNDERSTICKS: 'thundersticks',
     // disable unit limit increasing for now
     // STANDING_ARMY: 'standingArmy',
 }
@@ -79,6 +83,8 @@ export const SCIENCE_BUTTON_TEXTS = {
     [SCIENCE_BUTTON_TYPES.MAGIC]: 'Magic',
     [SCIENCE_BUTTON_TYPES.MITHRIL]: 'Mithril',
     [SCIENCE_BUTTON_TYPES.ADAMANTITE]: 'Adamantite',
+    [SCIENCE_BUTTON_TYPES.DWARVERN_ENGINEERING]: 'Dwarvern Engineering',
+    [SCIENCE_BUTTON_TYPES.THUNDERSTICKS]: 'Thunderstick',
     // [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: 'Standing Army',
 }
 
@@ -227,6 +233,16 @@ export const SCIENCE_BUTTON_PREREQS: IPrereqsList = {
         sciencePrereqs: [],
         resourcePrereqs: [RESOURCE_TYPES.LUTAREZS_WARHAMMER]
     },
+    [SCIENCE_BUTTON_TYPES.DWARVERN_ENGINEERING]: {
+        sciencePrereqs: [],
+        resourcePrereqs: [],
+        storyPrereq: STORY_PROGRESS_LIST['A3S1'],
+        collectionsPrereq: [LIBRARY_COLLECTIONS.TODO]
+    },
+    [SCIENCE_BUTTON_TYPES.THUNDERSTICKS]: {
+        sciencePrereqs: [SCIENCE_BUTTON_TYPES.DWARVERN_ENGINEERING],
+        resourcePrereqs: [],
+    },
 }
 
 export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
@@ -272,7 +288,7 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.STEEL, cost: 200 }
     ],
     [SCIENCE_BUTTON_TYPES.MITHRIL_PICKAXE]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 35000 },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 50000 },
         { type: RESOURCE_TYPES.GOLD, cost: 1000 },
         { type: RESOURCE_TYPES.MITHRIL_ALLOY, cost: 100 }
     ],
@@ -289,7 +305,7 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.WOOD, cost: 1000 }
     ],
     [SCIENCE_BUTTON_TYPES.INDUSTRY]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 5000 },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 3000 },
         { type: RESOURCE_TYPES.WOOD, cost: 1000 }
     ],
     [SCIENCE_BUTTON_TYPES.ADVANCED_INDUSTRY]: [
@@ -308,7 +324,7 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
     //     { type: RESOURCE_TYPES.GOLD, cost: 50 }
     // ],
     [SCIENCE_BUTTON_TYPES.TAXATION]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 10000 },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 70000 },
         { type: RESOURCE_TYPES.FOOD, cost: 10000 },
         { type: RESOURCE_TYPES.WOOD, cost: 10000 },
         { type: RESOURCE_TYPES.WOOD_PLANK, cost: 100 },
@@ -325,62 +341,75 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.GOLD, cost: 50 },
     ],
     [SCIENCE_BUTTON_TYPES.IRON_SMELTING]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 500 }
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 3000 },
+        { type: RESOURCE_TYPES.RAW_ORE, cost: 1000 },
+        { type: RESOURCE_TYPES.COAL, cost: 500 }
     ],
     [SCIENCE_BUTTON_TYPES.HUNTERS]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 500 },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 1000 },
         { type: RESOURCE_TYPES.FOOD, cost: 1000 },
         { type: RESOURCE_TYPES.WOOD, cost: 500 },
         { type: RESOURCE_TYPES.IRON, cost: 10 }
     ],
     [SCIENCE_BUTTON_TYPES.STEELMAKING]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 2000 }
-    ],
-    [SCIENCE_BUTTON_TYPES.STEEL_FRAMING]: [
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 10000 }
     ],
+    [SCIENCE_BUTTON_TYPES.STEEL_FRAMING]: [
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 15000 },
+        { type: RESOURCE_TYPES.STEEL, cost: 5000 }
+    ],
     [SCIENCE_BUTTON_TYPES.BARRACKS]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 500 }
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 5000 }
     ],
     [SCIENCE_BUTTON_TYPES.SLINGSHOTS]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 700 },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 5000 },
         { type: RESOURCE_TYPES.RAW_ORE, cost: 300 },
         { type: RESOURCE_TYPES.WOOD, cost: 300 }
     ],
     [SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 12000 },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 15000 },
         { type: RESOURCE_TYPES.STEEL, cost: 10 }
     ],
     [SCIENCE_BUTTON_TYPES.MAGIC]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 12000 }
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 20000 }
     ],
     [SCIENCE_BUTTON_TYPES.MITHRIL]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 20000 },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 50000 },
         { type: RESOURCE_TYPES.STEEL, cost: 100 }
     ],
     [SCIENCE_BUTTON_TYPES.ADAMANTITE]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 50000 },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 150000 },
         { type: RESOURCE_TYPES.MITHRIL_ALLOY, cost: 100 }
     ],
     // [SCIENCE_BUTTON_TYPES.STANDING_ARMY]: [
     //     { type: RESOURCE_TYPES.KNOWLEDGE, cost: 20000 },
     //     { type: RESOURCE_TYPES.GOLD, cost: 700 },
     // ],
-
+    [SCIENCE_BUTTON_TYPES.DWARVERN_ENGINEERING]: [
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 70000 },
+        { type: RESOURCE_TYPES.GOLD, cost: 1000 },
+        { type: RESOURCE_TYPES.STEEL, cost: 500 },
+        { type: RESOURCE_TYPES.MITHRIL_ALLOY, cost: 50 }
+    ],
+    [SCIENCE_BUTTON_TYPES.THUNDERSTICKS]: [
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 50000 },
+        { type: RESOURCE_TYPES.STEEL, cost: 1000 },
+        { type: RESOURCE_TYPES.GOLD, cost: 1000 }
+    ],
     [SCIENCE_BUTTON_TYPES.STUDY_SINATRA_ARTIFACT]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 20000, },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 100000, },
         { type: RESOURCE_TYPES.SINATRAS_SHATTERED_ARMOR, cost: 1, },
     ],
     [SCIENCE_BUTTON_TYPES.STUDY_ADUN_ARTIFACT]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 50000, },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 130000, },
         { type: RESOURCE_TYPES.HALBERD_OF_ADUN, cost: 1, },
     ],
     [SCIENCE_BUTTON_TYPES.STUDY_AEDUS_TOME_ARTIFACT]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 50000, },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 200000, },
         { type: RESOURCE_TYPES.AEDUS_TOME_OF_KNOWLEDGE, cost: 1, },
     ],
     [SCIENCE_BUTTON_TYPES.STUDY_LUTAREZ_ARTIFACT]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 70000, },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 200000, },
         { type: RESOURCE_TYPES.LUTAREZS_WARHAMMER, cost: 1, },
     ],
 }

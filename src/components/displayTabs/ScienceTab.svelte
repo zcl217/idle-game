@@ -35,6 +35,7 @@ import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
             return;
         spendResources(SCIENCE_BUTTON_COSTS, resources, science);
         researchedSciences.update((list: Set<string>) => list.add(science));
+        if ($selectedMilitaryUnits.length >= 4) return;
         switch (science) {
             case SCIENCE_BUTTON_TYPES.SLINGSHOTS:
                 $selectedMilitaryUnits.push(UNIT_TYPES.FOOTPAD);
@@ -45,6 +46,8 @@ import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
             case SCIENCE_BUTTON_TYPES.MAGIC:
                 $selectedMilitaryUnits.push(UNIT_TYPES.MAGE);
                 break;
+            case SCIENCE_BUTTON_TYPES.THUNDERSTICKS:
+                $selectedMilitaryUnits.push(UNIT_TYPES.THUNDERER);
             default:
                 return;
         }

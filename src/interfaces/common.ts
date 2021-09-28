@@ -1,6 +1,7 @@
 export interface IPrereqs {
     sciencePrereqs: string[];
     resourcePrereqs: string[];
+    collectionsPrereq?: string[];
     storyPrereq?: number;
 }
 

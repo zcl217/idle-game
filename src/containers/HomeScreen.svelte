@@ -14,7 +14,6 @@
     import { TABS } from "~/constants/buttons/buttons";
     import CharacterChoice from "~/components/displayTabs/CharacterChoice.svelte";
     import { curStoryProgress, inExpedition } from "~/store/gameState";
-    import UnitDeploymentTab from "~/components/UnitDeploymentTab.svelte";
     import { STORY_PROGRESS_LIST } from "~/constants/story";
     import ResourceInfoBox from "~/components/infoBoxes/ResourceInfoBox.svelte";
     import { onMount } from "svelte";
@@ -127,15 +126,12 @@
     .w-min-1300px {
         min-width: 1300px;
     }
-
     .w-min-840px {
         min-width: 840px;
     }
-
     .h-min-620px {
         min-height: 620px;
     }
-
     .pr-0 {
         padding-right: 0px;
     }
@@ -148,14 +144,12 @@
     ::-webkit-scrollbar {
         width: 12px; /* width of the entire scrollbar */
     }
-
     ::-webkit-scrollbar-track {
         background: #be6714; /* color of the tracking area */
         border-radius: 20px;
         margin-top: 10px;
         margin-bottom: 10px;
     }
-
     ::-webkit-scrollbar-thumb {
         background-color: white; /* color of the scroll thumb */
         border-radius: 20px; /* roundness of the scroll thumb */

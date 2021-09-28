@@ -1,14 +1,21 @@
-import { get } from "svelte/store";
 import { EMPIRE_BUTTON_TYPES, INITIAL_EMPIRE_BUTTON_COSTS } from "~/constants/buttons/empireButtons";
 import { BLAST_FURNACE_INPUTS, BLAST_FURNACE_OUTPUTS, IRON_SMELTER_INPUTS, IRON_SMELTER_OUTPUTS, MAGIC_FURNACE_INPUTS, MAGIC_FURNACE_OUTPUTS, MITHRIL_FURNACE_INPUTS, MITHRIL_FURNACE_OUTPUTS, WORKSHOP_INPUTS, WORKSHOP_OUTPUTS } from "~/constants/resources/industry";
 import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
 import type { IResourceList } from "~/interfaces/resource";
 
 export const resourceParser = (value: number): string => {
-    const million = 1000000;
     const thousand = 1000;
+    const million = thousand * 1000;
+    const billion = million * 1000;
+    const trillion = billion * 1000;
     let parsedValue = '';
-    if (value >= million) {
+    if (value >= trillion) {
+        parsedValue = parseDecimals(value / trillion).toString();
+        parsedValue += 't';
+    } else if (value >= billion) {
+        parsedValue = parseDecimals(value / billion).toString();
+        parsedValue += 'b';
+    } else if (value >= million) {
         parsedValue = parseDecimals(value / million).toString();
         parsedValue += 'm';
     } else if (value >= thousand) {
@@ -75,7 +82,7 @@ export const getIndustryOutputList = (industryBuilding: string): Record<string, 
     }
 }
 
-export const buildingCostCalculator = (buttonType: string, buildingsOwned: number, resourceType: string) => {
+export const buildingCostCalculator = (buttonType: string, buildingsOwned: number, resourceType: string): number => {
     const baseCost = INITIAL_EMPIRE_BUTTON_COSTS[buttonType].find(i => i.type === resourceType)
     if (!baseCost) return 0;
     switch (buttonType) {
