@@ -9,6 +9,7 @@
         removedEnemyUnitCount,
         unitHasBeenDeployed,
         unitToDeploy,
+        isGlobalPoisonOn,
     } from "~/store/military";
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
     import type { IExpeditionCell } from "~/interfaces/military/expeditionGrid";
@@ -33,7 +34,6 @@
     import { STAGE_LIST } from "~/constants/military/stageList";
 
     export let mapType: number = 1,
-        level = 1,
         stage: string = STAGE_LIST["1-1"];
 
     const dispatch = createEventDispatcher();
@@ -52,7 +52,7 @@
         //  handleVictory();
         grid = initializeGrid(mapType);
         setGridPath(grid, mapType);
-        setLifeCount(level, lifeCount);
+        setLifeCount(stage, lifeCount);
         enemiesRemaining = initializeEnemies(stage, enemyUnits, grid);
         loadExpeditionLevel();
     });
@@ -86,12 +86,6 @@
                     playerUnits,
                     enemyUnits
                 );
-                /*
-             if we want to implement faster/slower movements,
-             we need the setinterval to be at the lowest tick (the fastest moving unit
-             speed's interval) and then just ignore the mobs that are still moving 
-             (which can be done by checking their state)
-            */
                 handleEnemyMovements(enemyUnits, grid, lifeCount);
                 handleUnitAnimations(playerUnits, enemyUnits, frame);
                 handleProjectileAnimations(arrivedProjectiles);
@@ -104,7 +98,7 @@
                     (unitA: ISprite, unitB: ISprite) =>
                         unitB.state.currentHp - unitA.state.currentHp
                 );
-                // enemy units aren't removed properly sometimes so double check that
+                // enemy units aren't removed properly sometimes
                 // (TODO: find cause of the bug)
                 for (let a = enemyUnits.length - 1; a >= 0; a--) {
                     // console.log(enemyUnits[a].state.currentHp);
@@ -154,10 +148,10 @@
 
     const handleDefeat = () => {
         clearInterval(interval);
+        isGlobalPoisonOn.set(false);
         // set it to 1 so we don't instantly lose when we load this component
         // (since we lose when lives are 0)
         lifeCount.set(1);
-        //emit to emit defeat to parent
         dispatch("DEFEAT");
         enemiesRemaining = 1;
     };

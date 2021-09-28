@@ -7,7 +7,7 @@ import { UNIT_TYPES } from "./unitTypes";
 export const THUNDERER: ISprite = {
     spriteInfo: {
         damage: 50,
-        attackRange: 2,
+        attackRange: 1,
         melee: false,
         maxHp: 60,
         name: "Thunderer",

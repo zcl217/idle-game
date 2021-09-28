@@ -1,12 +1,12 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import {
-        ALL_CLEAR_REWARDS,
-        STAGE_LIST,
-    } from "~/constants/military/stageList";
+    import { STAGE_LIST } from "~/constants/military/stageList";
     import type { ISprite } from "~/interfaces/military/sprite";
     import { clearedStages } from "~/store/military";
-    import { areAllZoneStagesCleared, generatePreviewList } from "~/utils/helpers";
+    import {
+        areAllZoneStagesCleared,
+        generatePreviewList,
+    } from "~/utils/helpers";
     import StagePreview from "./StagePreview.svelte";
 
     const ZONES = {
@@ -21,7 +21,7 @@
     const zone1: string[] = [];
     const zone2: string[] = [];
     const zone3: string[] = [];
-    let zone2Unlocked: boolean = true;
+    let zone2Unlocked: boolean = false;
     let zone3Unlocked: boolean = false;
     let enemyPreviewList: { sprite: ISprite; amount: number }[] = [];
     const dispatch = createEventDispatcher();
@@ -46,8 +46,6 @@
         }
     }
 
-    // TODO: add half transparent image of the stage of the respective zone to the background
-
     const handleStageSelection = (stage: string) => {
         selectedStage = STAGE_LIST[stage];
         enemyPreviewList = generatePreviewList(selectedStage);
@@ -57,6 +55,12 @@
         selectedZone = zone;
         selectedStage = "";
         zonePreviewImage = `url("zonePreviews/map${selectedZone}.png")`;
+    };
+    const previousStageCleared = (stage: string) => {
+        const stageNumber = parseInt(stage.substring(2, 3));
+        if (stageNumber === 1) return true;
+        const previousStage = stage.substring(0, 2) + (stageNumber - 1);
+        return $clearedStages[STAGE_LIST[previousStage]];
     };
 
     const startExpedition = (stage: string) => {
@@ -90,11 +94,17 @@
     </button>
 </div>
 
-<div class="flex h-5/6">
-    <div class="flex flex-col justify-around flex-grow h-5/6">
+<div class="flex justify-between h-5/6">
+    <div class="flex flex-col justify-around h-5/6">
         {#if selectedZone === ZONES.ONE}
             {#each zone1 as stage}
-                <div class="flex flex-row items-center">
+                <div
+                    class="flex flex-row items-center {previousStageCleared(
+                        stage
+                    )
+                        ? ''
+                        : 'invisible'}"
+                >
                     <button
                         class=" w-10 rpgui-button {selectedStage ===
                         STAGE_LIST[stage]
@@ -112,7 +122,13 @@
             {/each}
         {:else if selectedZone === ZONES.TWO}
             {#each zone2 as stage}
-                <div class="flex flex-row items-center">
+                <div
+                    class="flex flex-row items-center {previousStageCleared(
+                        stage
+                    )
+                        ? ''
+                        : 'invisible'}"
+                >
                     <button
                         class="w-10 rpgui-button {selectedStage ===
                         STAGE_LIST[stage]
@@ -130,7 +146,13 @@
             {/each}
         {:else if selectedZone === ZONES.THREE}
             {#each zone3 as stage}
-                <div class="flex flex-row items-center">
+                <div
+                    class="flex flex-row items-center {previousStageCleared(
+                        stage
+                    )
+                        ? ''
+                        : 'invisible'}"
+                >
                     <button
                         class="w-10 rpgui-button {selectedStage ===
                         STAGE_LIST[stage]
@@ -148,9 +170,23 @@
                 </div>
             {/each}
         {/if}
+
+        {#if enemyPreviewList.length > 0}
+            <div class="absolute flex w-4/6 bottom-5">
+                <button
+                    class="w-20 h-20 mr-5 rpgui-button"
+                    type="button"
+                    on:click={() => {
+                        startExpedition(selectedStage);
+                    }}
+                >
+                    <p class="text-green">START</p>
+                </button>
+            </div>
+        {/if}
     </div>
     {#if enemyPreviewList.length > 0}
-        <StagePreview {enemyPreviewList} {selectedStage} {startExpedition} />
+        <StagePreview {enemyPreviewList} />
     {:else if selectedZone > 0}
         {#if selectedZone === 3} work in progress {/if}
         <div class="flex flex-col items-center justify-center w-4/6 mt-5">
@@ -178,5 +214,8 @@
     }
     .-ml-60px {
         margin-left: -60px !important;
+    }
+    .invisible {
+        visibility: hidden;
     }
 </style>

@@ -58,6 +58,7 @@ const createNewSelectedMilitaryUnits = (initialList: string[]) => {
         subscribe,
         addUnit,
         removeUnit,
+        updateUnit,
         set
     };
     function addUnit(type: string) {
@@ -72,6 +73,15 @@ const createNewSelectedMilitaryUnits = (initialList: string[]) => {
                 (unitType) => unitType === type
             );
             if (index >= 0) selectedMilitaryUnits.splice(index, 1);
+            return selectedMilitaryUnits;
+        })
+    }
+    function updateUnit(type: string, newType: string) {
+        update((selectedMilitaryUnits) => {
+            const index = selectedMilitaryUnits.findIndex(
+                (unitType) => unitType === type
+            );
+            if (index >= 0) selectedMilitaryUnits[index] = newType;
             return selectedMilitaryUnits;
         })
     }

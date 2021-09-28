@@ -26,6 +26,8 @@
         [STAGE_LIST["2-1"]]: 2,
         [STAGE_LIST["2-2"]]: 2,
         [STAGE_LIST["2-3"]]: 2,
+        [STAGE_LIST["2-4"]]: 2,
+        [STAGE_LIST["2-5"]]: 2,
         [STAGE_LIST["3-1"]]: 3,
         [STAGE_LIST["3-2"]]: 3,
         [STAGE_LIST["3-3"]]: 3,
@@ -59,14 +61,20 @@
                 );
             }
             switch (zone) {
-                case "1":
+                case "1": {
                     const nextScene = STORY_PROGRESS_LIST["A3S1"];
                     curStoryProgress.set(nextScene);
                     updateDialogue(DIALOGUES[nextScene]);
                     displayDialogueBox.set(true);
                     return;
-                case "2":
+                }
+                case "2": {
+                    const nextScene = STORY_PROGRESS_LIST["A4S1"];
+                    curStoryProgress.set(nextScene);
+                    updateDialogue(DIALOGUES[nextScene]);
+                    displayDialogueBox.set(true);
                     return;
+                }
                 default:
                     return;
             }

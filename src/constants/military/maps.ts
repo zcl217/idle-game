@@ -332,7 +332,7 @@ export const UNIT_PATHS = {
             { row: 4, col: 7 },
             { row: 5, col: 7 },
             { row: 6, col: 7 },
-        ], 
+        ],
         // from unwalkable left to right, then down
         PATH_8: [
             { row: 2, col: 0 },
@@ -349,6 +349,59 @@ export const UNIT_PATHS = {
             { row: 4, col: 8 },
             { row: 5, col: 8 },
             { row: 6, col: 8 },
+        ],
+        // from unwalkable left to right, then down
+        // (this is one tile lower than path 8)
+        PATH_9: [
+            { row: 3, col: 0 },
+            { row: 3, col: 1 },
+            { row: 3, col: 2 },
+            { row: 3, col: 3 },
+            { row: 3, col: 4 },
+            { row: 3, col: 5 },
+            { row: 3, col: 6 },
+            { row: 3, col: 7 },
+            // reached right
+            { row: 3, col: 8 },
+            { row: 4, col: 8 },
+            { row: 5, col: 8 },
+            { row: 6, col: 8 },
+        ],
+        // boss path
+        PATH_10: [
+            // going right left right
+            { row: 1, col: 0 },
+            { row: 1, col: 1 },
+            { row: 1, col: 2 },
+            { row: 1, col: 3 },
+            { row: 1, col: 4 },
+            { row: 1, col: 3 },
+            { row: 1, col: 2 },
+            { row: 1, col: 1 },
+            { row: 1, col: 0 },
+            { row: 1, col: 1 },
+            { row: 1, col: 2 },
+            { row: 1, col: 3 },
+            { row: 1, col: 4 },
+            { row: 1, col: 5 },
+            // going down
+            { row: 2, col: 5 },
+            { row: 3, col: 5 },
+            { row: 4, col: 5 },
+            // going left
+            { row: 4, col: 4 },
+            { row: 4, col: 3 },
+            { row: 4, col: 2 },
+            { row: 5, col: 2 },
+            { row: 6, col: 2 },
+            // going right
+            { row: 6, col: 3 },
+            { row: 6, col: 4 },
+            { row: 6, col: 5 },
+            { row: 6, col: 6 },
+            { row: 5, col: 6 },
+            { row: 5, col: 7 },
+            { row: 6, col: 7 },
         ],
     }
 }

@@ -14,6 +14,8 @@ import { ENEMY_SPAWN_LIST } from "~/constants/military/enemySpawnList";
 import { isGlobalPoisonOn, removedEnemyUnitCount } from "~/store/military";
 import { GLOBAL_POISON_DAMAGE, SPECIAL_ABILITIES } from "~/constants/military/specialAbilities";
 import { THUNDERSTICK_BLAST_SPRITESHEET_INFO } from "~/constants/military/spriteSheetInfo/projectiles/thunderstickBlast";
+import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
+import { STAGE_LIST } from "~/constants/military/stageList";
 
 export const initializeGrid = (mapType: number): IExpeditionCell[][] => {
     const grid: IExpeditionCell[][] = [];
@@ -151,9 +153,14 @@ export function initializeUnitPosition(unit: ISprite, row: number, col: number):
     unit.position.coordinates = { row, col };
 }
 
-export const setLifeCount = (level: number, lifeCount: any): void => {
-    // TODO: different lives based on the level
-    lifeCount.set(2);
+export const setLifeCount = (stage: string, lifeCount: any): void => {
+    switch(stage) {
+        case STAGE_LIST['2-5']:
+            lifeCount.set(1);
+            break;
+        default:
+            lifeCount.set(2);
+    }
 }
 
 export const handleDamageCalculations = (
@@ -209,10 +216,10 @@ export const processDamageCalculation = (
     enemyUnits: ISprite[]
 ): void => {
     switch (specialAbility) {
-        case SPECIAL_ABILITIES.AOE:
+        case SPECIAL_ABILITIES.AOE: {
             const targetCoordinates = target.position.coordinates;
-            let unitList = grid[targetCoordinates.row][targetCoordinates.col].enemyUnitList;
-            for (let unit of unitList) {
+            const unitList = grid[targetCoordinates.row][targetCoordinates.col].enemyUnitList;
+            for (const unit of unitList) {
                 unit.state.currentHp -= damage;
                 // remove sprite from cell and master list
                 if (unit.state.currentHp <= 0 && !unit.state.isDead) {
@@ -224,6 +231,7 @@ export const processDamageCalculation = (
                 }
             }
             break;
+        }
         default:
             target.state.currentHp -= damage;
             // remove sprite from cell and master list
@@ -312,6 +320,7 @@ function processUnitDeath(
         removeFromUnitList(target, targetCell.enemyUnitList);
         removeFromUnitList(target, enemyUnits);
         removedEnemyUnitCount.increment();
+        if (target.spriteInfo.unitType === UNIT_TYPES.GHAST) isGlobalPoisonOn.set(false);
     } else {
         targetCell.playerUnit = undefined;
         removeFromUnitList(target, playerUnits);
@@ -599,7 +608,7 @@ export const handleProjectiles = (
                     playerUnits,
                     enemyUnits
                 );
-                let removedProjectile = projectiles.splice(a, 1)[0];
+                const removedProjectile = projectiles.splice(a, 1)[0];
                 if (projectile.hasAnimation) {
                     arrivedProjectiles.push(removedProjectile);
                 }
@@ -650,7 +659,7 @@ export const handleSpecialEffects = (
 
 export const handleProjectileAnimations = (
     arrivedProjectiles: IProjectile[]
-) => {
+): void => {
     for (let a = arrivedProjectiles.length - 1; a >= 0; a--) {
         const projectile = arrivedProjectiles[a];
         let attackFrames;

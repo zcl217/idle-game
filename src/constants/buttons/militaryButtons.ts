@@ -71,7 +71,7 @@ export const MILITARY_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.GOLD, cost: 100, },
     ],
     [MILITARY_BUTTON_TYPES.TRAIN_MAGE]: [
-        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 3000, },
+        { type: RESOURCE_TYPES.KNOWLEDGE, cost: 10000, },
         { type: RESOURCE_TYPES.GOLD, cost: 150, },
     ],
     [MILITARY_BUTTON_TYPES.TRAIN_THUNDERER]: [

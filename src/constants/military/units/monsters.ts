@@ -276,14 +276,14 @@ export const SHADOW: ISprite = {
 
 export const GHAST: ISprite = {
     spriteInfo: {
-        damage: 5,
+        damage: 50,
         melee: true,
-        maxHp: 300,
+        maxHp: 1000,
         name: "Ghast",
         unitType: UNIT_TYPES.GHAST,
         spriteSize: SPRITE_SIZES.TYPE_1,
         isEnemy: true,
-        animationSpeed: 1,
+        animationSpeed: 2,
         movementAnimationSpeed: 5,
         hpBarOffsetX: 0,
         specialAbility: SPECIAL_ABILITIES.GLOBAL_POISON
@@ -296,7 +296,7 @@ export const GHAST: ISprite = {
         spriteSheetPositionX: 0,
         spriteSheetPositionY: 0,
         facingRight: true,
-        tweenedDelay: 3000
+        tweenedDelay: 3970
     },
     state: {
         currentState: UNIT_STATES.IDLE,

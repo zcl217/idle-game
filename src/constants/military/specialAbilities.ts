@@ -3,6 +3,8 @@ export const SPECIAL_ABILITIES: Record<string, string> = {
     ETHEREAL: 'ethereal',
     GLOBAL_POISON: 'global poison',
     AOE: 'area of effect',
+    STEALTHED: 'stealthed',
+    
 
 }
 

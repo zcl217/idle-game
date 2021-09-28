@@ -8,8 +8,9 @@
     import { INFO_BOX_TYPES } from "~/constants/infoBoxes";
     import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
     import type { ISprite } from "~/interfaces/military/sprite";
-    import { militaryUnitList } from "~/store/military";
+    import { militaryUnitList, selectedMilitaryUnits } from "~/store/military";
     import { resources } from "~/store/resources";
+    import { getUnitLineType } from "~/utils/helpers";
     import {
         hasEnoughResources,
         spendResources,
@@ -17,42 +18,28 @@
     import FramedSprite from "./FramedSprite.svelte";
 
     const BUTTON_WIDTH = 145;
+    const MILITARY_UPGRADE_MAP: Record<string, string> = {
+        [UNIT_TYPES.SPEARMAN]: UNIT_TYPES.PIKEMAN,
+        [UNIT_TYPES.PIKEMAN]: UNIT_TYPES.HALBERDIER,
+        [UNIT_TYPES.FOOTPAD]: UNIT_TYPES.OUTLAW,
+        [UNIT_TYPES.HEAVY_INFANTRY]: UNIT_TYPES.SHOCKTROOPER,
+        [UNIT_TYPES.SHOCKTROOPER]: UNIT_TYPES.SIEGETROOPER,
+        [UNIT_TYPES.MAGE]: UNIT_TYPES.ARCH_MAGE,
+        [UNIT_TYPES.THUNDERER]: UNIT_TYPES.THUNDERGUARD,
+        [UNIT_TYPES.THUNDERGUARD]: UNIT_TYPES.DRAGONGUARD,
+    };
     export let sprite: ISprite;
     let unitCount = 0;
     let unitType = sprite.spriteInfo.unitType;
     $: {
-        unitCount = $militaryUnitList[getUnitLineType()].count;
+        unitCount = $militaryUnitList[getUnitLineType(unitType)].count;
     }
-    const getUnitLineType = () => {
-        switch (unitType) {
-            case UNIT_TYPES.SPEARMAN:
-            case UNIT_TYPES.PIKEMAN:
-            case UNIT_TYPES.HALBERDIER:
-                return UNIT_TYPES.SPEARMAN;
-            case UNIT_TYPES.FOOTPAD:
-            case UNIT_TYPES.OUTLAW:
-                return UNIT_TYPES.FOOTPAD;
-            case UNIT_TYPES.HEAVY_INFANTRY:
-            case UNIT_TYPES.SHOCKTROOPER:
-            case UNIT_TYPES.SIEGETROOPER:
-                return UNIT_TYPES.HEAVY_INFANTRY;
-            case UNIT_TYPES.MAGE:
-            case UNIT_TYPES.ARCH_MAGE:
-                return UNIT_TYPES.MAGE;
-            case UNIT_TYPES.THUNDERER:
-            case UNIT_TYPES.THUNDERGUARD:
-            case UNIT_TYPES.DRAGONGUARD:
-                return UNIT_TYPES.THUNDERER;
-            default:
-                break;
-        }
-    };
 
     const trainUnit = () => {
         const buttonType = getTrainButtonType();
         if (!hasEnoughResources(MILITARY_BUTTON_COSTS, $resources, buttonType))
             return;
-        militaryUnitList.incrementMilitaryUnitCount(getUnitLineType());
+        militaryUnitList.incrementMilitaryUnitCount(getUnitLineType(unitType));
         spendResources(MILITARY_BUTTON_COSTS, resources, buttonType);
     };
 
@@ -60,68 +47,18 @@
         const buttonType = getUpgradeButtonType();
         if (!hasEnoughResources(MILITARY_BUTTON_COSTS, $resources, buttonType))
             return;
-        switch (unitType) {
-            case UNIT_TYPES.SPEARMAN:
-                militaryUnitList.updateMilitaryUnitType(
-                    UNIT_TYPES.SPEARMAN,
-                    UNIT_TYPES.PIKEMAN
-                );
-                unitType = UNIT_TYPES.PIKEMAN;
-                break;
-            case UNIT_TYPES.PIKEMAN:
-                militaryUnitList.updateMilitaryUnitType(
-                    UNIT_TYPES.SPEARMAN,
-                    UNIT_TYPES.HALBERDIER
-                );
-                unitType = UNIT_TYPES.HALBERDIER;
-                break;
-            case UNIT_TYPES.FOOTPAD:
-                militaryUnitList.updateMilitaryUnitType(
-                    UNIT_TYPES.FOOTPAD,
-                    UNIT_TYPES.OUTLAW
-                );
-                unitType = UNIT_TYPES.OUTLAW;
-                break;
-            case UNIT_TYPES.HEAVY_INFANTRY:
-                militaryUnitList.updateMilitaryUnitType(
-                    UNIT_TYPES.HEAVY_INFANTRY,
-                    UNIT_TYPES.SHOCKTROOPER
-                );
-                unitType = UNIT_TYPES.SHOCKTROOPER;
-                break;
-            case UNIT_TYPES.SHOCKTROOPER:
-                militaryUnitList.updateMilitaryUnitType(
-                    UNIT_TYPES.HEAVY_INFANTRY,
-                    UNIT_TYPES.SIEGETROOPER
-                );
-                unitType = UNIT_TYPES.SIEGETROOPER;
-                break;
-            case UNIT_TYPES.MAGE:
-                militaryUnitList.updateMilitaryUnitType(
-                    UNIT_TYPES.MAGE,
-                    UNIT_TYPES.ARCH_MAGE
-                );
-                unitType = UNIT_TYPES.ARCH_MAGE;
-                break;
-            case UNIT_TYPES.THUNDERER:
-                militaryUnitList.updateMilitaryUnitType(
-                    UNIT_TYPES.THUNDERER,
-                    UNIT_TYPES.THUNDERGUARD
-                );
-                unitType = UNIT_TYPES.THUNDERGUARD;
-                break;
-            case UNIT_TYPES.THUNDERGUARD:
-                militaryUnitList.updateMilitaryUnitType(
-                    UNIT_TYPES.THUNDERGUARD,
-                    UNIT_TYPES.DRAGONGUARD
-                );
-                unitType = UNIT_TYPES.DRAGONGUARD;
-                break;
-            default:
-                return;
-        }
+        updateUnitType();
         spendResources(MILITARY_BUTTON_COSTS, resources, buttonType);
         curUpgradeButtonType = getUpgradeButtonType();
+    };
+
+    const updateUnitType = () => {
+        if (MILITARY_UPGRADE_MAP[unitType]) {
+            let newUnitType = MILITARY_UPGRADE_MAP[unitType];
+            militaryUnitList.updateMilitaryUnitType(unitType, newUnitType);
+            selectedMilitaryUnits.updateUnit(unitType, newUnitType);
+            unitType = newUnitType;
+        }
     };
 
     const getTrainButtonType = () => {
@@ -169,7 +106,6 @@
                 return MILITARY_BUTTON_TYPES.DISABLED_UPGRADE;
         }
     };
-
     let curUpgradeButtonType = getUpgradeButtonType();
 </script>
 

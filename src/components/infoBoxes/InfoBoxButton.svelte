@@ -4,7 +4,7 @@
         buttonType,
         buttonCategory,
         buttonPositionX,
-        buttonPositionY
+        buttonPositionY,
     } from "~/store/infoBox";
     import {
         BUTTON_CATEGORIES,
@@ -19,7 +19,6 @@
         MILITARY_BUTTON_TEXTS,
         MILITARY_BUTTON_TYPES,
         TRAIN_BUTTONS,
-        UPGRADE_BUTTONS,
     } from "~/constants/buttons/militaryButtons";
     import {
         OTHER_BUTTON_TEXTS,
@@ -28,6 +27,12 @@
     import { onDestroy } from "svelte";
     import { researchedSciences } from "~/store/gameState";
     import { INFO_BOX_TYPES } from "~/constants/infoBoxes";
+
+    const LONG_NAMES: Set<String> = new Set<String>([
+        SCIENCE_BUTTON_TYPES.CONSCRIPTION,
+        SCIENCE_BUTTON_TYPES.THUNDERSTICKS,
+    ]);
+
     export let handler: any = () => {},
         curButtonType: string,
         width: number = BUTTON_WIDTH,
@@ -49,16 +54,36 @@
         } else {
             switch (curButtonType) {
                 case MILITARY_BUTTON_TYPES.UPGRADE_HEAVY_INFANTRY:
-                    if (!$researchedSciences.has(SCIENCE_BUTTON_TYPES.STUDY_SINATRA_ARTIFACT)) disabled = true;
+                    if (
+                        !$researchedSciences.has(
+                            SCIENCE_BUTTON_TYPES.STUDY_SINATRA_ARTIFACT
+                        )
+                    )
+                        disabled = true;
                     break;
                 case MILITARY_BUTTON_TYPES.UPGRADE_PIKEMAN:
-                    if (!$researchedSciences.has(SCIENCE_BUTTON_TYPES.STUDY_ADUN_ARTIFACT)) disabled = true;
+                    if (
+                        !$researchedSciences.has(
+                            SCIENCE_BUTTON_TYPES.STUDY_ADUN_ARTIFACT
+                        )
+                    )
+                        disabled = true;
                     break;
                 case MILITARY_BUTTON_TYPES.UPGRADE_MAGE:
-                    if (!$researchedSciences.has(SCIENCE_BUTTON_TYPES.STUDY_AEDUS_TOME_ARTIFACT)) disabled = true;
+                    if (
+                        !$researchedSciences.has(
+                            SCIENCE_BUTTON_TYPES.STUDY_AEDUS_TOME_ARTIFACT
+                        )
+                    )
+                        disabled = true;
                     break;
                 case MILITARY_BUTTON_TYPES.UPGRADE_SHOCKTROOPER:
-                    if (!$researchedSciences.has(SCIENCE_BUTTON_TYPES.STUDY_LUTAREZ_ARTIFACT)) disabled = true;
+                    if (
+                        !$researchedSciences.has(
+                            SCIENCE_BUTTON_TYPES.STUDY_LUTAREZ_ARTIFACT
+                        )
+                    )
+                        disabled = true;
                     break;
                 case OTHER_BUTTON_TYPES.LORD_2:
                 case MILITARY_BUTTON_TYPES.DISABLED_TRAIN:
@@ -92,13 +117,8 @@
         const bounds = button.getBoundingClientRect();
         let marginLeft = 0;
         let marginTop = 0;
-        if (infoBoxButtonType === INFO_BOX_TYPES.RESOURCE) {
-            marginLeft = bounds.left;
-            marginTop = bounds.top + bounds.height / 2;
-        } else {
-            marginLeft = bounds.left + bounds.width * 1.5;
-            marginTop = bounds.top - bounds.height;
-        }
+        marginLeft = bounds.left;
+        marginTop = bounds.top + bounds.height / 2;
         buttonPositionX.set(marginLeft);
         buttonPositionY.set(marginTop);
     };
@@ -113,7 +133,9 @@
 {#if infoBoxButtonType === INFO_BOX_TYPES.RESOURCE}
     <button
         style="width: {width}px"
-        class="m-3 mx-2 rpgui-button"
+        class="m-3 mx-2 rpgui-button {LONG_NAMES.has(curButtonType)
+            ? 'text-xs'
+            : ''}"
         type="button"
         {disabled}
         bind:this={button}
@@ -133,7 +155,7 @@
     </button>
 {:else}
     <div
-        class="flex items-center justify-center p-0 mt-1 button-style"
+        class="z-10 flex items-center justify-center p-0 mt-1 button-style"
         bind:this={button}
         on:mouseenter={showInfoBox}
         on:mouseleave={hideInfoBox}
@@ -155,5 +177,8 @@
     }
     .mt-1 {
         margin-top: 0.25rem;
+    }
+    .text-xs {
+        font-size: 0.75rem;
     }
 </style>

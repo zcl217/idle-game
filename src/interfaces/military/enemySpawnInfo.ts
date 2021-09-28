@@ -8,3 +8,8 @@ export interface EnemySpawnInfo {
     intervalDelay: number;
     amount: number;
 }
+
+export interface PreviewInfo {
+    sprite: ISprite;
+    amount: number;
+}
