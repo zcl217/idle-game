@@ -120,6 +120,9 @@
                 <p>HP: {sprite.spriteInfo.maxHp}</p>
                 <p>Damage: {sprite.spriteInfo.damage}</p>
                 <p>Units: {unitCount}</p>
+                {#if !sprite.spriteInfo.melee}
+                    <p> Range: {sprite.spriteInfo.attackRange} </p>
+                {/if}
                 {#if sprite.spriteInfo.specialAbility}
                     <InfoBoxButton
                         width={BUTTON_WIDTH}
