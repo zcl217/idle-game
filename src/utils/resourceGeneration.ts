@@ -46,7 +46,7 @@ export const calculateGenerationRate = (type: string, resources: any, workers: a
 export const getResourceConsumption = (type: string, resources: any, workers: any): number => {
     switch (type) {
         case RESOURCE_TYPES.FOOD: {
-            const maxWorkers = resources[RESOURCE_TYPES.HOUSE].value;
+            const maxWorkers = get(totalWorkers);
             const assignedWorkers = maxWorkers - workers[WORKER_TYPES.UNASSIGNED].value;
             const totalWorkerConsumption = assignedWorkers * WORKER_FOOD_CONSUMPTION;
             const totalTavernConsumption = resources[RESOURCE_TYPES.TAVERN].value * TAVERN_FOOD_CONSUMPTION;
