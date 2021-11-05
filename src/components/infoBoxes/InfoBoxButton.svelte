@@ -111,6 +111,7 @@
         }
     };
     const showInfoBox = () => {
+        if (disabled) return;
         displayInfoBox.set(true);
         buttonType.set(curButtonType);
         buttonCategory.set(curButtonCategory);

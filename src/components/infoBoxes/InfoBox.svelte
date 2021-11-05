@@ -28,19 +28,20 @@
         costs: IButtonCost[] = [],
         title: string,
         text: string,
+        x: number,
         y: number,
         infoBoxType: string = INFO_BOX_TYPES.RESOURCE;
 
     $: infoBoxBounds = infoBox?.getBoundingClientRect();
-    $: {
-        y = $buttonPositionY - infoBoxBounds?.height / 2;
+    $: if (infoBoxBounds) {
+        x = $buttonPositionX - infoBoxBounds.width - 10;
+        y = $buttonPositionY - infoBoxBounds.height / 2;
         if (y) {
             if (y + infoBoxBounds.height > displayScreenHeight) {
                 y = displayScreenHeight - infoBoxBounds.height + 50;
             }
         }
     }
-    $: x = $buttonPositionX - infoBoxBounds?.width - 10;
     $: {
         infoBoxType = INFO_BOX_TYPES.RESOURCE;
         switch ($buttonCategory) {
