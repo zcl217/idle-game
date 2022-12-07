@@ -1,6 +1,5 @@
 <script lang="ts">
     import InfoBoxButton from "~/components/infoBoxes/InfoBoxButton.svelte";
-    import CharacterFrame from "../CharacterFrame.svelte";
     import { RESOURCE_TYPES } from "~/constants/resources/resourceTypes";
     import {
         BUTTON_WIDTH,
@@ -10,18 +9,13 @@
     import { displayDialogueBox, updateDialogue } from "~/store/dialogue";
     import { obtainedResources, resources } from "~/store/resources";
     import { empireButtonCosts } from "~/store/buttonCosts";
-    import {
-        playerImage,
-        playerName,
-        researchedSciences,
-        curStoryProgress,
-    } from "~/store/gameState";
+    import { curStoryProgress } from "~/store/gameState";
     import { buttonPrereqsMet } from "~/utils/helpers";
     import {
         BUTTON_RESOURCE_MAPPING,
         EMPIRE_BUTTON_TYPES,
     } from "~/constants/buttons/empireButtons";
-    import { GATHER_FOOD_AMOUNT, GATHER_WOOD_AMOUNT, STORAGE_CAPACITY } from "~/constants/gameState";
+    import { GATHER_FOOD_AMOUNT, GATHER_WOOD_AMOUNT, CAPACITIES } from "~/constants/gameState";
     import {
         hasEnoughResources,
         spendResources,
@@ -53,10 +47,10 @@
         if (!createBuilding(buttonType, resourceType)) return;
         switch (buttonType) {
             case EMPIRE_BUTTON_TYPES.BUILD_STORAGE:
-                incrementResourceLimits(STORAGE_CAPACITY);
+                incrementResourceLimits(CAPACITIES.STORAGE);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_ATTRACTIVE_HOUSE:
-                buildAttractiveHouseHandler(buttonType);
+                buildAttractiveHouseHandler();
                 break;
             default:
                 break;
@@ -102,7 +96,7 @@
             }
         }
     };
-    const buildAttractiveHouseHandler = (buttonType: string) => {
+    const buildAttractiveHouseHandler = () => {
         setTimeout(() => {
             if ($curStoryProgress !== STORY_PROGRESS_LIST["A1S3"]) {
                 const nextScene = STORY_PROGRESS_LIST["A1S1"];

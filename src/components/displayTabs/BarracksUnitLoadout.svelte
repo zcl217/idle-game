@@ -12,6 +12,7 @@
 </script>
 
 <div class="flex flex-row justify-between mt-5">
+    <!-- Unit viewer -->
     <div class="flex flex-row flex-wrap justify-around w-4/6">
         {#each Object.entries(unitList) as [key, unit]}
             {#if displayUnit(unit.type, $researchedSciences)}
@@ -48,7 +49,7 @@
             {/if}
         {/each}
     </div>
-
+    <!-- Selected units -->
     <div class="relative right-250px">
         <div class="fixed flex flex-col ml-3">
             <div class="flex flex-col mb-3 text-center h-52px">

@@ -2,8 +2,7 @@
     import { get } from "svelte/store";
     import {
         INDUSTRY_BUILDINGS,
-        INDUSTRY_BUILDING_STORE_MAP,
-        INDUSTRY_BUILDING_TITLES,
+        INDUSTRY_BUILDING_STORE_MAP
     } from "~/constants/resources/industry";
     import { obtainedResources } from "~/store/resources";
     import IndustryBuilding from "../IndustryBuilding.svelte";

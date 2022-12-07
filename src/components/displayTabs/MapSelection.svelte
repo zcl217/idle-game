@@ -26,17 +26,11 @@
     let enemyPreviewList: { sprite: ISprite; amount: number }[] = [];
     const dispatch = createEventDispatcher();
 
-    for (let a = 0; a < 5; a++) {
-        zone1.push("1");
+    for (let stageNo = 1; stageNo <= 5; stageNo++) {
+        zone1.push(`1-${stageNo}`);
     }
-    for (let a = 0; a < 5; a++) {
-        zone2.push("2");
-    }
-    for (let a = zone1.length; a > 0; a--) {
-        zone1[a - 1] += `-${a}`;
-    }
-    for (let a = zone2.length; a > 0; a--) {
-        zone2[a - 1] += `-${a}`;
+    for (let stageNo = 1; stageNo <= 5; stageNo++) {
+        zone2.push(`2-${stageNo+1}`);
     }
     $: {
         if (areAllZoneStagesCleared("1", $clearedStages)) {
@@ -68,6 +62,7 @@
     };
 </script>
 
+<!-- Zone selection -->
 <div class="flex flex-row justify-around">
     <button
         class="rpgui-button {selectedZone === ZONES.ONE ? 'selected' : ''}"
@@ -93,7 +88,7 @@
         Zone 3
     </button>
 </div>
-
+<!-- Stage selection -->
 <div class="flex justify-between h-5/6">
     <div class="flex flex-col justify-around h-5/6">
         {#if selectedZone === ZONES.ONE}

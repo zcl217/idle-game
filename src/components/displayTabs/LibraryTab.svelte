@@ -18,6 +18,7 @@
 </script>
 
 {#if isViewingCollection}
+<!-- Volume viewer mode -->
     <div class="flex flex-row justify-between">
         <button
             class="rpgui-button"
@@ -44,6 +45,7 @@
         </div>
     {/if}
 {:else}
+<!-- Collection viewer mode -->
     <div class="flex flex-row justify-between">
         <div class="w-1/3">
             <h2 class="text-left">Collections</h2>

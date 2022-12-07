@@ -19,15 +19,7 @@
     import { totalWorkers, workers } from "~/store/workers";
     import { WORKER_TYPES } from "~/constants/workers/workerTypes";
     import {
-        GRANARY_CAPACITY,
-        HOUSE_BONUS,
-        HUGE_WAREHOUSE_CAPACITY,
-        MANSION_BONUS,
-        QUARRY_CAPACITY,
-        SAWMILL_CAPACITY,
-        STORAGE_CAPACITY,
-        UNIVERSITY_CAPACITY,
-        WAREHOUSE_CAPACITY,
+        BONUSES, CAPACITIES
     } from "~/constants/gameState";
     import {
         hasEnoughResources,
@@ -97,52 +89,52 @@
                 $hiddenButtons.add(EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_HOUSE:
-                workers.increment(WORKER_TYPES.UNASSIGNED, HOUSE_BONUS);
-                totalWorkers.add(HOUSE_BONUS);
+                workers.increment(WORKER_TYPES.UNASSIGNED, BONUSES.HOUSE);
+                totalWorkers.add(BONUSES.HOUSE);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_MANSION:
-                workers.increment(WORKER_TYPES.UNASSIGNED, MANSION_BONUS);
-                totalWorkers.add(MANSION_BONUS);
+                workers.increment(WORKER_TYPES.UNASSIGNED, BONUSES.MANSION);
+                totalWorkers.add(BONUSES.MANSION);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_STORAGE:
-                incrementResourceLimits(STORAGE_CAPACITY);
+                incrementResourceLimits(CAPACITIES.STORAGE);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE:
-                incrementResourceLimits(WAREHOUSE_CAPACITY);
+                incrementResourceLimits(CAPACITIES.WAREHOUSE);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_HUGE_WAREHOUSE:
-                incrementResourceLimits(HUGE_WAREHOUSE_CAPACITY);
+                incrementResourceLimits(CAPACITIES.HUGE_WAREHOUSE);
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_GRANARY:
                 resources.incrementResourceLimit(
                     RESOURCE_TYPES.FOOD,
-                    GRANARY_CAPACITY
+                    CAPACITIES.GRANARY
                 );
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_SAWMILL:
                 resources.incrementResourceLimit(
                     RESOURCE_TYPES.WOOD,
-                    SAWMILL_CAPACITY
+                    CAPACITIES.SAWMILL
                 );
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_QUARRY:
                 resources.incrementResourceLimit(
                     RESOURCE_TYPES.RAW_ORE,
-                    QUARRY_CAPACITY
+                    CAPACITIES.QUARRY
                 );
                 resources.incrementResourceLimit(
                     RESOURCE_TYPES.COAL,
-                    QUARRY_CAPACITY
+                    CAPACITIES.QUARRY
                 );
                 resources.incrementResourceLimit(
                     RESOURCE_TYPES.GOLD,
-                    QUARRY_CAPACITY
+                    CAPACITIES.QUARRY
                 );
                 break;
             case EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY:
                 resources.incrementResourceLimit(
                     RESOURCE_TYPES.KNOWLEDGE,
-                    UNIVERSITY_CAPACITY
+                    CAPACITIES.UNIVERSITY
                 );
                 break;
             default:
@@ -191,6 +183,7 @@
             />
         </div>
     {/each}
+    <!-- Residential sector buttons -->
     {#if residentialSectorButtons.size > 0}
         <h1 class="flex-1 text-left">Residential Sector</h1>
     {/if}
@@ -206,12 +199,14 @@
             />
         </div>
     {/each}
+    <!-- Button spacing -->
     {#if residentialSectorButtons.size % 3 === 1}
         <div />
         <div />
     {:else if residentialSectorButtons.size % 3 === 2}
         <div />
     {/if}
+    <!-- Storage sector buttons -->
     {#if storageSectorButtons.size > 0}
         <h1 class="flex-1 pt-3 text-left">Storage Sector</h1>
     {/if}
@@ -227,12 +222,14 @@
             />
         </div>
     {/each}
+    <!-- Button spacing -->
     {#if storageSectorButtons.size % 3 === 1}
         <div />
         <div />
     {:else if storageSectorButtons.size % 3 === 2}
         <div />
     {/if}
+    <!-- Industry sector buttons -->
     {#if industrySectorButtons.size > 0}
         <h1 class="flex-1 pt-3 text-left">Industry Sector</h1>
     {/if}
@@ -248,6 +245,7 @@
             />
         </div>
     {/each}
+    <!-- Button spacing -->
     {#if industrySectorButtons.size % 3 === 1}
         <div />
         <div />

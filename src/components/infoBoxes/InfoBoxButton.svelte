@@ -96,6 +96,7 @@
         }
     }
     const handleButtonClick = () => {
+        // handler function received from parent
         handler();
         switch (curButtonType) {
             case MILITARY_BUTTON_TYPES.UPGRADE_SPEARMAN:

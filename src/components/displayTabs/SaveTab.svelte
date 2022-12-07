@@ -170,6 +170,7 @@
     };
 </script>
 
+<!-- Credits -->
 {#if displayCredits}
     <div
         class="absolute flex flex-col w-95 h-95 z-100 rpgui-container framed-golden"
@@ -231,6 +232,7 @@
         Automatic saving hasn't been implemented yet so you have to save
         manually every time.
     </h4>
+    <!-- Save handling -->
     <div class="flex flex-col justify-around h-full">
         <div>
             <h2>Export Save</h2>

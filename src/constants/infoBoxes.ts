@@ -3,7 +3,7 @@ import { EMPIRE_BUTTON_TYPES } from './buttons/empireButtons'
 import type { IInfoBoxList } from "~/interfaces/infoBox"
 import { MILITARY_BUTTON_TYPES } from './buttons/militaryButtons';
 import { SCIENCE_BUTTON_TYPES } from './buttons/scienceButtons';
-import { GATHER_FOOD_AMOUNT, GATHER_WOOD_AMOUNT, GRANARY_BONUS, GRANARY_CAPACITY, HOUSE_BONUS, HUGE_WAREHOUSE_CAPACITY, MANSION_BONUS, MANSION_COAL_CONSUMPTION, QUARRY_BONUS, QUARRY_CAPACITY, SAWMILL_BONUS, SAWMILL_CAPACITY, STORAGE_CAPACITY, TAVERN_BONUS, TAVERN_FOOD_CONSUMPTION, UNIVERSITY_BONUS, UNIVERSITY_CAPACITY, WAREHOUSE_CAPACITY } from './gameState';
+import { GATHER_FOOD_AMOUNT, GATHER_WOOD_AMOUNT, BONUSES, CAPACITIES, MANSION_COAL_CONSUMPTION, TAVERN_FOOD_CONSUMPTION } from './gameState';
 import { SPECIAL_ABILITIES } from './military/specialAbilities';
 
 export const EMPIRE_INFO_BOXES: IInfoBoxList = {
@@ -21,7 +21,7 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_STORAGE]: {
         title: 'Build Storage',
-        text: `Increase resource limit by ${STORAGE_CAPACITY} per storage`
+        text: `Increase resource limit by ${CAPACITIES.STORAGE} per storage`
     },
     [EMPIRE_BUTTON_TYPES.CREATE_TREE_FARM]: {
         title: 'Create Tree Farm',
@@ -33,15 +33,15 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_HOUSE]: {
         title: 'Build House',
-        text: `Increases max workers by ${HOUSE_BONUS}`
+        text: `Increases max workers by ${BONUSES.HOUSE}`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_MANSION]: {
         title: 'Build Mansion',
-        text: `Increases max workers by ${MANSION_BONUS} and consumes ${MANSION_COAL_CONSUMPTION} coal per second`
+        text: `Increases max workers by ${BONUSES.MANSION} and consumes ${MANSION_COAL_CONSUMPTION} coal per second`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_TAVERN]: {
         title: 'Build Tavern',
-        text: `Increases worker efficiency by ${TAVERN_BONUS}% per tavern and consumes ${TAVERN_FOOD_CONSUMPTION} food per second`
+        text: `Increases worker efficiency by ${BONUSES.TAVERN}% per tavern and consumes ${TAVERN_FOOD_CONSUMPTION} food per second`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_ATHENAEUM]: {
         title: 'Build Athenaeum',
@@ -49,27 +49,27 @@ export const EMPIRE_INFO_BOXES: IInfoBoxList = {
     },
     [EMPIRE_BUTTON_TYPES.BUILD_WAREHOUSE]: {
         title: 'Build Warehouse',
-        text: `Increases resource limit by ${WAREHOUSE_CAPACITY} per warehouse`
+        text: `Increases resource limit by ${CAPACITIES.WAREHOUSE} per warehouse`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_GRANARY]: {
         title: 'Build Granary',
-        text: `Increases food storage limit by ${GRANARY_CAPACITY} and acquisition by ${GRANARY_BONUS * 100}% per granary`
+        text: `Increases food storage limit by ${CAPACITIES.GRANARY} and acquisition by ${BONUSES.GRANARY * 100}% per granary`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_SAWMILL]: {
         title: 'Build Sawmill',
-        text: `Increase wood storage limit by ${SAWMILL_CAPACITY} and acquisition by ${SAWMILL_BONUS * 100}% per sawmill`
+        text: `Increase wood storage limit by ${CAPACITIES.SAWMILL} and acquisition by ${BONUSES.SAWMILL * 100}% per sawmill`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_QUARRY]: {
         title: 'Build Quarry',
-        text: `Increase raw ore, coal, and gold storage limit by ${QUARRY_CAPACITY} and acquisition by ${QUARRY_BONUS * 100}% per quarry`
+        text: `Increase raw ore, coal, and gold storage limit by ${CAPACITIES.QUARRY} and acquisition by ${BONUSES.QUARRY * 100}% per quarry`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_UNIVERSITY]: {
         title: 'Build University',
-        text: `Increase knowledge storage limit by ${UNIVERSITY_CAPACITY} and acquisition by ${UNIVERSITY_BONUS * 100}% per university`
+        text: `Increase knowledge storage limit by ${CAPACITIES.UNIVERSITY} and acquisition by ${BONUSES.UNIVERSITY * 100}% per university`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_HUGE_WAREHOUSE]: {
         title: 'Build Huge Warehouse',
-        text: `Increases resource limit by ${HUGE_WAREHOUSE_CAPACITY} per huge warehouse`
+        text: `Increases resource limit by ${CAPACITIES.HUGE_WAREHOUSE} per huge warehouse`
     },
     [EMPIRE_BUTTON_TYPES.BUILD_WORKSHOP]: {
         title: 'Build Workshop',
@@ -346,7 +346,7 @@ export const ABILITY_INFO_BOXES: Record<string, string> = {
 export const OTHER_INFO_BOXES: IInfoBoxList = {
     [OTHER_BUTTON_TYPES.LORD_1]: {
         title: 'The Final Bastion of Humanity',
-        text: 'Become the lord of hope. You will lead humanity to heights never seen before, your name remembered for centuries to come. Your subjects will be filled with the wisest of scholars and the most legendary of knights.'
+        text: 'Become the lord of hope. You will lead humanity to heights never seen before, your name remembered for centuries to come. Your subjects will be comprised of the wisest of scholars and the most legendary of knights.'
     },
     [OTHER_BUTTON_TYPES.LORD_2]: {
         title: 'Destroyer of All',

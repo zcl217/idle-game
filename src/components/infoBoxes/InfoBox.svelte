@@ -84,6 +84,7 @@
 
 {#if $displayInfoBox}
     {#if infoBoxType === INFO_BOX_TYPES.RESOURCE}
+        <!-- Resource info & cost -->
         <div
             class="absolute border-4 rpgui-container framed-grey max-w-250px"
             style="top: {y}px; margin-left: {x}px"

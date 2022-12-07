@@ -4,6 +4,12 @@
     import BarracksUnitList from "./BarracksUnitList.svelte";
     import BarracksUnitLoadout from "./BarracksUnitLoadout.svelte";
 
+    const advancedUnits = [
+      SCIENCE_BUTTON_TYPES.SLINGSHOTS,
+      SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY,
+      SCIENCE_BUTTON_TYPES.MAGIC,
+      SCIENCE_BUTTON_TYPES.THUNDERSTICKS
+    ]
     enum TABS {
         UNIT_LIST,
         LOADOUT,
@@ -12,14 +18,9 @@
     let researchCount = 0;
     $: {
         let newResearchCount = 0;
-        if ($researchedSciences.has(SCIENCE_BUTTON_TYPES.SLINGSHOTS))
-            newResearchCount++;
-        if ($researchedSciences.has(SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY))
-            newResearchCount++;
-        if ($researchedSciences.has(SCIENCE_BUTTON_TYPES.MAGIC))
-            newResearchCount++;
-        if ($researchedSciences.has(SCIENCE_BUTTON_TYPES.THUNDERSTICKS))
-            newResearchCount++;
+        for (let advancedUnit of advancedUnits) {
+          if ($researchedSciences.has(advancedUnit)) newResearchCount++;
+        }
         researchCount = newResearchCount;
     }
 </script>

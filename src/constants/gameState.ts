@@ -3,22 +3,27 @@ export const GATHER_FOOD_AMOUNT = 1;
 export const GATHER_WOOD_AMOUNT = 1;
 
 export const WORKER_FOOD_CONSUMPTION = 5;
-export const WORKER_TAXATION_BONUS = 0.5;
 
 export const MANSION_COAL_CONSUMPTION = 1;
 export const TAVERN_FOOD_CONSUMPTION = 10;
 
-export const HOUSE_BONUS = 1;
-export const MANSION_BONUS = 5;
-export const TAVERN_BONUS = 1;
-export const STORAGE_CAPACITY = 200;
-export const WAREHOUSE_CAPACITY = 1500;
-export const HUGE_WAREHOUSE_CAPACITY = 10000;
-export const SAWMILL_CAPACITY = 500;
-export const SAWMILL_BONUS = 0.05;
-export const GRANARY_CAPACITY = 500;
-export const GRANARY_BONUS = 0.05;
-export const QUARRY_CAPACITY = 500;
-export const QUARRY_BONUS = 0.05;
-export const UNIVERSITY_BONUS = 0.05;
-export const UNIVERSITY_CAPACITY = 500;
+export const BONUSES = {
+  WORKER_TAXATION: 0.5,
+  HOUSE: 1,
+  MANSION: 1,
+  TAVERN: 1,
+  SAWMILL: 0.05,
+  GRANARY: 0.05,
+  QUARRY: 0.05,
+  UNIVERSITY: 0.05
+}
+
+export const CAPACITIES = {
+  STORAGE: 200,
+  WAREHOUSE: 1500,
+  HUGE_WAREHOUSE: 10000,
+  SAWMILL: 500,
+  GRANARY: 500,
+  QUARRY: 500,
+  UNIVERSITY: 500,
+}

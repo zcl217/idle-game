@@ -3,7 +3,7 @@ import { RESOURCE_GENERATOR_MAP, RESOURCE_TYPES } from "~/constants/resources/re
 import { WORKER_GENERATOR_MAP, WORKER_TYPES } from "~/constants/workers/workerTypes";
 import { researchedSciences as researchedSciencesFromStore } from '~/store/gameState';
 import { SCIENCE_BUTTON_TYPES } from "~/constants/buttons/scienceButtons";
-import { GRANARY_BONUS, MANSION_COAL_CONSUMPTION, QUARRY_BONUS, SAWMILL_BONUS, TAVERN_FOOD_CONSUMPTION, UNIVERSITY_BONUS, WORKER_FOOD_CONSUMPTION, WORKER_TAXATION_BONUS } from "~/constants/gameState";
+import { MANSION_COAL_CONSUMPTION, TAVERN_FOOD_CONSUMPTION, WORKER_FOOD_CONSUMPTION, BONUSES } from "~/constants/gameState";
 import type { IResourceList } from "~/interfaces/resource";
 import { resourcesFromExpeditions } from "~/store/resources";
 import { totalWorkers } from "~/store/workers";
@@ -25,7 +25,7 @@ export const calculateGenerationRate = (type: string, resources: any, workers: a
     switch (type) {
         case RESOURCE_TYPES.GOLD:
             if (researchedSciences.has(SCIENCE_BUTTON_TYPES.TAXATION))
-                resourcesFromScience = get(totalWorkers) * WORKER_TAXATION_BONUS;
+                resourcesFromScience = get(totalWorkers) * BONUSES.WORKER_TAXATION;
             break;
         default:
             break;
@@ -88,7 +88,7 @@ const calculateFoodMulitplier = (researchedSciences: Set<string>, resources: IRe
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.HORSE_COLLAR)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.HEAVY_PLOW)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.CROP_ROTATION)) multiplier += 0.5;
-    multiplier += resources[RESOURCE_TYPES.GRANARY].value * GRANARY_BONUS;
+    multiplier += resources[RESOURCE_TYPES.GRANARY].value * BONUSES.GRANARY;
     return multiplier;
 }
 
@@ -97,13 +97,13 @@ const calculateWoodMulitplier = (researchedSciences: Set<string>, resources: any
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.DOUBLE_BIT_AXE)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.BOW_SAW)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.TWO_MAN_SAW)) multiplier += 0.5;
-    multiplier += resources[RESOURCE_TYPES.SAWMILL].value * SAWMILL_BONUS;
+    multiplier += resources[RESOURCE_TYPES.SAWMILL].value * BONUSES.SAWMILL;
     return multiplier;
 }
 
 const calculateKnowledgeMulitplier = (researchedSciences: Set<string>, resources: IResourceList): number => {
     let multiplier = 1;
-    multiplier += resources[RESOURCE_TYPES.UNIVERSITY].value * UNIVERSITY_BONUS;
+    multiplier += resources[RESOURCE_TYPES.UNIVERSITY].value * BONUSES.UNIVERSITY;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.BLOCK_PRINTING)) multiplier += 0.5;
     return multiplier;
 }
@@ -115,7 +115,7 @@ const calculateMiningMultiplier = (researchedSciences: Set<string>, resources: a
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.SHAFT_MINING)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.MITHRIL_PICKAXE)) multiplier += 0.5;
     if (researchedSciences.has(SCIENCE_BUTTON_TYPES.ADAMANTITE_PICKAXE)) multiplier += 0.5;
-    multiplier += resources[RESOURCE_TYPES.QUARRY].value * QUARRY_BONUS;
+    multiplier += resources[RESOURCE_TYPES.QUARRY].value * BONUSES.QUARRY;
     return multiplier;
 }
 

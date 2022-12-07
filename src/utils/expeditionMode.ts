@@ -18,12 +18,14 @@ import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
 import { STAGE_LIST } from "~/constants/military/stageList";
 
 export const initializeGrid = (mapType: number): IExpeditionCell[][] => {
+    const COLS = 7;
+    const ROWS = 9;
     const grid: IExpeditionCell[][] = [];
     let cellCount = 0;
     const backgroundImage = `url("sprites/map${mapType}/tile`;
-    for (let y = 0; y < 7; y++) {
+    for (let y = 0; y < COLS; y++) {
         const row: IExpeditionCell[] = [];
-        for (let x = 0; x < 9; x++) {
+        for (let x = 0; x < ROWS; x++) {
             const cell: IExpeditionCell = {
                 isPath: false,
                 isDeployable: false,
@@ -45,6 +47,7 @@ export const initializeGrid = (mapType: number): IExpeditionCell[][] => {
     return grid;
 };
 
+// start = entry point of the path where enemies spawn
 const isStart = (row: number, col: number, mapType: number): boolean => {
     let startCoordinates = [];
     switch (mapType) {
@@ -64,6 +67,7 @@ const isStart = (row: number, col: number, mapType: number): boolean => {
     return false;
 }
 
+// end = end point of the path where enemies leave from
 const isEnd = (row: number, col: number, mapType: number): boolean => {
     let endCoordinates = [];
     switch (mapType) {
@@ -113,6 +117,7 @@ export const initializeEnemies = (stage: string, enemyUnits: ISprite[], grid: IE
     for (const enemySpawnInfo of ENEMY_SPAWN_LIST[stage]) {
         totalEnemies += enemySpawnInfo.amount;
         setTimeout(() => {
+            // prepare all the units of a certain group and spawn them one by one
             const enemy = cloneDeep(enemySpawnInfo.enemyUnit);
             enemy.state.unitPath = enemySpawnInfo.path;
             const { row, col } = enemy.state.unitPath[0];
@@ -127,6 +132,8 @@ export const initializeEnemies = (stage: string, enemyUnits: ISprite[], grid: IE
     return totalEnemies;
 }
 
+// set each enemy info, add them to the enemy list array, and recursively
+// spawn the next one according to the spawn delay
 function createEnemies(
     enemy: ISprite, enemyUnits: ISprite[], startingCell: IExpeditionCell, delay: number, remainingEnemies: number): void {
     if (remainingEnemies === 0) return;
@@ -180,7 +187,6 @@ function processAttack(
     enemyUnits: ISprite[],
     projectiles: IProjectile[]
 ): void {
-    // console.log(unit.state.currentState);
     const target = getAttackTarget(unit, grid);
     if (!target) return;
     changeUnitState(unit, UNIT_STATES.ATTACK);
@@ -411,6 +417,7 @@ const getCoordinateRange = (
     return pruneCoordinateList(coordinateList, grid);
 };
 
+// remove invalid coordinates (ex. out of bounds, out of range) from coordinate list
 function pruneCoordinateList(
     coordinateList: ICoordinates[],
     grid: IExpeditionCell[][],
@@ -446,9 +453,8 @@ export const handleEnemyMovements = (enemyUnits: ISprite[], grid: IExpeditionCel
         // attack the blocking player unit
         if (grid[row][col].playerUnit) {
             changeUnitState(unit, UNIT_STATES.ATTACK);
-            if (unit.spriteInfo.specialAbility) processMovementStopEffects(unit);
+            if (unit.spriteInfo.specialAbility) processUnitBlockedEffects(unit);
         } else {
-
             grid[row][col].enemyUnitArriving = true;
             unit.position.positionXTweened.set(col * CELL_WIDTH);
             unit.position.positionYTweened.set(row * CELL_HEIGHT).then(() => {
@@ -477,7 +483,6 @@ function handleCompletedMovement(
 
     const currentCellCoordinates = unit.state.unitPath[unit.state.currentPathIndex];
     const currentCell = grid[currentCellCoordinates.row][currentCellCoordinates.col];
-    //console.log(unit.state.currentPathIndex + " " + unit.state.unitPath.length);
     if (unit.state.currentPathIndex >= unit.state.unitPath.length - 1) {
         lifeCount.update((n: number) => n > 0 ? n - 1 : n);
         removedEnemyUnitCount.increment();
@@ -488,7 +493,8 @@ function handleCompletedMovement(
     }
 }
 
-function processMovementStopEffects(unit: ISprite) {
+// effects that occur when the enemy is blocked by a player unit
+function processUnitBlockedEffects(unit: ISprite) {
     switch (unit.spriteInfo.specialAbility) {
         case SPECIAL_ABILITIES.GLOBAL_POISON:
             isGlobalPoisonOn.set(false);
@@ -498,7 +504,7 @@ function processMovementStopEffects(unit: ISprite) {
     }
 }
 
-
+// effects that occur when the enemy is moving
 function processMovementStartEffects(unit: ISprite) {
     switch (unit.spriteInfo.specialAbility) {
         case SPECIAL_ABILITIES.GLOBAL_POISON:
@@ -599,6 +605,7 @@ export const handleProjectiles = (
             // console.log(targetX + " " + targetY + " " + $positionSpring.x + " " + $positionSpring.y);
             const xDifference = Math.abs(positionSpring.x - targetX);
             const yDifference = Math.abs(positionSpring.y - targetY);
+            // 25 is the offset we're using to detect collision
             if (xDifference < 25 && yDifference < 25) {
                 processDamageCalculation(
                     projectile.damage,

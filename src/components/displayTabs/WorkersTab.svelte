@@ -57,6 +57,7 @@
         Available Workers: {availableWorkers} / {maxWorkers}
     </h1>
 </div>
+<!-- Worker buttons -->
 <table class="text-xl text-white">
     {#each Object.entries(WORKER_TYPES) as [key, workerType]}
         {#if displayWorkerType(workerType)}
@@ -88,7 +89,7 @@
         {/if}
     {/each}
 </table>
-
+<!-- Multipliers -->
 <div class="flex justify-around mt-10">
     <button
         class="rpgui-button {workerChangeValue === 1 ? 'selected' : ''}"

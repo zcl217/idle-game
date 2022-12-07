@@ -7,6 +7,7 @@
     import {
         SCIENCE_BUTTON_COSTS,
         SCIENCE_BUTTON_TYPES,
+        SCIENCE_UNIT_MAP,
     } from "~/constants/buttons/scienceButtons";
     import { researchedSciences } from "~/store/gameState";
     import { buttonPrereqsMet } from "~/utils/helpers";
@@ -15,8 +16,7 @@
         hasEnoughResources,
         spendResources,
     } from "~/utils/resourceHelpers";
-import { selectedMilitaryUnits } from "~/store/military";
-import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
+    import { selectedMilitaryUnits } from "~/store/military";
 
     let buttonsToDisplay: Set<string> = new Set();
     $: {
@@ -36,25 +36,14 @@ import { UNIT_TYPES } from "~/constants/military/units/unitTypes";
         spendResources(SCIENCE_BUTTON_COSTS, resources, science);
         researchedSciences.update((list: Set<string>) => list.add(science));
         if ($selectedMilitaryUnits.length >= 4) return;
-        switch (science) {
-            case SCIENCE_BUTTON_TYPES.SLINGSHOTS:
-                $selectedMilitaryUnits.push(UNIT_TYPES.FOOTPAD);
-                break;
-            case SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY:
-                $selectedMilitaryUnits.push(UNIT_TYPES.HEAVY_INFANTRY);
-                break;
-            case SCIENCE_BUTTON_TYPES.MAGIC:
-                $selectedMilitaryUnits.push(UNIT_TYPES.MAGE);
-                break;
-            case SCIENCE_BUTTON_TYPES.THUNDERSTICKS:
-                $selectedMilitaryUnits.push(UNIT_TYPES.THUNDERER);
-            default:
-                return;
-        }
+        // if the research is military unit related, we add it to the selected units
+        if (SCIENCE_UNIT_MAP[science])
+          $selectedMilitaryUnits.push(SCIENCE_UNIT_MAP[science])
     };
 </script>
 
 <h1 class="text-center">Available Research</h1>
+<!-- Science buttons -->
 <div class="container flex flex-wrap justify-around">
     {#each [...buttonsToDisplay] as id}
         <div class="flex justify-center">

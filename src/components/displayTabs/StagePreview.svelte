@@ -13,6 +13,7 @@
 
 <div class="w-4/6 h-5/6">
     <p class="my-5 text-center">Enemy List</p>
+    <!-- Enemy list -->
     <div class="flex flex-row flex-wrap justify-center">
         {#each enemyPreviewList as enemy}
             <div class="flex flex-row py-1">

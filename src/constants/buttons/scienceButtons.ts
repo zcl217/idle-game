@@ -2,6 +2,7 @@
 import type { IButtonCostList } from '~/interfaces/buttons';
 import type { IPrereqsList } from '~/interfaces/common';
 import { LIBRARY_COLLECTIONS } from '../library/library';
+import { UNIT_TYPES } from '../military/units/unitTypes';
 import { RESOURCE_TYPES } from '../resources/resourceTypes';
 import { STORY_PROGRESS_LIST } from '../story';
 
@@ -412,4 +413,11 @@ export const SCIENCE_BUTTON_COSTS: IButtonCostList = {
         { type: RESOURCE_TYPES.KNOWLEDGE, cost: 200000, },
         { type: RESOURCE_TYPES.LUTAREZS_WARHAMMER, cost: 1, },
     ],
+}
+
+export const SCIENCE_UNIT_MAP = {
+  [SCIENCE_BUTTON_TYPES.SLINGSHOTS]: UNIT_TYPES.FOOTPAD,
+  [SCIENCE_BUTTON_TYPES.HEAVY_INFANTRY]: UNIT_TYPES.HEAVY_INFANTRY,
+  [SCIENCE_BUTTON_TYPES.MAGIC]: UNIT_TYPES.MAGE,
+  [SCIENCE_BUTTON_TYPES.THUNDERSTICKS]: UNIT_TYPES.THUNDERER,
 }

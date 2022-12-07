@@ -7,7 +7,7 @@
 
     export let sprite: ISprite,
         isSmallFrame: boolean = false,
-        shouldAnimateSprite = true;
+        shouldAnimateSprite: boolean = true;
     let interval = 0;
     let currentFrame = 0;
     let backgroundPosition = getSpriteBackgroundPosition(
